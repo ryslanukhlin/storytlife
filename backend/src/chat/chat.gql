@@ -1,0 +1,29 @@
+type Message {
+    id: String!
+    text: String!
+    created_at: String!
+    user_id: String!
+    chat_id: String!
+}
+
+type Chat {
+    id: String!
+}
+
+input MessageInput {
+    txt: String!
+    roomId: String!
+}
+
+type Query {
+    getMessages(roomId: String!): [Message]!
+}
+
+type Mutation {
+    createRoom(userId: String!): Chat
+    createMessage(messageInput: MessageInput!): String
+}
+
+type Subscription {
+    newMessage(roomId: String!): Message!
+}

@@ -1,0 +1,30 @@
+mutation CreateRoom($userId: String!) {
+    createRoom(userId: $userId) {
+        id
+        users {
+            id
+            login
+            phone
+        }
+    }
+}
+
+mutation CreateMessage($messageInput: MessageInput!) {
+    createMessage(messageInput: $messageInput)
+}
+
+subscription NewMessage($roomId: String!) {
+    newMessage(roomId: $roomId) {
+        id
+        user_id
+        text
+    }
+}
+
+query GetMessages($roomId: String!) {
+    getMessages(roomId: $roomId) {
+        id
+        user_id
+        text
+    }
+}

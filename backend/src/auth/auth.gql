@@ -1,0 +1,23 @@
+input RegisterInput {
+    login: String!
+    phone: String!
+    password: String!
+}
+
+input LoginInput {
+    phone: String!
+    password: String!
+}
+
+type RegisterObject {
+    success: Boolean!
+}
+
+type LoginObject {
+    access_token: String!
+}
+
+type Mutation {
+    registerUser(registerInput: RegisterInput): RegisterObject
+    loginUser(loginInput: LoginInput): LoginObject
+}

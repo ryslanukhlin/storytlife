@@ -1,0 +1,39 @@
+input RegisterInput {
+    login: String!
+    phone: String!
+    password: String!
+}
+
+input LoginInput {
+    phone: String!
+    password: String!
+}
+
+mutation RegisterUser($registerInput: RegisterInput) {
+    registerUser(registerInput: $registerInput) {
+        success
+    }
+}
+
+mutation LoginUser($loginInput: LoginInput) {
+    loginUser(loginInput: $loginInput) {
+        access_token
+    }
+}
+
+query GetUser {
+    getUser {
+        id
+        phone
+        login
+        created_at
+        chats {
+            id
+            users {
+                id
+                login
+                phone
+            }
+        }
+    }
+}

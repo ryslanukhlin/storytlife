@@ -1,0 +1,49 @@
+@font-face {
+    font-family: "Gordita";
+    src: url("../public/fonts/Gordita-Bold.ttf");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Raleway";
+    src: url("../public/fonts/Raleway-Medium.ttf");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Raleway";
+    src: url("../public/fonts/Raleway-SemiBold.ttf");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "Raleway";
+    src: url("../public/fonts/Raleway-Bold.ttf");
+    font-weight: 700;
+}
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Raleway;
+}
+
+form {
+    width: 100%;
+}
+
+.Link {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.Subtitle {
+    color: #2B2B2B;
+}
+
+.PageWrapper {
+    padding: 10px;
+}

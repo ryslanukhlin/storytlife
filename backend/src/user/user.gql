@@ -1,0 +1,18 @@
+type Chat {
+    id: String!
+    users: [User]!
+}
+
+type User {
+    id: String!
+    login: String!
+    phone: String!
+    password: String!
+    created_at: String!
+    chats: [Chat]!
+}
+
+type Query {
+    getUser: User!
+    getUsers: [User]!
+}

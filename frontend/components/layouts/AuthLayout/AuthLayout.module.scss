@@ -1,0 +1,53 @@
+.AuthLayout {
+    display: flex;
+}
+
+.AuthContent {
+    width: 50%;
+}
+
+.AuthHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.AuthForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 88px);
+    padding: 0 60px;
+}
+
+.AuthInput {
+    width: 100%;
+    margin-bottom: 20px !important;
+}
+
+.AuthTitle {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    font-family: Gordita;
+    font-weight: 500;
+}
+
+.AuthCheckBox {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.AuthButton {
+    margin-bottom: 20px !important;
+    width: 100%;
+}
+
+.AuthImg {
+    width: 50%;
+    background: url("https://minimalistic-wallpaper.demolab.com/?random") center center/cover no-repeat;
+    margin: 20px;
+    border-radius: 10px;
+}
