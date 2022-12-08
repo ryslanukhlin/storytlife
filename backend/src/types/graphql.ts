@@ -8,6 +8,16 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum TypeCreate {
+    ANSWER = "ANSWER",
+    OFFER = "OFFER"
+}
+
+export enum AcceptCall {
+    Accept = "Accept",
+    Deny = "Deny"
+}
+
 export class RegisterInput {
     login: string;
     phone: string;
@@ -19,9 +29,32 @@ export class LoginInput {
     password: string;
 }
 
+export class CreateOfferInput {
+    userId: string;
+    payload: string;
+    connection: TypeCreate;
+}
+
+export class CreateCandidateInput {
+    candidate: string;
+    userId: string;
+}
+
 export class MessageInput {
     txt: string;
     roomId: string;
+}
+
+export class CreateCallInput {
+    chatId: string;
+    userId: string;
+    usingVideo: boolean;
+}
+
+export class AcceptCallInput {
+    chatId: string;
+    userId: string;
+    acceptCall: AcceptCall;
 }
 
 export class RegisterObject {
@@ -37,9 +70,46 @@ export abstract class IMutation {
 
     abstract loginUser(loginInput?: Nullable<LoginInput>): Nullable<LoginObject> | Promise<Nullable<LoginObject>>;
 
-    abstract createRoom(userId: string): Nullable<Chat> | Promise<Nullable<Chat>>;
+    abstract createOffer(createOfferInput: CreateOfferInput): string | Promise<string>;
 
-    abstract createMessage(messageInput: MessageInput): Nullable<string> | Promise<Nullable<string>>;
+    abstract createCandidate(createCandidateInput: CreateCandidateInput): string | Promise<string>;
+
+    abstract answerOnCallPage(userId: string): string | Promise<string>;
+
+    abstract leaveCall(userId: string): string | Promise<string>;
+
+    abstract createRoom(userId: string): Chat | Promise<Chat>;
+
+    abstract createMessage(messageInput: MessageInput): string | Promise<string>;
+
+    abstract createCall(createCallInput: CreateCallInput): string | Promise<string>;
+
+    abstract acceptCall(acceptCallInput: AcceptCallInput): string | Promise<string>;
+
+    abstract cancelCall(userId: string): string | Promise<string>;
+}
+
+export class NewCreateType {
+    payload: string;
+    connection: TypeCreate;
+}
+
+export abstract class ISubscription {
+    abstract newCreateOffer(userId: string): NewCreateType | Promise<NewCreateType>;
+
+    abstract newCreateCandidate(userId: string): string | Promise<string>;
+
+    abstract newAnswerOnCallPage(userId: string): string | Promise<string>;
+
+    abstract newLeaveCall(userId: string): string | Promise<string>;
+
+    abstract newMessage(roomId: string): Message | Promise<Message>;
+
+    abstract newCreteCall(userId: string): CreateCallType | Promise<CreateCallType>;
+
+    abstract newAcceptCall(userId: string): AcceptCallType | Promise<AcceptCallType>;
+
+    abstract newCancelCall(userId: string): string | Promise<string>;
 }
 
 export class Message {
@@ -55,16 +125,22 @@ export class Chat {
     users: Nullable<User>[];
 }
 
+export class CreateCallType {
+    chatId: string;
+    usingVideo: boolean;
+}
+
+export class AcceptCallType {
+    chatId: string;
+    acceptCall: AcceptCall;
+}
+
 export abstract class IQuery {
     abstract getMessages(roomId: string): Nullable<Message>[] | Promise<Nullable<Message>[]>;
 
     abstract getUser(): User | Promise<User>;
 
     abstract getUsers(): Nullable<User>[] | Promise<Nullable<User>[]>;
-}
-
-export abstract class ISubscription {
-    abstract newMessage(roomId: string): Message | Promise<Message>;
 }
 
 export class User {

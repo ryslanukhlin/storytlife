@@ -17,8 +17,6 @@ const Login = () => {
     const formik = useFormik({
         initialValues: { password: '', remember: false },
         onSubmit: async ({ password, remember }) => {
-            console.log(phone);
-
             const request = await login({
                 variables: {
                     loginInput: { phone, password },

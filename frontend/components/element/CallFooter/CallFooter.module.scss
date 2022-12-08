@@ -1,0 +1,14 @@
+.CallFooter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 5px 30px;
+
+    button {
+        margin-right: 10px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

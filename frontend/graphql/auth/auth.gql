@@ -37,3 +37,33 @@ query GetUser {
         }
     }
 }
+
+mutation CreateCall($createCallInput: CreateCallInput!) {
+    createCall(createCallInput: $createCallInput)
+}
+
+subscription NewCreteCall($userId: String!) {
+    newCreteCall(userId: $userId) {
+        chatId
+        usingVideo
+    }
+}
+
+mutation AcceptCall($acceptCallInput: AcceptCallInput!) {
+    acceptCall(acceptCallInput: $acceptCallInput)
+}
+
+subscription NewAcceptCall($userId: String!) {
+    newAcceptCall(userId: $userId) {
+        acceptCall
+        chatId
+    }
+}
+
+mutation CancelCall($userId: String!) {
+    cancelCall(userId: $userId)
+}
+
+subscription NewCancelCall($userId: String!) {
+    newCancelCall(userId: $userId)
+}

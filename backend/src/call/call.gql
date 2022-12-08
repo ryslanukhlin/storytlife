@@ -1,0 +1,34 @@
+enum TypeCreate {
+    ANSWER
+    OFFER
+}
+
+input CreateOfferInput {
+    userId: String!
+    payload: String!
+    connection: TypeCreate!
+}
+
+input CreateCandidateInput {
+    candidate: String!
+    userId: String!
+}
+
+type NewCreateType {
+    payload: String!
+    connection: TypeCreate!
+}
+
+type Mutation {
+    createOffer(createOfferInput: CreateOfferInput!): String!
+    createCandidate(createCandidateInput: CreateCandidateInput!): String!
+    answerOnCallPage(userId: String!): String!
+    leaveCall(userId: String!): String!
+}
+
+type Subscription {
+    newCreateOffer(userId: String!): NewCreateType!
+    newCreateCandidate(userId: String!): String!
+    newAnswerOnCallPage(userId: String!): String!
+    newLeaveCall(userId: String!): String!
+}

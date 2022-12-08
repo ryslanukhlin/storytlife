@@ -1,5 +1,5 @@
-import { Box, Button, InputBase, styled, Typography } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import { Box, Button, IconButton, InputBase, styled, Typography } from '@mui/material';
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './ChatContent.module.scss';
 import SendIcon from '@mui/icons-material/Send';
@@ -10,8 +10,12 @@ import {
     useCreateMessageMutation,
     useGetMessagesLazyQuery,
     useNewMessageSubscription,
+    useCreateCallMutation,
 } from '../../../graphql/generated';
 import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
+import CallOffetModal from '../../ui/modal/CallOffetModal';
 
 const CustomHeader = styled(Box)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -44,15 +48,23 @@ type Message = {
 } | null;
 
 const ChatContent = () => {
-    const { bigNav, changeViewNav } = useContext(TypeMenuContext);
+    const blockMessagesRef = useRef<HTMLDivElement>(null);
+    const { bigNav } = useContext(TypeMenuContext);
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
+    const [call, setCall] = useState<{ usingVideo: boolean } | null>(null);
+
     const [getMessages] = useGetMessagesLazyQuery();
     const [createMessage] = useCreateMessageMutation();
+    const [createCall] = useCreateCallMutation();
 
     const user = useReactiveVar(userData);
     const chatId = window.location.pathname.split('/').at(-1)!;
     const frend = user?.chats?.find((chat) => chat?.id === chatId)?.users![0];
+
+    const closeCall = () => {
+        setCall(null);
+    };
 
     const changeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(event.target.value);
@@ -70,6 +82,19 @@ const ChatContent = () => {
             });
             document.documentElement.scrollTop = document.documentElement.scrollHeight;
         }
+    };
+
+    const callHandler = (usingVideo: boolean) => {
+        setCall({ usingVideo });
+        createCall({
+            variables: {
+                createCallInput: {
+                    chatId,
+                    userId: frend?.id!,
+                    usingVideo,
+                },
+            },
+        });
     };
 
     useNewMessageSubscription({
@@ -92,26 +117,51 @@ const ChatContent = () => {
         })();
     }, [chatId]);
 
+    useLayoutEffect(() => {
+        window.scrollTo({ top: blockMessagesRef.current?.scrollHeight });
+    });
+
     const classesChatFooter = `${styles.ChatFooter} ${
+        bigNav ? styles.maxWidthBigNav : styles.maxWidthSmallNav
+    }`;
+
+    const classesChatHeader = `${styles.ChatHeaderContent} ${
         bigNav ? styles.maxWidthBigNav : styles.maxWidthSmallNav
     }`;
 
     return (
         <div className={styles.ChatContent}>
+            {call && (
+                <CallOffetModal
+                    frend={frend!}
+                    closeModal={closeCall}
+                    usingVideo={call.usingVideo}
+                />
+            )}
             <div className={styles.ChatHeader}>
-                <CustomHeader className={styles.ChatHeaderContent}>
-                    <img
-                        src="https://cdn1.flamp.ru/cb0c3eab2e574f178382f0377d00c68f_300_300.jpg"
-                        alt="contact"
-                        className={styles.ChatHeaderImg}
-                    />
-                    <div className={styles.ChatHeaderDescription}>
-                        <Typography variant="body1">{frend?.login}</Typography>
-                        <Typography variant="body2">{frend?.phone}</Typography>
+                <CustomHeader className={classesChatHeader}>
+                    <div className={styles.ChatHeaderUserInfo}>
+                        <img
+                            src="https://cdn1.flamp.ru/cb0c3eab2e574f178382f0377d00c68f_300_300.jpg"
+                            alt="contact"
+                            className={styles.ChatHeaderImg}
+                        />
+                        <div className={styles.ChatHeaderDescription}>
+                            <Typography variant="body1">{frend?.login}</Typography>
+                            <Typography variant="body2">{frend?.phone}</Typography>
+                        </div>
+                    </div>
+                    <div>
+                        <IconButton size="large" onClick={callHandler.bind(null, false)}>
+                            <LocalPhoneIcon fontSize="inherit" />
+                        </IconButton>
+                        <IconButton size="large" onClick={callHandler.bind(null, true)}>
+                            <VideocamOutlinedIcon fontSize="inherit" />
+                        </IconButton>
                     </div>
                 </CustomHeader>
             </div>
-            <MessageContainer className={styles.ChatMessages}>
+            <MessageContainer className={styles.ChatMessages} ref={blockMessagesRef}>
                 {messages?.map((message) => (
                     <div
                         className={

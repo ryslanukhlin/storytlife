@@ -13,6 +13,7 @@ import { ChatModule } from './chat/chat.module';
 import { PubsubModule } from './pubsub/pubsub.module';
 import { Context } from 'graphql-ws';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { CallModule } from './call/call.module';
 import jwt_decode from 'jwt-decode';
 
 function toLowerKeys(obj) {
@@ -62,6 +63,7 @@ function toLowerKeys(obj) {
         AuthModule,
         ChatModule,
         PubsubModule,
+        CallModule,
     ],
     providers: [
         {

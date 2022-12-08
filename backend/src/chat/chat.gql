@@ -15,15 +15,48 @@ input MessageInput {
     roomId: String!
 }
 
+enum AcceptCall {
+    Accept
+    Deny
+}
+
+input CreateCallInput {
+    chatId: String!
+    userId: String!
+    usingVideo: Boolean!
+}
+
+input AcceptCallInput {
+    chatId: String!
+    userId: String!
+    acceptCall: AcceptCall!
+}
+
+type CreateCallType {
+    chatId: String!
+    usingVideo: Boolean!
+}
+
+type AcceptCallType {
+    chatId: String!
+    acceptCall: AcceptCall!
+}
+
 type Query {
     getMessages(roomId: String!): [Message]!
 }
 
 type Mutation {
-    createRoom(userId: String!): Chat
-    createMessage(messageInput: MessageInput!): String
+    createRoom(userId: String!): Chat!
+    createMessage(messageInput: MessageInput!): String!
+    createCall(createCallInput: CreateCallInput!): String!
+    acceptCall(acceptCallInput: AcceptCallInput!): String!
+    cancelCall(userId: String!): String!
 }
 
 type Subscription {
     newMessage(roomId: String!): Message!
+    newCreteCall(userId: String!): CreateCallType!
+    newAcceptCall(userId: String!): AcceptCallType!
+    newCancelCall(userId: String!): String!
 }

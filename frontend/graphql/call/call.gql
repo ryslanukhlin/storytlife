@@ -1,0 +1,34 @@
+mutation CreateOffer($createOfferInput: CreateOfferInput!) {
+    createOffer(createOfferInput: $createOfferInput)
+}
+
+subscription NewCreateOffer($userId: String!) {
+    newCreateOffer(userId: $userId) {
+        connection
+        payload
+    }
+}
+
+mutation CreateCandidate($createCandidateInput: CreateCandidateInput!) {
+    createCandidate(createCandidateInput: $createCandidateInput)
+}
+
+subscription NewCreateCandidate($userId: String!) {
+    newCreateCandidate(userId: $userId)
+}
+
+mutation AnswerOnCallPage($userId: String!) {
+    answerOnCallPage(userId: $userId)
+}
+
+subscription NewAnswerOnCallPage($userId: String!) {
+    newAnswerOnCallPage(userId: $userId)
+}
+
+mutation LeaveCall($userId: String!) {
+    leaveCall(userId: $userId)
+}
+
+subscription NewLeaveCall($userId: String!) {
+    newLeaveCall(userId: $userId)
+}

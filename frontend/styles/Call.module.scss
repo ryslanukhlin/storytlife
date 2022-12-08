@@ -1,0 +1,18 @@
+.CallWrapper {
+    height: 100vh;
+}
+
+.VideoWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 310px);
+
+    video {
+        border-radius: 10px;
+
+        &:first-child {
+            margin-right: 20px;
+        }
+    }
+}

@@ -6,19 +6,23 @@
 }
 
 .ChatHeader {
-    position: absolute;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     top: 0;
     left: 0;
     width: 100%;
+}
+
+.ChatHeaderUserInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .ChatHeaderContent {
     position: fixed;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     padding: 10px;
     position: fixed;

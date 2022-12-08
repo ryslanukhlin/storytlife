@@ -14,6 +14,7 @@ import '../styles/globals.scss';
 import '@mui/lab/themeAugmentation';
 import AuthProvider from '../components/provider/AuthProvider';
 import LayoutProvider from '../components/provider/LayoutProvider';
+import React from 'react';
 
 const createTheme =
     process.env.NODE_ENV === 'production' ? createMuiTheme : unstable_createMuiStrictModeTheme;
@@ -68,17 +69,19 @@ export default function App({ Component, pageProps }: AppProps) {
     };
 
     return (
-        <ClientApolloProvider>
-            <ThemeContext.Provider value={{ theme, changeTheme }}>
-                <ThemeProvider theme={theme === 'white' ? whiteTheme : darkTheme}>
-                    <CssBaseline />
-                    <AuthProvider>
-                        <LayoutProvider>
-                            <Component {...pageProps} />
-                        </LayoutProvider>
-                    </AuthProvider>
-                </ThemeProvider>
-            </ThemeContext.Provider>
-        </ClientApolloProvider>
+        <React.StrictMode>
+            <ClientApolloProvider>
+                <ThemeContext.Provider value={{ theme, changeTheme }}>
+                    <ThemeProvider theme={theme === 'white' ? whiteTheme : darkTheme}>
+                        <CssBaseline />
+                        <AuthProvider>
+                            <LayoutProvider>
+                                <Component {...pageProps} />
+                            </LayoutProvider>
+                        </AuthProvider>
+                    </ThemeProvider>
+                </ThemeContext.Provider>
+            </ClientApolloProvider>
+        </React.StrictMode>
     );
 }

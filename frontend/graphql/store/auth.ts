@@ -4,6 +4,12 @@ export const auth = makeVar<boolean>(false);
 
 export const authToken = makeVar<string>('');
 
+export type Frend = {
+    __typename?: 'User';
+    id: string;
+    login: string;
+    phone: string;
+};
 type typeUser = {
     __typename?: 'User';
     id: string;
@@ -13,12 +19,7 @@ type typeUser = {
     chats?: Array<{
         __typename?: 'Chat';
         id: string;
-        users?: Array<{
-            __typename?: 'User';
-            id: string;
-            login: string;
-            phone: string;
-        } | null> | null;
+        users?: Array<Frend | null> | null;
     } | null> | null;
 };
 
