@@ -38,6 +38,15 @@ export type Chat = {
   users: Array<Maybe<User>>;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  created_at: Scalars['String'];
+  id: Scalars['String'];
+  post: Post;
+  txt: Scalars['String'];
+  user: User;
+};
+
 export type CreateCallInput = {
   chatId: Scalars['String'];
   userId: Scalars['String'];
@@ -55,10 +64,28 @@ export type CreateCandidateInput = {
   userId: Scalars['String'];
 };
 
+export type CreateCommentInput = {
+  postId: Scalars['String'];
+  txt: Scalars['String'];
+};
+
 export type CreateOfferInput = {
   connection: TypeCreate;
   payload: Scalars['String'];
   userId: Scalars['String'];
+};
+
+export type CreatePostInput = {
+  description: Scalars['String'];
+  img?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+};
+
+export type Like = {
+  __typename?: 'Like';
+  id: Scalars['String'];
+  post: Post;
+  user: User;
 };
 
 export type LoginInput = {
@@ -88,12 +115,15 @@ export type MessageInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptCall: Scalars['String'];
+  addComment: Scalars['String'];
+  addLike: Scalars['String'];
   answerOnCallPage: Scalars['String'];
   cancelCall: Scalars['String'];
   createCall: Scalars['String'];
   createCandidate: Scalars['String'];
   createMessage: Scalars['String'];
   createOffer: Scalars['String'];
+  createPost: Scalars['String'];
   createRoom: Chat;
   leaveCall: Scalars['String'];
   loginUser?: Maybe<LoginObject>;
@@ -103,6 +133,16 @@ export type Mutation = {
 
 export type MutationAcceptCallArgs = {
   acceptCallInput: AcceptCallInput;
+};
+
+
+export type MutationAddCommentArgs = {
+  createCommentInput: CreateCommentInput;
+};
+
+
+export type MutationAddLikeArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -136,6 +176,11 @@ export type MutationCreateOfferArgs = {
 };
 
 
+export type MutationCreatePostArgs = {
+  createPost: CreatePostInput;
+};
+
+
 export type MutationCreateRoomArgs = {
   userId: Scalars['String'];
 };
@@ -161,10 +206,23 @@ export type NewCreateType = {
   payload: Scalars['String'];
 };
 
+export type Post = {
+  __typename?: 'Post';
+  comments: Array<Comment>;
+  created_at: Scalars['String'];
+  description: Scalars['String'];
+  id: Scalars['String'];
+  img?: Maybe<Scalars['String']>;
+  likes: Array<Like>;
+  title: Scalars['String'];
+  user: User;
+};
+
 export type Query = {
   __typename?: 'Query';
   getMessages: Array<Maybe<Message>>;
   getUser: User;
+  getUserPosts: Array<Post>;
   getUsers: Array<Maybe<User>>;
 };
 
@@ -189,11 +247,14 @@ export type Subscription = {
   newAcceptCall: AcceptCallType;
   newAnswerOnCallPage: Scalars['String'];
   newCancelCall: Scalars['String'];
+  newComment: Comment;
   newCreateCandidate: Scalars['String'];
   newCreateOffer: NewCreateType;
   newCreteCall: CreateCallType;
   newLeaveCall: Scalars['String'];
+  newLike: Like;
   newMessage: Message;
+  newPost: Post;
 };
 
 
@@ -209,6 +270,11 @@ export type SubscriptionNewAnswerOnCallPageArgs = {
 
 export type SubscriptionNewCancelCallArgs = {
   userId: Scalars['String'];
+};
+
+
+export type SubscriptionNewCommentArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -232,8 +298,18 @@ export type SubscriptionNewLeaveCallArgs = {
 };
 
 
+export type SubscriptionNewLikeArgs = {
+  postId: Scalars['String'];
+};
+
+
 export type SubscriptionNewMessageArgs = {
   roomId: Scalars['String'];
+};
+
+
+export type SubscriptionNewPostArgs = {
+  userId: Scalars['String'];
 };
 
 export enum TypeCreate {
@@ -395,6 +471,53 @@ export type GetMessagesQueryVariables = Exact<{
 
 
 export type GetMessagesQuery = { __typename?: 'Query', getMessages: Array<{ __typename?: 'Message', id: string, user_id: string, text: string } | null> };
+
+export type GetUserPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string } }> }> };
+
+export type CreatePostMutationVariables = Exact<{
+  createPost: CreatePostInput;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: string };
+
+export type NewPostSubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewPostSubscription = { __typename?: 'Subscription', newPost: { __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string } }> } };
+
+export type AddLikeMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type AddLikeMutation = { __typename?: 'Mutation', addLike: string };
+
+export type NewLikeSubscriptionVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type NewLikeSubscription = { __typename?: 'Subscription', newLike: { __typename?: 'Like', user: { __typename?: 'User', id: string } } };
+
+export type AddCommentMutationVariables = Exact<{
+  createCommentInput: CreateCommentInput;
+}>;
+
+
+export type AddCommentMutation = { __typename?: 'Mutation', addComment: string };
+
+export type NewCommentSubscriptionVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type NewCommentSubscription = { __typename?: 'Subscription', newComment: { __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string } } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1073,6 +1196,264 @@ export function useGetMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>;
 export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>;
 export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>;
+export const GetUserPostsDocument = gql`
+    query GetUserPosts {
+  getUserPosts {
+    id
+    description
+    img
+    created_at
+    title
+    likes {
+      user {
+        id
+      }
+    }
+    comments {
+      id
+      txt
+      created_at
+      user {
+        login
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserPostsQuery__
+ *
+ * To run a query within a React component, call `useGetUserPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserPostsQuery, GetUserPostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserPostsQuery, GetUserPostsQueryVariables>(GetUserPostsDocument, options);
+      }
+export function useGetUserPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserPostsQuery, GetUserPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserPostsQuery, GetUserPostsQueryVariables>(GetUserPostsDocument, options);
+        }
+export type GetUserPostsQueryHookResult = ReturnType<typeof useGetUserPostsQuery>;
+export type GetUserPostsLazyQueryHookResult = ReturnType<typeof useGetUserPostsLazyQuery>;
+export type GetUserPostsQueryResult = Apollo.QueryResult<GetUserPostsQuery, GetUserPostsQueryVariables>;
+export const CreatePostDocument = gql`
+    mutation CreatePost($createPost: CreatePostInput!) {
+  createPost(createPost: $createPost)
+}
+    `;
+export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
+
+/**
+ * __useCreatePostMutation__
+ *
+ * To run a mutation, you first call `useCreatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
+ *   variables: {
+ *      createPost: // value for 'createPost'
+ *   },
+ * });
+ */
+export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, options);
+      }
+export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const NewPostDocument = gql`
+    subscription NewPost($userId: String!) {
+  newPost(userId: $userId) {
+    id
+    description
+    img
+    created_at
+    title
+    likes {
+      user {
+        id
+      }
+    }
+    comments {
+      id
+      txt
+      created_at
+      user {
+        login
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewPostSubscription__
+ *
+ * To run a query within a React component, call `useNewPostSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewPostSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewPostSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewPostSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewPostSubscription, NewPostSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewPostSubscription, NewPostSubscriptionVariables>(NewPostDocument, options);
+      }
+export type NewPostSubscriptionHookResult = ReturnType<typeof useNewPostSubscription>;
+export type NewPostSubscriptionResult = Apollo.SubscriptionResult<NewPostSubscription>;
+export const AddLikeDocument = gql`
+    mutation AddLike($postId: String!) {
+  addLike(postId: $postId)
+}
+    `;
+export type AddLikeMutationFn = Apollo.MutationFunction<AddLikeMutation, AddLikeMutationVariables>;
+
+/**
+ * __useAddLikeMutation__
+ *
+ * To run a mutation, you first call `useAddLikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddLikeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addLikeMutation, { data, loading, error }] = useAddLikeMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useAddLikeMutation(baseOptions?: Apollo.MutationHookOptions<AddLikeMutation, AddLikeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddLikeMutation, AddLikeMutationVariables>(AddLikeDocument, options);
+      }
+export type AddLikeMutationHookResult = ReturnType<typeof useAddLikeMutation>;
+export type AddLikeMutationResult = Apollo.MutationResult<AddLikeMutation>;
+export type AddLikeMutationOptions = Apollo.BaseMutationOptions<AddLikeMutation, AddLikeMutationVariables>;
+export const NewLikeDocument = gql`
+    subscription NewLike($postId: String!) {
+  newLike(postId: $postId) {
+    user {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewLikeSubscription__
+ *
+ * To run a query within a React component, call `useNewLikeSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewLikeSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewLikeSubscription({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useNewLikeSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewLikeSubscription, NewLikeSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewLikeSubscription, NewLikeSubscriptionVariables>(NewLikeDocument, options);
+      }
+export type NewLikeSubscriptionHookResult = ReturnType<typeof useNewLikeSubscription>;
+export type NewLikeSubscriptionResult = Apollo.SubscriptionResult<NewLikeSubscription>;
+export const AddCommentDocument = gql`
+    mutation AddComment($createCommentInput: CreateCommentInput!) {
+  addComment(createCommentInput: $createCommentInput)
+}
+    `;
+export type AddCommentMutationFn = Apollo.MutationFunction<AddCommentMutation, AddCommentMutationVariables>;
+
+/**
+ * __useAddCommentMutation__
+ *
+ * To run a mutation, you first call `useAddCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCommentMutation, { data, loading, error }] = useAddCommentMutation({
+ *   variables: {
+ *      createCommentInput: // value for 'createCommentInput'
+ *   },
+ * });
+ */
+export function useAddCommentMutation(baseOptions?: Apollo.MutationHookOptions<AddCommentMutation, AddCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddCommentMutation, AddCommentMutationVariables>(AddCommentDocument, options);
+      }
+export type AddCommentMutationHookResult = ReturnType<typeof useAddCommentMutation>;
+export type AddCommentMutationResult = Apollo.MutationResult<AddCommentMutation>;
+export type AddCommentMutationOptions = Apollo.BaseMutationOptions<AddCommentMutation, AddCommentMutationVariables>;
+export const NewCommentDocument = gql`
+    subscription NewComment($postId: String!) {
+  newComment(postId: $postId) {
+    id
+    txt
+    created_at
+    user {
+      login
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewCommentSubscription__
+ *
+ * To run a query within a React component, call `useNewCommentSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewCommentSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewCommentSubscription({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useNewCommentSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewCommentSubscription, NewCommentSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewCommentSubscription, NewCommentSubscriptionVariables>(NewCommentDocument, options);
+      }
+export type NewCommentSubscriptionHookResult = ReturnType<typeof useNewCommentSubscription>;
+export type NewCommentSubscriptionResult = Apollo.SubscriptionResult<NewCommentSubscription>;
 export const GetUsersDocument = gql`
     query getUsers {
   getUsers {

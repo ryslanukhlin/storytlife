@@ -18,6 +18,9 @@ model User {
   created_at DateTime @default(now())
   chats Chat[]
   message Message[]
+  post Post[]
+  like Like[]
+  comment Comment[]
 }
 
 model Chat {
@@ -34,4 +37,34 @@ model Message {
   user_id String
   chat Chat @relation(fields: [chat_id], references: [id])
   chat_id String
+}
+
+model Post {
+  id String @id @default(uuid())
+  title String
+  created_at DateTime @default(now())
+  description String
+  img String?
+  user User @relation(fields: [user_id], references: [id])
+  user_id String
+  likes Like[]
+  comments Comment[]
+}
+
+model Like {
+  id String @id @default(uuid())
+  post Post @relation(fields: [post_id], references: [id])
+  post_id String
+  user User @relation(fields: [user_id], references: [id])
+  user_id String
+}
+
+model Comment {
+  id String @id @default(uuid())
+  created_at DateTime @default(now())
+  txt String
+  post Post @relation(fields: [post_id], references: [id])
+  post_id String
+  user User @relation(fields: [user_id], references: [id])
+  user_id String
 }

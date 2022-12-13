@@ -1,0 +1,12 @@
+.Comment {
+    display: flex;
+    margin-bottom: 10px;
+
+    &:last-child {
+        margin-bottom: 20px;
+    }
+}
+
+.Avatar {
+    margin-right: 10px;
+}

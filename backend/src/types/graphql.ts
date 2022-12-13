@@ -57,6 +57,17 @@ export class AcceptCallInput {
     acceptCall: AcceptCall;
 }
 
+export class CreatePostInput {
+    title: string;
+    description: string;
+    img?: Nullable<string>;
+}
+
+export class CreateCommentInput {
+    postId: string;
+    txt: string;
+}
+
 export class RegisterObject {
     success: boolean;
 }
@@ -87,6 +98,12 @@ export abstract class IMutation {
     abstract acceptCall(acceptCallInput: AcceptCallInput): string | Promise<string>;
 
     abstract cancelCall(userId: string): string | Promise<string>;
+
+    abstract createPost(createPost: CreatePostInput): string | Promise<string>;
+
+    abstract addLike(postId: string): string | Promise<string>;
+
+    abstract addComment(createCommentInput: CreateCommentInput): string | Promise<string>;
 }
 
 export class NewCreateType {
@@ -110,6 +127,12 @@ export abstract class ISubscription {
     abstract newAcceptCall(userId: string): AcceptCallType | Promise<AcceptCallType>;
 
     abstract newCancelCall(userId: string): string | Promise<string>;
+
+    abstract newPost(userId: string): Post | Promise<Post>;
+
+    abstract newLike(postId: string): Like | Promise<Like>;
+
+    abstract newComment(postId: string): Comment | Promise<Comment>;
 }
 
 export class Message {
@@ -138,9 +161,36 @@ export class AcceptCallType {
 export abstract class IQuery {
     abstract getMessages(roomId: string): Nullable<Message>[] | Promise<Nullable<Message>[]>;
 
+    abstract getUserPosts(): Post[] | Promise<Post[]>;
+
     abstract getUser(): User | Promise<User>;
 
     abstract getUsers(): Nullable<User>[] | Promise<Nullable<User>[]>;
+}
+
+export class Comment {
+    id: string;
+    created_at: string;
+    txt: string;
+    post: Post;
+    user: User;
+}
+
+export class Like {
+    id: string;
+    post: Post;
+    user: User;
+}
+
+export class Post {
+    id: string;
+    title: string;
+    created_at: string;
+    description: string;
+    img?: Nullable<string>;
+    user: User;
+    likes: Like[];
+    comments: Comment[];
 }
 
 export class User {

@@ -1,0 +1,27 @@
+.UserHeader {
+    position: relative;
+    height: 530px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.UserBackground {
+    height: 420px;
+    width: 100%;
+    background: url("https://i.pinimg.com/originals/1e/df/a3/1edfa3ce874c318c471aabea9b515535.jpg") center center/cover no-repeat;
+    border-radius: 10px 10px 0 0;
+}
+
+.UserImg {
+    height: 130px;
+    width: 130px;
+    border-radius: 50%;
+    border: 3px solid white;
+}
+
+.UserInfo {
+    position: absolute;
+    margin-left: 45px;
+    bottom: 0;
+    margin-bottom: 20px;
+}

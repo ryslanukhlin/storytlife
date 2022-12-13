@@ -18,6 +18,7 @@ import React from 'react';
 
 const createTheme =
     process.env.NODE_ENV === 'production' ? createMuiTheme : unstable_createMuiStrictModeTheme;
+
 const whiteTheme = createTheme({
     palette: {
         mode: 'light',

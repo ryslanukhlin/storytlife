@@ -1,0 +1,76 @@
+query GetUserPosts {
+    getUserPosts {
+        id
+        description
+        img
+        created_at
+        title
+        likes {
+            user {
+                id
+            }
+        }
+        comments {
+            id
+            txt
+            created_at
+            user {
+                login
+            }
+        }
+    }
+}
+
+mutation CreatePost($createPost: CreatePostInput!) {
+    createPost(createPost: $createPost)
+}
+
+subscription NewPost($userId: String!) {
+    newPost(userId: $userId) {
+        id
+        description
+        img
+        created_at
+        title
+        likes {
+            user {
+                id
+            }
+        }
+        comments {
+            id
+            txt
+            created_at
+            user {
+                login
+            }
+        }
+    }
+}
+
+mutation AddLike($postId: String!) {
+    addLike(postId: $postId)
+}
+
+subscription NewLike($postId: String!) {
+    newLike(postId: $postId) {
+        user {
+            id
+        }
+    }
+}
+
+mutation AddComment($createCommentInput: CreateCommentInput!) {
+    addComment(createCommentInput: $createCommentInput)
+}
+
+subscription NewComment($postId: String!) {
+    newComment(postId: $postId) {
+        id
+        txt
+        created_at
+        user {
+            login
+        }
+    }
+}

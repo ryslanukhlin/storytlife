@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrismaModule } from './prisma/prisma.module';
@@ -14,7 +14,9 @@ import { PubsubModule } from './pubsub/pubsub.module';
 import { Context } from 'graphql-ws';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { CallModule } from './call/call.module';
+import { PostModule } from './post/post.module';
 import jwt_decode from 'jwt-decode';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 function toLowerKeys(obj) {
     // 👇️ [ ['NAME', 'Tom'], ['AGE', 30] ]
@@ -58,12 +60,16 @@ function toLowerKeys(obj) {
         ConfigModule.forRoot({
             isGlobal: true,
         }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'public'),
+        }),
         PrismaModule,
         UserModule,
         AuthModule,
         ChatModule,
         PubsubModule,
         CallModule,
+        PostModule,
     ],
     providers: [
         {

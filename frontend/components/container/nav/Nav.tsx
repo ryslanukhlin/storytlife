@@ -52,7 +52,7 @@ const Nav = () => {
             </div>
             <nav className={styles.NavContent}>
                 <CustomLink
-                    href={userData()!.id}
+                    href={'/' + userData()!.id}
                     className={styles.NavLink + ' ' + styles.NavLinkActive}>
                     <PersonIcon />
                     {bigNav && <div className={styles.NavLinkTxt}>Профиль</div>}

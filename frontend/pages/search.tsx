@@ -47,7 +47,7 @@ const Search = () => {
     if (loading && error) return null;
 
     return (
-        <Grid container spacing={2} className="PageWrapper">
+        <Grid container spacing={2}>
             {data?.getUsers!.map((user) => (
                 <Grid key={user?.id} item xs={12} lg={3} md={4} sm={6} xl={2}>
                     <CardCustom variant="outlined">

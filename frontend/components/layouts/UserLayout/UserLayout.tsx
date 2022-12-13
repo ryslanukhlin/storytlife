@@ -46,7 +46,7 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
 
     const PageWrapperClasses = `${styles.PageWrapper} ${
         bigNav ? styles.BigNavMargin : styles.MiniNavMargin
-    }`;
+    } ${router.pathname !== '/chat' && router.pathname !== '/chat/[id]' && 'PageWrapper'}`;
 
     if (router.pathname === '/call/[id]') return <>{children}</>;
 

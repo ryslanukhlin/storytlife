@@ -1,0 +1,51 @@
+type Comment {
+    id: String!
+    created_at: String!
+    txt: String!
+    post: Post!
+    user: User!
+}
+
+type Like {
+    id: String!
+    post: Post!
+    user: User!
+}
+
+type Post {
+    id: String!
+    title: String!
+    created_at: String!
+    description: String!
+    img: String
+    user: User!
+    likes: [Like!]!
+    comments: [Comment!]!
+}
+
+input CreatePostInput {
+    title: String!
+    description: String!
+    img: String
+}
+
+input CreateCommentInput {
+    postId: String!
+    txt: String!
+}
+
+type Query {
+    getUserPosts: [Post!]!
+}
+
+type Mutation {
+    createPost(createPost: CreatePostInput!): String!
+    addLike(postId: String!): String!
+    addComment(createCommentInput: CreateCommentInput!): String!
+}
+
+type Subscription {
+    newPost(userId: String!): Post!
+    newLike(postId: String!): Like!
+    newComment(postId: String!): Comment!
+}
