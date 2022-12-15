@@ -1,7 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
 import React, { FC, ReactNode, useEffect } from 'react';
-import { useGetUserLazyQuery } from '../../graphql/generated';
+import { useGetCurrentUserLazyQuery, useGetUserLazyQuery } from '../../graphql/generated';
 import { authToken, userData } from '../../graphql/store/auth';
 
 const publicPath = ['/login', '/register'];
@@ -9,14 +9,14 @@ const publicPath = ['/login', '/register'];
 const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [download, setDownload] = React.useState(false);
     const router = useRouter();
-    const [getUser] = useGetUserLazyQuery();
+    const [getCurrentUser] = useGetCurrentUserLazyQuery();
     const token = useReactiveVar(authToken);
 
     const getUserRequest = async () => {
-        const { data } = await getUser();
+        const { data } = await getCurrentUser();
 
         if (data) {
-            userData(data.getUser);
+            userData(data.getCurrentUser);
             if (localStorage.getItem('auth_token')) authToken(localStorage.getItem('auth_token')!);
         }
         setDownload(true);

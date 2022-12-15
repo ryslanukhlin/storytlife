@@ -55,6 +55,7 @@ type Mutation {
 }
 
 type Subscription {
+    newCreateRoom(userId: String!): Chat!
     newMessage(roomId: String!): Message!
     newCreteCall(userId: String!): CreateCallType!
     newAcceptCall(userId: String!): AcceptCallType!

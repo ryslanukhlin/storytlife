@@ -25,6 +25,11 @@ const whiteTheme = createTheme({
         background: {
             paper: '#e3e4e6',
         },
+        primary: {
+            main: '#764abc',
+            light: '#916ec9',
+            dark: '#6a43a9',
+        },
     },
     components: {
         MuiTimeline: {
@@ -42,6 +47,11 @@ const darkTheme = createTheme({
         mode: 'dark',
         background: {
             paper: '#222222',
+        },
+        primary: {
+            main: '#ba8fff',
+            light: '#7431ca',
+            dark: '#b97cfd',
         },
     },
     components: {

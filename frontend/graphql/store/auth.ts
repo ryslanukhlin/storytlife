@@ -10,7 +10,7 @@ export type Frend = {
     login: string;
     phone: string;
 };
-type typeUser = {
+export type TypeUser = {
     __typename?: 'User';
     id: string;
     phone: string;
@@ -23,4 +23,4 @@ type typeUser = {
     } | null> | null;
 };
 
-export const userData = makeVar<typeUser | null>(null);
+export const userData = makeVar<TypeUser | null>(null);

@@ -1,11 +1,14 @@
 import { Avatar, Button, TextField } from '@mui/material';
 import { red } from '@mui/material/colors';
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { useAddCommentMutation } from '../../../graphql/generated';
 
 import styles from './CommentForm.module.scss';
 
-const CommentForm: FC<{ postId: string }> = ({ postId }) => {
+const CommentForm: FC<{
+    postId: string;
+    commentInput: React.MutableRefObject<HTMLInputElement | undefined>;
+}> = ({ postId, commentInput }) => {
     const [txt, setTxt] = useState('');
     const [addComment] = useAddCommentMutation();
 
@@ -23,6 +26,7 @@ const CommentForm: FC<{ postId: string }> = ({ postId }) => {
                 },
             },
         });
+        setTxt('');
     };
 
     return (
@@ -39,6 +43,7 @@ const CommentForm: FC<{ postId: string }> = ({ postId }) => {
                 multiline
                 value={txt}
                 onChange={changeTxt}
+                inputRef={commentInput}
             />
             <Button variant="contained" className={styles.Button} onClick={sendComment}>
                 Отправить

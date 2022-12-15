@@ -13,7 +13,6 @@ type ComponentsProps = {
 
 const Comments: FC<ComponentsProps> = ({ comments, postId, addComment }) => {
     const [commentArr, setCommentArr] = useState(comments);
-    console.log(postId);
 
     useNewCommentSubscription({
         variables: {

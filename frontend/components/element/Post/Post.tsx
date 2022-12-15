@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import CardHeader from '@mui/material/CardHeader';
 import { red } from '@mui/material/colors';
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 
 import styles from './Post.module.scss';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -33,13 +33,14 @@ const CustomCard = styled(Card)(({ theme }) => ({
 
 const Post: FC<{ post: Post }> = ({ post }) => {
     const user = useReactiveVar(userData);
+    const commentInput = useRef<HTMLInputElement>();
 
     const [likeCount, setLikeCount] = useState(post.likes);
     const [commentCount, setCommentCount] = useState(post.comments.length);
     const [addLike] = useAddLikeMutation();
+    const isLiked = likeCount.find((like) => like.user.id === user?.id);
 
     const setLike = () => {
-        const isLiked = likeCount.find((like) => like.user.id === user?.id);
         if (isLiked) return;
 
         addLike({
@@ -47,6 +48,14 @@ const Post: FC<{ post: Post }> = ({ post }) => {
                 postId: post.id,
             },
         });
+    };
+
+    const addComment = () => {
+        setCommentCount((prev) => ++prev);
+    };
+
+    const focusInput = () => {
+        commentInput.current?.focus();
     };
 
     useNewLikeSubscription({
@@ -58,10 +67,6 @@ const Post: FC<{ post: Post }> = ({ post }) => {
         },
     });
 
-    const addComment = () => {
-        setCommentCount((prev) => ++prev);
-    };
-
     return (
         <CustomCard variant="outlined" className={styles.Post}>
             <CardHeader
@@ -70,7 +75,7 @@ const Post: FC<{ post: Post }> = ({ post }) => {
                         R
                     </Avatar>
                 }
-                title={post.title}
+                title={post.user.login}
                 subheader={dateFormater(post.created_at)}
             />
             {post.img && (
@@ -83,6 +88,9 @@ const Post: FC<{ post: Post }> = ({ post }) => {
             )}
 
             <CardContent>
+                <Typography variant="subtitle1" color="text.secondary">
+                    {post.title}
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
                     {post.description}
                 </Typography>
@@ -90,11 +98,14 @@ const Post: FC<{ post: Post }> = ({ post }) => {
             <CardActions disableSpacing>
                 <div className={styles.PostFooter}>
                     <div className={styles.FooterActions}>
-                        <IconButton aria-label="add like" onClick={setLike}>
+                        <IconButton
+                            aria-label="add like"
+                            onClick={setLike}
+                            color={isLiked ? 'error' : 'default'}>
                             <FavoriteIcon />
                         </IconButton>
                         <div className={styles.FooterCount}>{likeCount.length}</div>
-                        <IconButton aria-label="add comment">
+                        <IconButton aria-label="add comment" onClick={focusInput}>
                             <CommentIcon />
                         </IconButton>
                         <div className={styles.FooterCount}>{commentCount}</div>
@@ -112,7 +123,7 @@ const Post: FC<{ post: Post }> = ({ post }) => {
             </CardActions>
             <Collapse in unmountOnExit className={styles.CommentsWrapper}>
                 <Comments comments={post.comments} postId={post.id} addComment={addComment} />
-                <CommentForm postId={post.id} />
+                <CommentForm postId={post.id} commentInput={commentInput} />
             </Collapse>
         </CustomCard>
     );

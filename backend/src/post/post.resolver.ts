@@ -20,8 +20,18 @@ export class PostResolver {
     ) {}
 
     @Query()
-    getUserPosts(@CurrentUser() currentUser: ICurrentUser) {
-        return this.postService.getUserPosts(currentUser);
+    getUserPosts(@Args('userId') userId: string) {
+        return this.postService.getUserPosts(userId);
+    }
+
+    @Query()
+    getPosts() {
+        return this.postService.getPosts();
+    }
+
+    @Query()
+    getPost(@Args('postId') postId: string) {
+        return this.postService.getPost(postId);
     }
 
     @Mutation()

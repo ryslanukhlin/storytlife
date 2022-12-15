@@ -1,21 +1,9 @@
 import { useReactiveVar } from '@apollo/client';
-import {
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    CardMedia,
-    Grid,
-    styled,
-    Typography,
-} from '@mui/material';
+import { Button, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import Card from '../components/ui/Card';
 import { useCreateRoomMutation, useGetUsersQuery } from '../graphql/generated';
 import { userData } from '../graphql/store/auth';
-
-const CardCustom = styled(Card)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
-}));
 
 const Search = () => {
     const router = useRouter();
@@ -40,7 +28,11 @@ const Search = () => {
             },
         });
 
-        userData({ ...userData()!, chats: [...userData()?.chats!, data!.createRoom!] });
+        console.log(data?.createRoom);
+
+        console.log(errors);
+
+        userData({ ...user!, chats: [...user!.chats!, data!.createRoom!] });
         router.push('/chat/' + data?.createRoom?.id);
     };
 
@@ -50,7 +42,7 @@ const Search = () => {
         <Grid container spacing={2}>
             {data?.getUsers!.map((user) => (
                 <Grid key={user?.id} item xs={12} lg={3} md={4} sm={6} xl={2}>
-                    <CardCustom variant="outlined">
+                    <Card variant="outlined">
                         <CardMedia
                             image="https://cdn1.flamp.ru/df271521a12773528a59498632d7ba6a.jpg"
                             component="img"
@@ -69,7 +61,7 @@ const Search = () => {
                                 Написать сообшение
                             </Button>
                         </CardActions>
-                    </CardCustom>
+                    </Card>
                 </Grid>
             ))}
         </Grid>

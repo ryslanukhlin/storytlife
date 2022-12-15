@@ -35,7 +35,9 @@ input CreateCommentInput {
 }
 
 type Query {
-    getUserPosts: [Post!]!
+    getUserPosts(userId: String!): [Post!]!
+    getPosts: [Post!]!
+    getPost(postId: String!): Post
 }
 
 type Mutation {

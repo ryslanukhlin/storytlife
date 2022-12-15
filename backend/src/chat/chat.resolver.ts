@@ -14,6 +14,7 @@ import { PUB_SUB } from 'src/pubsub/pubsub.module';
 import { Public } from 'src/decorator/public.decorator';
 
 enum SUBSCRIPTIONS_EVENT {
+    NEW_ROOM = 'NEW_ROOM',
     NEW_MESSAGE = 'NEW_MESSAGE',
     NEW_CALL = 'NEW_CALL',
     ACCEPT_CALL = 'ACCEPT_CALL',
@@ -33,8 +34,26 @@ export class ChatResolver {
     }
 
     @Mutation()
-    createRoom(@CurrentUser() currentUser: ICurrentUser, @Args('userId') userId: string) {
-        return this.chatService.createRoom(currentUser.id, userId);
+    async createRoom(@CurrentUser() currentUser: ICurrentUser, @Args('userId') userId: string) {
+        const room = await this.chatService.createRoom(currentUser.id, userId);
+        const usersFrend = room.users.filter((user) => user.id !== currentUser.id);
+        const usersCurrent = room.users.filter((user) => user.id !== userId);
+
+        const frendRoom = { ...room };
+        const currentRoom = { ...room };
+
+        frendRoom.users = usersFrend;
+        currentRoom.users = usersCurrent;
+
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.NEW_ROOM + userId, {
+            newCreateRoom: currentRoom,
+        });
+        return frendRoom;
+    }
+
+    @Subscription()
+    newCreateRoom(@Args('userId') userId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.NEW_ROOM + userId);
     }
 
     @Mutation()

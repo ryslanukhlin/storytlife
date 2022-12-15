@@ -10,6 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import MessageIcon from '@mui/icons-material/Message';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import { userData } from '../../../graphql/store/auth';
 import { ThemeContext } from '../../../pages/_app';
 import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
@@ -40,7 +41,6 @@ const Nav = () => {
     return (
         <BoxBorderRight className={NavClasses}>
             <div className={styles.NavHeader}>
-                {bigNav && <h1 className={styles.NavTitle}>StoryLife</h1>}
                 <IconButton
                     onClick={changeViewNav}
                     className={styles.NavClose}
@@ -49,6 +49,7 @@ const Nav = () => {
                     aria-label="menu">
                     <MenuIcon />
                 </IconButton>
+                {bigNav && <h1 className={styles.NavTitle}>StoryLife</h1>}
             </div>
             <nav className={styles.NavContent}>
                 <CustomLink
@@ -56,6 +57,10 @@ const Nav = () => {
                     className={styles.NavLink + ' ' + styles.NavLinkActive}>
                     <PersonIcon />
                     {bigNav && <div className={styles.NavLinkTxt}>Профиль</div>}
+                </CustomLink>
+                <CustomLink href="/post" className={styles.NavLink}>
+                    <NewspaperIcon />
+                    {bigNav && <div className={styles.NavLinkTxt}>Посты</div>}
                 </CustomLink>
                 <CustomLink href="/chat" className={styles.NavLink}>
                     <MessageIcon />

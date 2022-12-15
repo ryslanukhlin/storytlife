@@ -2,7 +2,10 @@ import { useReactiveVar } from '@apollo/client';
 import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { createContext, FC, ReactNode, useState } from 'react';
-import { useNewCreteCallSubscription } from '../../../graphql/generated';
+import {
+    useNewCreateRoomSubscription,
+    useNewCreteCallSubscription,
+} from '../../../graphql/generated';
 import { userData } from '../../../graphql/store/auth';
 import Nav from '../../container/nav/Nav';
 import CallAnswerModal from '../../ui/modal/CallAnswerModal';
@@ -41,6 +44,15 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
                 chatId,
                 usingVideo,
             });
+        },
+    });
+
+    useNewCreateRoomSubscription({
+        variables: {
+            userId: user?.id!,
+        },
+        onData: (option) => {
+            userData({ ...user!, chats: [...user!.chats!, option.data.data?.newCreateRoom!] });
         },
     });
 

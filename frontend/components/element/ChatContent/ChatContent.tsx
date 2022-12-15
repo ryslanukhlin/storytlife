@@ -40,6 +40,14 @@ const MessageContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
+const MyMessage = styled(Box)(({ theme }) => ({
+    backgroundColor: theme.palette.primary.light,
+}));
+
+const Message = styled(Box)(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+}));
+
 type Message = {
     __typename?: 'Message' | undefined;
     id: string;
@@ -72,7 +80,7 @@ const ChatContent = () => {
 
     const sendMesssage = async () => {
         if (message.replace(/\s+/g, '')) {
-            await createMessage({
+            const { data, errors } = await createMessage({
                 variables: {
                     messageInput: {
                         roomId: chatId,
@@ -80,6 +88,9 @@ const ChatContent = () => {
                     },
                 },
             });
+            console.log('data - ', data);
+            console.log('errors - ', errors);
+            setMessage('');
             document.documentElement.scrollTop = document.documentElement.scrollHeight;
         }
     };
@@ -162,15 +173,17 @@ const ChatContent = () => {
                 </CustomHeader>
             </div>
             <MessageContainer className={styles.ChatMessages} ref={blockMessagesRef}>
-                {messages?.map((message) => (
-                    <div
-                        className={
-                            message?.user_id === user?.id ? styles.MyMessage : styles.Message
-                        }
-                        key={message?.id}>
-                        {message?.text}
-                    </div>
-                ))}
+                {messages?.map((message) =>
+                    message?.user_id === user?.id ? (
+                        <MyMessage className={styles.MyMessage} key={message?.id}>
+                            {message?.text}
+                        </MyMessage>
+                    ) : (
+                        <Message className={styles.Message} key={message?.id}>
+                            {message?.text}
+                        </Message>
+                    ),
+                )}
             </MessageContainer>
             <CustomFooter className={classesChatFooter}>
                 <ChatInput

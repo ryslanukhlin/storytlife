@@ -13,6 +13,7 @@ type User {
 }
 
 type Query {
-    getUser: User!
+    getCurrentUser: User!
+    getUser(userId: String!): User
     getUsers: [User]!
 }

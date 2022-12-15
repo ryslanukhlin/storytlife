@@ -120,6 +120,8 @@ export abstract class ISubscription {
 
     abstract newLeaveCall(userId: string): string | Promise<string>;
 
+    abstract newCreateRoom(userId: string): Chat | Promise<Chat>;
+
     abstract newMessage(roomId: string): Message | Promise<Message>;
 
     abstract newCreteCall(userId: string): CreateCallType | Promise<CreateCallType>;
@@ -161,9 +163,15 @@ export class AcceptCallType {
 export abstract class IQuery {
     abstract getMessages(roomId: string): Nullable<Message>[] | Promise<Nullable<Message>[]>;
 
-    abstract getUserPosts(): Post[] | Promise<Post[]>;
+    abstract getUserPosts(userId: string): Post[] | Promise<Post[]>;
 
-    abstract getUser(): User | Promise<User>;
+    abstract getPosts(): Post[] | Promise<Post[]>;
+
+    abstract getPost(postId: string): Nullable<Post> | Promise<Nullable<Post>>;
+
+    abstract getCurrentUser(): User | Promise<User>;
+
+    abstract getUser(userId: string): Nullable<User> | Promise<Nullable<User>>;
 
     abstract getUsers(): Nullable<User>[] | Promise<Nullable<User>[]>;
 }

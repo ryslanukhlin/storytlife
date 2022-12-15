@@ -15,12 +15,15 @@ export class ChatService {
         });
     }
 
-    createRoom(currentUserId: string, userId: string) {
-        return this.prisma.chat.create({
+    async createRoom(currentUserId: string, userId: string) {
+        return await this.prisma.chat.create({
             data: {
                 users: {
                     connect: [{ id: currentUserId }, { id: userId }],
                 },
+            },
+            include: {
+                users: true,
             },
         });
     }

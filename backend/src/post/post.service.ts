@@ -39,6 +39,7 @@ export class PostService {
                 },
             },
             include: {
+                user: true,
                 likes: {
                     include: {
                         user: true,
@@ -53,12 +54,42 @@ export class PostService {
         });
     }
 
-    getUserPosts(currentUser: ICurrentUser) {
+    getPosts() {
+        return this.prisma.post.findMany({
+            include: {
+                user: true,
+            },
+        });
+    }
+
+    getUserPosts(userId: string) {
         return this.prisma.post.findMany({
             where: {
-                user_id: currentUser.id,
+                user_id: userId,
             },
             include: {
+                user: true,
+                likes: {
+                    include: {
+                        user: true,
+                    },
+                },
+                comments: {
+                    include: {
+                        user: true,
+                    },
+                },
+            },
+        });
+    }
+
+    getPost(postId: string) {
+        return this.prisma.post.findFirst({
+            where: {
+                id: postId,
+            },
+            include: {
+                user: true,
                 likes: {
                     include: {
                         user: true,

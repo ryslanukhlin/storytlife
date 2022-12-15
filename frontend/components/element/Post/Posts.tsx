@@ -1,7 +1,9 @@
 import { useReactiveVar } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { FC, useEffect, useState } from 'react';
 import { useGetUserPostsLazyQuery, useNewPostSubscription } from '../../../graphql/generated';
-import { userData } from '../../../graphql/store/auth';
+import { TypeUser, userData } from '../../../graphql/store/auth';
+import { UserPageInfo } from '../../../pages/[id]';
 import PostComponent from './Post';
 
 export interface Comment {
@@ -19,6 +21,10 @@ export interface Post {
     img?: string | null;
     created_at: string;
     title: string;
+    user: {
+        __typename?: 'User' | undefined;
+        login: string;
+    };
     likes: {
         __typename?: 'Like' | undefined;
         user: {
@@ -29,20 +35,24 @@ export interface Post {
     comments: Comment[];
 }
 
-const Posts = () => {
-    const user = useReactiveVar(userData);
+const Posts: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
+    const router = useRouter();
     const [posts, setPosts] = useState<Post[]>([]);
     const [getPosts] = useGetUserPostsLazyQuery();
 
     const downloadPosts = async () => {
-        const { data } = await getPosts();
+        const { data } = await getPosts({
+            variables: {
+                userId: router.query.id as string,
+            },
+        });
 
         setPosts(data?.getUserPosts as Post[]);
     };
 
     useNewPostSubscription({
         variables: {
-            userId: user?.id!,
+            userId: user.id,
         },
         onData: (option) => {
             const { created_at } = option.data.data?.newPost!;

@@ -26,6 +26,11 @@ const ChatItem = () => {
 
     return (
         <BoxBorderRight className={styles.ChatList}>
+            {user?.chats?.length === 0 && (
+                <Typography variant="body1">
+                    Перейдите в раздел 'сообшения' <br /> и выберете кому хотите написать
+                </Typography>
+            )}
             {user?.chats!.map((contact) => {
                 const user = contact!.users![0];
 

@@ -21,8 +21,8 @@ mutation LoginUser($loginInput: LoginInput) {
     }
 }
 
-query GetUser {
-    getUser {
+query GetCurrentUser {
+    getCurrentUser {
         id
         phone
         login
@@ -35,6 +35,15 @@ query GetUser {
                 phone
             }
         }
+    }
+}
+
+query GetUser($userId: String!) {
+    getUser(userId: $userId) {
+        id
+        phone
+        login
+        created_at
     }
 }
 

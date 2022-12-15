@@ -1,10 +1,52 @@
-query GetUserPosts {
-    getUserPosts {
+query GetPosts {
+    getPosts {
+        id
+        created_at
+        title
+        description
+        img
+        user {
+            login
+        }
+    }
+}
+
+query GetUserPosts($userId: String!) {
+    getUserPosts(userId: $userId) {
         id
         description
         img
         created_at
         title
+        user {
+            login
+        }
+        likes {
+            user {
+                id
+            }
+        }
+        comments {
+            id
+            txt
+            created_at
+            user {
+                login
+            }
+        }
+    }
+}
+
+query GetPost($postId: String!) {
+    getPost(postId: $postId) {
+        id
+        title
+        description
+        created_at
+        img
+        user {
+            login
+        }
         likes {
             user {
                 id
@@ -32,6 +74,9 @@ subscription NewPost($userId: String!) {
         img
         created_at
         title
+        user {
+            login
+        }
         likes {
             user {
                 id

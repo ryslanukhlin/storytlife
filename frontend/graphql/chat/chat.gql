@@ -21,6 +21,17 @@ subscription NewMessage($roomId: String!) {
     }
 }
 
+subscription NewCreateRoom($userId: String!) {
+    newCreateRoom(userId: $userId) {
+        id
+        users {
+            id
+            login
+            phone
+        }
+    }
+}
+
 query GetMessages($roomId: String!) {
     getMessages(roomId: $roomId) {
         id
