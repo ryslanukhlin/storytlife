@@ -58,6 +58,7 @@ const authLink = new ApolloLink((operation, forward) => {
 const client = new ApolloClient({
     link: authLink.concat(splitLink),
     cache: new InMemoryCache(),
+    queryDeduplication: true,
 });
 
 const ClientApolloProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {

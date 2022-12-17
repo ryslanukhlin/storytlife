@@ -11,10 +11,11 @@ import MessageIcon from '@mui/icons-material/Message';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import { userData } from '../../../graphql/store/auth';
+import { notificationData, userData } from '../../../graphql/store/auth';
 import { ThemeContext } from '../../../pages/_app';
 import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
 import BoxBorderRight from '../../ui/BoxBorderRight';
+import { useReactiveVar } from '@apollo/client';
 
 const CustomLink = styled(Link)(({ theme }) => ({
     color: theme.palette.text.primary,
@@ -33,10 +34,18 @@ const CustomChangeTheme = styled(Box)(({ theme }) => ({
 }));
 
 const Nav = () => {
+    const notifications = useReactiveVar(notificationData);
     const themeContext = useContext(ThemeContext);
     const { bigNav, changeViewNav } = useContext(TypeMenuContext);
 
+    const countNotification = notifications!.filter(
+        (notif) => !!notif && !!notif!.messages_id && notif!.messages_id!.length,
+    );
+
     const NavClasses = `${styles.Nav} ${bigNav ? styles.BigNav : ''}`;
+    const NotificationClasses = `${
+        themeContext.theme === 'dark' ? styles.NotificationBlack : styles.Notification
+    } ${bigNav ? '' : styles.MiniNotification}`;
 
     return (
         <BoxBorderRight className={NavClasses}>
@@ -62,9 +71,16 @@ const Nav = () => {
                     <NewspaperIcon />
                     {bigNav && <div className={styles.NavLinkTxt}>Посты</div>}
                 </CustomLink>
-                <CustomLink href="/chat" className={styles.NavLink}>
-                    <MessageIcon />
-                    {bigNav && <div className={styles.NavLinkTxt}>Сообшения</div>}
+                <CustomLink
+                    href="/chat"
+                    className={styles.NavLink + ' ' + styles.NavLinkNotification}>
+                    <div className={styles.NanContent}>
+                        <MessageIcon />
+                        {bigNav && <div className={styles.NavLinkTxt}>Сообшения</div>}
+                    </div>
+                    {countNotification!.length! > 0 && (
+                        <div className={NotificationClasses}>{countNotification!.length}</div>
+                    )}
                 </CustomLink>
                 <CustomLink href="/search" className={styles.NavLink}>
                     <SearchIcon />

@@ -22,6 +22,7 @@
 .ChatListItem {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 10px;
     border-radius: 20px;
     margin-bottom: 10px;
@@ -40,4 +41,32 @@
 
 .ChatContent {
     margin-left: 20px;
+}
+
+.ChatListContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.NotificationBd {
+    background-color: #7431ca;
+    width: 30px;
+    height: 30px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.Notification {
+    background-color: #916ec9;
+    width: 30px;
+    height: 30px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
 }

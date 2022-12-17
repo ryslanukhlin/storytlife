@@ -30,6 +30,11 @@ export class UserService {
         return await this.prisma.user.findFirst({
             where: { id },
             include: {
+                message_notifications: {
+                    include: {
+                        chat: true,
+                    },
+                },
                 chats: {
                     include: {
                         users: {

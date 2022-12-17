@@ -13,6 +13,7 @@ type Chat {
 input MessageInput {
     txt: String!
     roomId: String!
+    userId: String!
 }
 
 enum AcceptCall {
@@ -46,17 +47,24 @@ type Query {
     getMessages(roomId: String!): [Message]!
 }
 
+input DeleteInputNotification {
+    notificationId: String!
+    messageId: String!
+}
+
 type Mutation {
     createRoom(userId: String!): Chat!
     createMessage(messageInput: MessageInput!): String!
     createCall(createCallInput: CreateCallInput!): String!
     acceptCall(acceptCallInput: AcceptCallInput!): String!
     cancelCall(userId: String!): String!
+    deleteNotification(deleteInputNotification: DeleteInputNotification!): String!
 }
 
 type Subscription {
     newCreateRoom(userId: String!): Chat!
     newMessage(roomId: String!): Message!
+    newNotification(userId: String!): MessageNotification!
     newCreteCall(userId: String!): CreateCallType!
     newAcceptCall(userId: String!): AcceptCallType!
     newCancelCall(userId: String!): String!

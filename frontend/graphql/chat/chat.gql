@@ -39,3 +39,7 @@ query GetMessages($roomId: String!) {
         text
     }
 }
+
+mutation DeleteNotification($deleteInputNotification: DeleteInputNotification!) {
+    deleteNotification(deleteInputNotification: $deleteInputNotification)
+}

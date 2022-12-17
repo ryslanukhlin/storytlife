@@ -52,8 +52,48 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    position: relative;
+
+    &Notification {
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .Notification {
+        background-color: #916ec9;
+        color: white;
+    }
+
+    .NotificationBlack {
+        background-color: #7431ca;
+        color: white;
+    }
 }
 
 .NavLinkTxt {
     margin-left: 20px;
+}
+
+.Notification,
+.NotificationBlack {
+    width: 27px;
+    height: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 15px;
+}
+
+.NanContent {
+    display: flex;
+}
+
+.MiniNotification {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
+    right: 0;
+    top: 0;
 }

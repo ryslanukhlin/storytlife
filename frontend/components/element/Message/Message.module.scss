@@ -1,0 +1,24 @@
+.MyMessage {
+    font-size: 16px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 6px;
+    width: fit-content;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.Message {
+    font-size: 16px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 6px;
+    width: fit-content;
+    margin-left: auto;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}

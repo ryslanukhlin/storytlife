@@ -16,6 +16,7 @@ import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 import CallOffetModal from '../../ui/modal/CallOffetModal';
+import Message from '../Message/Message';
 
 const CustomHeader = styled(Box)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -40,15 +41,7 @@ const MessageContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
-const MyMessage = styled(Box)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.light,
-}));
-
-const Message = styled(Box)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
-}));
-
-type Message = {
+export type MessageType = {
     __typename?: 'Message' | undefined;
     id: string;
     user_id: string;
@@ -59,7 +52,7 @@ const ChatContent = () => {
     const blockMessagesRef = useRef<HTMLDivElement>(null);
     const { bigNav } = useContext(TypeMenuContext);
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [messages, setMessages] = useState<MessageType[]>([]);
     const [call, setCall] = useState<{ usingVideo: boolean } | null>(null);
 
     const [getMessages] = useGetMessagesLazyQuery();
@@ -85,11 +78,10 @@ const ChatContent = () => {
                     messageInput: {
                         roomId: chatId,
                         txt: message,
+                        userId: frend?.id!,
                     },
                 },
             });
-            console.log('data - ', data);
-            console.log('errors - ', errors);
             setMessage('');
             document.documentElement.scrollTop = document.documentElement.scrollHeight;
         }
@@ -117,6 +109,10 @@ const ChatContent = () => {
         },
     });
 
+    const scrollBotton = () => {
+        window.scrollTo({ top: blockMessagesRef.current?.scrollHeight });
+    };
+
     useEffect(() => {
         (async () => {
             const { data } = await getMessages({
@@ -129,8 +125,10 @@ const ChatContent = () => {
     }, [chatId]);
 
     useLayoutEffect(() => {
-        window.scrollTo({ top: blockMessagesRef.current?.scrollHeight });
-    });
+        setTimeout(() => {
+            scrollBotton();
+        }, 100);
+    }, []);
 
     const classesChatFooter = `${styles.ChatFooter} ${
         bigNav ? styles.maxWidthBigNav : styles.maxWidthSmallNav
@@ -173,17 +171,9 @@ const ChatContent = () => {
                 </CustomHeader>
             </div>
             <MessageContainer className={styles.ChatMessages} ref={blockMessagesRef}>
-                {messages?.map((message) =>
-                    message?.user_id === user?.id ? (
-                        <MyMessage className={styles.MyMessage} key={message?.id}>
-                            {message?.text}
-                        </MyMessage>
-                    ) : (
-                        <Message className={styles.Message} key={message?.id}>
-                            {message?.text}
-                        </Message>
-                    ),
-                )}
+                {messages?.map((message) => (
+                    <Message key={message?.id} message={message} />
+                ))}
             </MessageContainer>
             <CustomFooter className={classesChatFooter}>
                 <ChatInput

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { MessageInput } from 'src/types/graphql';
+import { DeleteInputNotification, MessageInput } from 'src/types/graphql';
 import { ICurrentUser } from 'src/user/currentUser.decorator';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class ChatService {
     }
 
     async createMessage(currentUser: ICurrentUser, messageInput: MessageInput) {
-        return await this.prisma.message.create({
+        const message = await this.prisma.message.create({
             data: {
                 text: messageInput.txt,
                 user: {
@@ -40,5 +40,52 @@ export class ChatService {
                 },
             },
         });
+        let notification = await this.prisma.messageNotification.findFirst({
+            where: {
+                chat_id: message.chat_id,
+                AND: {
+                    user: {
+                        id: messageInput.userId,
+                    },
+                },
+            },
+        });
+
+        if (notification) {
+            notification = await this.prisma.messageNotification.update({
+                where: {
+                    id: notification.id,
+                },
+                data: {
+                    messages_id: [...notification.messages_id, message.id],
+                },
+                include: {
+                    chat: true,
+                },
+            });
+        } else {
+            notification = await this.prisma.messageNotification.create({
+                data: {
+                    messages_id: [message.id],
+                    user: {
+                        connect: { id: messageInput.userId },
+                    },
+                    chat: {
+                        connect: { id: messageInput.roomId },
+                    },
+                },
+                include: {
+                    chat: true,
+                },
+            });
+        }
+
+        return { message, notification };
+    }
+    // FIXME: нужно создать не масив из строчек а отдельную сужность в которой будет в качестве id
+    //        id сообшения, так как prisma не может удалить элемент из масиве не скачивая сам масив
+    async deleteNotification(deleteInput: DeleteInputNotification) {
+        await this.prisma
+            .$queryRaw`update "MessageNotification" set messages_id = array_remove(messages_id, ${deleteInput.messageId})`;
     }
 }

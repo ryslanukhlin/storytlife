@@ -43,6 +43,7 @@ export class CreateCandidateInput {
 export class MessageInput {
     txt: string;
     roomId: string;
+    userId: string;
 }
 
 export class CreateCallInput {
@@ -55,6 +56,11 @@ export class AcceptCallInput {
     chatId: string;
     userId: string;
     acceptCall: AcceptCall;
+}
+
+export class DeleteInputNotification {
+    notificationId: string;
+    messageId: string;
 }
 
 export class CreatePostInput {
@@ -99,6 +105,8 @@ export abstract class IMutation {
 
     abstract cancelCall(userId: string): string | Promise<string>;
 
+    abstract deleteNotification(deleteInputNotification: DeleteInputNotification): string | Promise<string>;
+
     abstract createPost(createPost: CreatePostInput): string | Promise<string>;
 
     abstract addLike(postId: string): string | Promise<string>;
@@ -123,6 +131,8 @@ export abstract class ISubscription {
     abstract newCreateRoom(userId: string): Chat | Promise<Chat>;
 
     abstract newMessage(roomId: string): Message | Promise<Message>;
+
+    abstract newNotification(userId: string): MessageNotification | Promise<MessageNotification>;
 
     abstract newCreteCall(userId: string): CreateCallType | Promise<CreateCallType>;
 
@@ -201,6 +211,12 @@ export class Post {
     comments: Comment[];
 }
 
+export class MessageNotification {
+    id: string;
+    messages_id?: Nullable<string[]>;
+    chat: Chat;
+}
+
 export class User {
     id: string;
     login: string;
@@ -208,6 +224,7 @@ export class User {
     password: string;
     created_at: string;
     chats: Nullable<Chat>[];
+    message_notifications: Nullable<MessageNotification>[];
 }
 
 type Nullable<T> = T | null;

@@ -81,6 +81,11 @@ export type CreatePostInput = {
   title: Scalars['String'];
 };
 
+export type DeleteInputNotification = {
+  messageId: Scalars['String'];
+  notificationId: Scalars['String'];
+};
+
 export type Like = {
   __typename?: 'Like';
   id: Scalars['String'];
@@ -110,6 +115,14 @@ export type Message = {
 export type MessageInput = {
   roomId: Scalars['String'];
   txt: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type MessageNotification = {
+  __typename?: 'MessageNotification';
+  chat: Chat;
+  id: Scalars['String'];
+  messages_id?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Mutation = {
@@ -125,6 +138,7 @@ export type Mutation = {
   createOffer: Scalars['String'];
   createPost: Scalars['String'];
   createRoom: Chat;
+  deleteNotification: Scalars['String'];
   leaveCall: Scalars['String'];
   loginUser?: Maybe<LoginObject>;
   registerUser?: Maybe<RegisterObject>;
@@ -183,6 +197,11 @@ export type MutationCreatePostArgs = {
 
 export type MutationCreateRoomArgs = {
   userId: Scalars['String'];
+};
+
+
+export type MutationDeleteNotificationArgs = {
+  deleteInputNotification: DeleteInputNotification;
 };
 
 
@@ -273,6 +292,7 @@ export type Subscription = {
   newLeaveCall: Scalars['String'];
   newLike: Like;
   newMessage: Message;
+  newNotification: MessageNotification;
   newPost: Post;
 };
 
@@ -332,6 +352,11 @@ export type SubscriptionNewMessageArgs = {
 };
 
 
+export type SubscriptionNewNotificationArgs = {
+  userId: Scalars['String'];
+};
+
+
 export type SubscriptionNewPostArgs = {
   userId: Scalars['String'];
 };
@@ -347,6 +372,7 @@ export type User = {
   created_at: Scalars['String'];
   id: Scalars['String'];
   login: Scalars['String'];
+  message_notifications: Array<Maybe<MessageNotification>>;
   password: Scalars['String'];
   phone: Scalars['String'];
 };
@@ -368,7 +394,7 @@ export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typen
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, chats: Array<{ __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, login: string, phone: string } | null> } | null> } };
+export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, chats: Array<{ __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, login: string, phone: string } | null> } | null>, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
 
 export type GetUserQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -418,6 +444,13 @@ export type NewCancelCallSubscriptionVariables = Exact<{
 
 
 export type NewCancelCallSubscription = { __typename?: 'Subscription', newCancelCall: string };
+
+export type NewNotificationSubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewNotificationSubscription = { __typename?: 'Subscription', newNotification: { __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } };
 
 export type CreateOfferMutationVariables = Exact<{
   createOfferInput: CreateOfferInput;
@@ -509,6 +542,13 @@ export type GetMessagesQueryVariables = Exact<{
 
 
 export type GetMessagesQuery = { __typename?: 'Query', getMessages: Array<{ __typename?: 'Message', id: string, user_id: string, text: string } | null> };
+
+export type DeleteNotificationMutationVariables = Exact<{
+  deleteInputNotification: DeleteInputNotification;
+}>;
+
+
+export type DeleteNotificationMutation = { __typename?: 'Mutation', deleteNotification: string };
 
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -656,6 +696,13 @@ export const GetCurrentUserDocument = gql`
         id
         login
         phone
+      }
+    }
+    message_notifications {
+      id
+      messages_id
+      chat {
+        id
       }
     }
   }
@@ -909,6 +956,40 @@ export function useNewCancelCallSubscription(baseOptions: Apollo.SubscriptionHoo
       }
 export type NewCancelCallSubscriptionHookResult = ReturnType<typeof useNewCancelCallSubscription>;
 export type NewCancelCallSubscriptionResult = Apollo.SubscriptionResult<NewCancelCallSubscription>;
+export const NewNotificationDocument = gql`
+    subscription NewNotification($userId: String!) {
+  newNotification(userId: $userId) {
+    id
+    messages_id
+    chat {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewNotificationSubscription__
+ *
+ * To run a query within a React component, call `useNewNotificationSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewNotificationSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewNotificationSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewNotificationSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewNotificationSubscription, NewNotificationSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewNotificationSubscription, NewNotificationSubscriptionVariables>(NewNotificationDocument, options);
+      }
+export type NewNotificationSubscriptionHookResult = ReturnType<typeof useNewNotificationSubscription>;
+export type NewNotificationSubscriptionResult = Apollo.SubscriptionResult<NewNotificationSubscription>;
 export const CreateOfferDocument = gql`
     mutation CreateOffer($createOfferInput: CreateOfferInput!) {
   createOffer(createOfferInput: $createOfferInput)
@@ -1321,6 +1402,37 @@ export function useGetMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>;
 export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>;
 export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>;
+export const DeleteNotificationDocument = gql`
+    mutation DeleteNotification($deleteInputNotification: DeleteInputNotification!) {
+  deleteNotification(deleteInputNotification: $deleteInputNotification)
+}
+    `;
+export type DeleteNotificationMutationFn = Apollo.MutationFunction<DeleteNotificationMutation, DeleteNotificationMutationVariables>;
+
+/**
+ * __useDeleteNotificationMutation__
+ *
+ * To run a mutation, you first call `useDeleteNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteNotificationMutation, { data, loading, error }] = useDeleteNotificationMutation({
+ *   variables: {
+ *      deleteInputNotification: // value for 'deleteInputNotification'
+ *   },
+ * });
+ */
+export function useDeleteNotificationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNotificationMutation, DeleteNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteNotificationMutation, DeleteNotificationMutationVariables>(DeleteNotificationDocument, options);
+      }
+export type DeleteNotificationMutationHookResult = ReturnType<typeof useDeleteNotificationMutation>;
+export type DeleteNotificationMutationResult = Apollo.MutationResult<DeleteNotificationMutation>;
+export type DeleteNotificationMutationOptions = Apollo.BaseMutationOptions<DeleteNotificationMutation, DeleteNotificationMutationVariables>;
 export const GetPostsDocument = gql`
     query GetPosts {
   getPosts {

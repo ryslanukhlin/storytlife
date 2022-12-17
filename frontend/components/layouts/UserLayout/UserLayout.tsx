@@ -5,8 +5,9 @@ import React, { createContext, FC, ReactNode, useState } from 'react';
 import {
     useNewCreateRoomSubscription,
     useNewCreteCallSubscription,
+    useNewNotificationSubscription,
 } from '../../../graphql/generated';
-import { userData } from '../../../graphql/store/auth';
+import { notificationData, userData } from '../../../graphql/store/auth';
 import Nav from '../../container/nav/Nav';
 import CallAnswerModal from '../../ui/modal/CallAnswerModal';
 
@@ -27,6 +28,7 @@ type AnserCallUser = {
 const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
     const router = useRouter();
     const user = useReactiveVar(userData);
+    const notification = useReactiveVar(notificationData);
     const [bigNav, setBigNav] = useState(true);
     const [callFrend, setFrendCall] = useState<AnserCallUser | null>(null);
 
@@ -53,6 +55,30 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
         },
         onData: (option) => {
             userData({ ...user!, chats: [...user!.chats!, option.data.data?.newCreateRoom!] });
+        },
+    });
+
+    useNewNotificationSubscription({
+        variables: {
+            userId: user?.id!,
+        },
+        onData: (option) => {
+            const newNotification = option.data.data?.newNotification;
+            const isCreatedRoomNotification = notification!.find(
+                (notif) => notif?.chat.id === newNotification?.chat.id,
+            );
+
+            if (isCreatedRoomNotification) {
+                const updateNotification = notification!.reduce((arr: any[], notif) => {
+                    if (notif?.chat.id === newNotification?.chat.id) {
+                        return [...arr, newNotification!];
+                    }
+                    return [...arr, notif];
+                }, []);
+                notificationData(updateNotification);
+            } else {
+                notificationData([...notification!, newNotification!]);
+            }
         },
     });
 

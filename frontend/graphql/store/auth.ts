@@ -10,6 +10,20 @@ export type Frend = {
     login: string;
     phone: string;
 };
+
+export type Chat = {
+    __typename?: 'Chat';
+    id: string;
+    users?: Array<Frend | null> | null;
+};
+
+export type Notification = Array<{
+    id: string;
+    __typename?: 'MessageNotification';
+    messages_id?: Array<string> | null;
+    chat: { __typename?: 'Chat'; id: string };
+} | null>;
+
 export type TypeUser = {
     __typename?: 'User';
     id: string;
@@ -24,3 +38,4 @@ export type TypeUser = {
 };
 
 export const userData = makeVar<TypeUser | null>(null);
+export const notificationData = makeVar<Notification | null>(null);

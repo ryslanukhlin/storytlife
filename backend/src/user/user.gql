@@ -3,6 +3,12 @@ type Chat {
     users: [User]!
 }
 
+type MessageNotification {
+    id: String!
+    messages_id: [String!]
+    chat: Chat!
+}
+
 type User {
     id: String!
     login: String!
@@ -10,6 +16,7 @@ type User {
     password: String!
     created_at: String!
     chats: [Chat]!
+    message_notifications: [MessageNotification]!
 }
 
 type Query {

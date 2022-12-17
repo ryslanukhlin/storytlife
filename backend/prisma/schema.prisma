@@ -21,12 +21,14 @@ model User {
   post Post[]
   like Like[]
   comment Comment[]
+  message_notifications MessageNotification[]
 }
 
 model Chat {
   id String @id @default(uuid())
   users User[]
   message Message[]
+  message_notification MessageNotification[]
 }
 
 model Message {
@@ -67,4 +69,13 @@ model Comment {
   post_id String
   user User @relation(fields: [user_id], references: [id])
   user_id String
+}
+
+model MessageNotification {
+  id String @id @default(uuid())
+  messages_id String[]
+  user User @relation(fields: [user_id], references: [id])
+  user_id String
+  chat Chat @relation(fields: [chat_id], references: [id])
+  chat_id String
 }

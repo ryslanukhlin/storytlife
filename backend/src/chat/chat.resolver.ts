@@ -6,6 +6,7 @@ import {
     AcceptCallInput,
     AcceptCallType,
     CreateCallInput,
+    DeleteInputNotification,
     MessageInput,
 } from './../types/graphql';
 import { Inject } from '@nestjs/common';
@@ -19,6 +20,7 @@ enum SUBSCRIPTIONS_EVENT {
     NEW_CALL = 'NEW_CALL',
     ACCEPT_CALL = 'ACCEPT_CALL',
     CANCEL_CALL = 'CANCEL_CALL',
+    NEW_NOTIFICATION = 'NEW_NOTIFICATION',
 }
 
 @Resolver()
@@ -62,9 +64,15 @@ export class ChatResolver {
         @Args('messageInput') messageInput: MessageInput,
     ) {
         try {
-            const message = await this.chatService.createMessage(currentUser, messageInput);
+            const { message, notification } = await this.chatService.createMessage(
+                currentUser,
+                messageInput,
+            );
             this.pubSub.publish(SUBSCRIPTIONS_EVENT.NEW_MESSAGE + messageInput.roomId, {
                 newMessage: message,
+            });
+            this.pubSub.publish(SUBSCRIPTIONS_EVENT.NEW_NOTIFICATION + messageInput.userId, {
+                newNotification: notification,
             });
             return 'success';
         } catch (e) {
@@ -75,6 +83,11 @@ export class ChatResolver {
     @Subscription()
     newMessage(@Args('roomId') roomId: string) {
         return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.NEW_MESSAGE + roomId);
+    }
+
+    @Subscription()
+    newNotification(@Args('userId') userId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.NEW_NOTIFICATION + userId);
     }
 
     @Mutation()
@@ -116,5 +129,19 @@ export class ChatResolver {
     @Subscription()
     newCancelCall(@Args('userId') userId: string) {
         return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.CANCEL_CALL + userId);
+    }
+
+    @Mutation()
+    async deleteNotification(
+        @Args('deleteInputNotification') deleteInput: DeleteInputNotification,
+    ) {
+        try {
+            await this.chatService.deleteNotification(deleteInput);
+            return 'success';
+        } catch (e) {
+            console.log(e);
+
+            return 'error';
+        }
     }
 }

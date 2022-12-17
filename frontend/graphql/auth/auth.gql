@@ -35,6 +35,13 @@ query GetCurrentUser {
                 phone
             }
         }
+        message_notifications {
+            id
+            messages_id
+            chat {
+                id
+            }
+        }
     }
 }
 
@@ -75,4 +82,14 @@ mutation CancelCall($userId: String!) {
 
 subscription NewCancelCall($userId: String!) {
     newCancelCall(userId: $userId)
+}
+
+subscription NewNotification($userId: String!) {
+    newNotification(userId: $userId) {
+        id
+        messages_id
+        chat {
+            id
+        }
+    }
 }
