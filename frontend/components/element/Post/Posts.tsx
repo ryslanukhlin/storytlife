@@ -11,7 +11,7 @@ export interface Comment {
     id: string;
     txt: string;
     created_at: string;
-    user: { __typename?: 'User'; login: string };
+    user: { __typename?: 'User'; login: string; img?: string | null };
 }
 
 export interface Post {
@@ -24,6 +24,7 @@ export interface Post {
     user: {
         __typename?: 'User' | undefined;
         login: string;
+        img?: string | null;
     };
     likes: {
         __typename?: 'Like' | undefined;

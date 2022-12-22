@@ -16,6 +16,8 @@ model User {
   phone String @unique
   password String
   created_at DateTime @default(now())
+  bg String?
+  img String?
   chats Chat[]
   message Message[]
   post Post[]

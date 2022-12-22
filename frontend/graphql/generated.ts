@@ -142,6 +142,8 @@ export type Mutation = {
   leaveCall: Scalars['String'];
   loginUser?: Maybe<LoginObject>;
   registerUser?: Maybe<RegisterObject>;
+  setAvatar: Scalars['String'];
+  setBg: Scalars['String'];
 };
 
 
@@ -219,6 +221,16 @@ export type MutationRegisterUserArgs = {
   registerInput?: InputMaybe<RegisterInput>;
 };
 
+
+export type MutationSetAvatarArgs = {
+  avatar: Scalars['String'];
+};
+
+
+export type MutationSetBgArgs = {
+  bg: Scalars['String'];
+};
+
 export type NewCreateType = {
   __typename?: 'NewCreateType';
   connection: TypeCreate;
@@ -283,6 +295,8 @@ export type Subscription = {
   __typename?: 'Subscription';
   newAcceptCall: AcceptCallType;
   newAnswerOnCallPage: Scalars['String'];
+  newAvatar: Scalars['String'];
+  newBg: Scalars['String'];
   newCancelCall: Scalars['String'];
   newComment: Comment;
   newCreateCandidate: Scalars['String'];
@@ -303,6 +317,16 @@ export type SubscriptionNewAcceptCallArgs = {
 
 
 export type SubscriptionNewAnswerOnCallPageArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type SubscriptionNewAvatarArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type SubscriptionNewBgArgs = {
   userId: Scalars['String'];
 };
 
@@ -368,9 +392,11 @@ export enum TypeCreate {
 
 export type User = {
   __typename?: 'User';
+  bg?: Maybe<Scalars['String']>;
   chats: Array<Maybe<Chat>>;
   created_at: Scalars['String'];
   id: Scalars['String'];
+  img?: Maybe<Scalars['String']>;
   login: Scalars['String'];
   message_notifications: Array<Maybe<MessageNotification>>;
   password: Scalars['String'];
@@ -394,14 +420,14 @@ export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typen
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, chats: Array<{ __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, login: string, phone: string } | null> } | null>, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
+export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, img?: string | null, bg?: string | null, chats: Array<{ __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, img?: string | null, login: string, phone: string } | null> } | null>, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
 
 export type GetUserQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, phone: string, login: string, created_at: string } | null };
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, img?: string | null, bg?: string | null } | null };
 
 export type CreateCallMutationVariables = Exact<{
   createCallInput: CreateCallInput;
@@ -451,6 +477,34 @@ export type NewNotificationSubscriptionVariables = Exact<{
 
 
 export type NewNotificationSubscription = { __typename?: 'Subscription', newNotification: { __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } };
+
+export type SetAvatarMutationVariables = Exact<{
+  avatar: Scalars['String'];
+}>;
+
+
+export type SetAvatarMutation = { __typename?: 'Mutation', setAvatar: string };
+
+export type SetBgMutationVariables = Exact<{
+  bg: Scalars['String'];
+}>;
+
+
+export type SetBgMutation = { __typename?: 'Mutation', setBg: string };
+
+export type NewAvatarSubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewAvatarSubscription = { __typename?: 'Subscription', newAvatar: string };
+
+export type NewBgSubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewBgSubscription = { __typename?: 'Subscription', newBg: string };
 
 export type CreateOfferMutationVariables = Exact<{
   createOfferInput: CreateOfferInput;
@@ -553,21 +607,21 @@ export type DeleteNotificationMutation = { __typename?: 'Mutation', deleteNotifi
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'Post', id: string, created_at: string, title: string, description: string, img?: string | null, user: { __typename?: 'User', login: string } }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'Post', id: string, created_at: string, title: string, description: string, img?: string | null, user: { __typename?: 'User', img?: string | null, login: string } }> };
 
 export type GetUserPostsQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, user: { __typename?: 'User', login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string } }> }> };
+export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, user: { __typename?: 'User', img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', img?: string | null, login: string } }> }> };
 
 export type GetPostQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', id: string, title: string, description: string, created_at: string, img?: string | null, user: { __typename?: 'User', login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string } }> } | null };
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', id: string, title: string, description: string, created_at: string, img?: string | null, user: { __typename?: 'User', img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', img?: string | null, login: string } }> } | null };
 
 export type CreatePostMutationVariables = Exact<{
   createPost: CreatePostInput;
@@ -581,7 +635,7 @@ export type NewPostSubscriptionVariables = Exact<{
 }>;
 
 
-export type NewPostSubscription = { __typename?: 'Subscription', newPost: { __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, user: { __typename?: 'User', login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string } }> } };
+export type NewPostSubscription = { __typename?: 'Subscription', newPost: { __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, user: { __typename?: 'User', img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string, img?: string | null } }> } };
 
 export type AddLikeMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -609,12 +663,12 @@ export type NewCommentSubscriptionVariables = Exact<{
 }>;
 
 
-export type NewCommentSubscription = { __typename?: 'Subscription', newComment: { __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string } } };
+export type NewCommentSubscription = { __typename?: 'Subscription', newComment: { __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', img?: string | null, login: string } } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, login: string, phone: string } | null> };
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, login: string, phone: string, img?: string | null } | null> };
 
 
 export const RegisterUserDocument = gql`
@@ -690,10 +744,13 @@ export const GetCurrentUserDocument = gql`
     phone
     login
     created_at
+    img
+    bg
     chats {
       id
       users {
         id
+        img
         login
         phone
       }
@@ -742,6 +799,8 @@ export const GetUserDocument = gql`
     phone
     login
     created_at
+    img
+    bg
   }
 }
     `;
@@ -990,6 +1049,124 @@ export function useNewNotificationSubscription(baseOptions: Apollo.SubscriptionH
       }
 export type NewNotificationSubscriptionHookResult = ReturnType<typeof useNewNotificationSubscription>;
 export type NewNotificationSubscriptionResult = Apollo.SubscriptionResult<NewNotificationSubscription>;
+export const SetAvatarDocument = gql`
+    mutation SetAvatar($avatar: String!) {
+  setAvatar(avatar: $avatar)
+}
+    `;
+export type SetAvatarMutationFn = Apollo.MutationFunction<SetAvatarMutation, SetAvatarMutationVariables>;
+
+/**
+ * __useSetAvatarMutation__
+ *
+ * To run a mutation, you first call `useSetAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setAvatarMutation, { data, loading, error }] = useSetAvatarMutation({
+ *   variables: {
+ *      avatar: // value for 'avatar'
+ *   },
+ * });
+ */
+export function useSetAvatarMutation(baseOptions?: Apollo.MutationHookOptions<SetAvatarMutation, SetAvatarMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetAvatarMutation, SetAvatarMutationVariables>(SetAvatarDocument, options);
+      }
+export type SetAvatarMutationHookResult = ReturnType<typeof useSetAvatarMutation>;
+export type SetAvatarMutationResult = Apollo.MutationResult<SetAvatarMutation>;
+export type SetAvatarMutationOptions = Apollo.BaseMutationOptions<SetAvatarMutation, SetAvatarMutationVariables>;
+export const SetBgDocument = gql`
+    mutation SetBg($bg: String!) {
+  setBg(bg: $bg)
+}
+    `;
+export type SetBgMutationFn = Apollo.MutationFunction<SetBgMutation, SetBgMutationVariables>;
+
+/**
+ * __useSetBgMutation__
+ *
+ * To run a mutation, you first call `useSetBgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetBgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setBgMutation, { data, loading, error }] = useSetBgMutation({
+ *   variables: {
+ *      bg: // value for 'bg'
+ *   },
+ * });
+ */
+export function useSetBgMutation(baseOptions?: Apollo.MutationHookOptions<SetBgMutation, SetBgMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetBgMutation, SetBgMutationVariables>(SetBgDocument, options);
+      }
+export type SetBgMutationHookResult = ReturnType<typeof useSetBgMutation>;
+export type SetBgMutationResult = Apollo.MutationResult<SetBgMutation>;
+export type SetBgMutationOptions = Apollo.BaseMutationOptions<SetBgMutation, SetBgMutationVariables>;
+export const NewAvatarDocument = gql`
+    subscription NewAvatar($userId: String!) {
+  newAvatar(userId: $userId)
+}
+    `;
+
+/**
+ * __useNewAvatarSubscription__
+ *
+ * To run a query within a React component, call `useNewAvatarSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewAvatarSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewAvatarSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewAvatarSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewAvatarSubscription, NewAvatarSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewAvatarSubscription, NewAvatarSubscriptionVariables>(NewAvatarDocument, options);
+      }
+export type NewAvatarSubscriptionHookResult = ReturnType<typeof useNewAvatarSubscription>;
+export type NewAvatarSubscriptionResult = Apollo.SubscriptionResult<NewAvatarSubscription>;
+export const NewBgDocument = gql`
+    subscription NewBg($userId: String!) {
+  newBg(userId: $userId)
+}
+    `;
+
+/**
+ * __useNewBgSubscription__
+ *
+ * To run a query within a React component, call `useNewBgSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewBgSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewBgSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewBgSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewBgSubscription, NewBgSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewBgSubscription, NewBgSubscriptionVariables>(NewBgDocument, options);
+      }
+export type NewBgSubscriptionHookResult = ReturnType<typeof useNewBgSubscription>;
+export type NewBgSubscriptionResult = Apollo.SubscriptionResult<NewBgSubscription>;
 export const CreateOfferDocument = gql`
     mutation CreateOffer($createOfferInput: CreateOfferInput!) {
   createOffer(createOfferInput: $createOfferInput)
@@ -1442,6 +1619,7 @@ export const GetPostsDocument = gql`
     description
     img
     user {
+      img
       login
     }
   }
@@ -1483,6 +1661,7 @@ export const GetUserPostsDocument = gql`
     created_at
     title
     user {
+      img
       login
     }
     likes {
@@ -1495,6 +1674,7 @@ export const GetUserPostsDocument = gql`
       txt
       created_at
       user {
+        img
         login
       }
     }
@@ -1538,6 +1718,7 @@ export const GetPostDocument = gql`
     created_at
     img
     user {
+      img
       login
     }
     likes {
@@ -1550,6 +1731,7 @@ export const GetPostDocument = gql`
       txt
       created_at
       user {
+        img
         login
       }
     }
@@ -1624,6 +1806,7 @@ export const NewPostDocument = gql`
     created_at
     title
     user {
+      img
       login
     }
     likes {
@@ -1637,6 +1820,7 @@ export const NewPostDocument = gql`
       created_at
       user {
         login
+        img
       }
     }
   }
@@ -1766,6 +1950,7 @@ export const NewCommentDocument = gql`
     txt
     created_at
     user {
+      img
       login
     }
   }
@@ -1800,6 +1985,7 @@ export const GetUsersDocument = gql`
     id
     login
     phone
+    img
   }
 }
     `;

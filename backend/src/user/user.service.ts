@@ -3,10 +3,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { RegisterInput } from 'src/types/graphql';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
+import { ICurrentUser } from './currentUser.decorator';
+import { FileResourceEnum, FileService } from 'src/file/file.service';
 
 @Injectable()
 export class UserService {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly fileService: FileService,
+    ) {}
 
     async createUser(registerInput: RegisterInput) {
         try {
@@ -58,5 +63,35 @@ export class UserService {
                 },
             },
         });
+    }
+
+    async setAvatar(userId: string, avatar: string) {
+        const fileName = this.fileService.saveFile(avatar, FileResourceEnum.AVATAR);
+
+        await this.prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                img: fileName,
+            },
+        });
+
+        return fileName;
+    }
+
+    async setBg(userId: string, avatar: string) {
+        const fileName = this.fileService.saveFile(avatar, FileResourceEnum.BG);
+
+        await this.prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                bg: fileName,
+            },
+        });
+
+        return fileName;
     }
 }

@@ -17,7 +17,6 @@ const PostForm = () => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onloadend = async function () {
-                    console.log(reader.result);
                     createPost({
                         variables: {
                             createPost: {
@@ -71,7 +70,7 @@ const PostForm = () => {
                 <div className={styles.PostActions}>
                     <Button variant="text" component="label">
                         {nameImage ?? 'Загрузиить изображение'}
-                        <input type="file" hidden onChange={chandeImagePost} />
+                        <input type="file" accept="image/*" hidden onChange={chandeImagePost} />
                     </Button>
                     <Button variant="contained" type="submit">
                         Опубликовать

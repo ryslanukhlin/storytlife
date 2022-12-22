@@ -15,6 +15,8 @@ type User {
     phone: String!
     password: String!
     created_at: String!
+    img: String
+    bg: String
     chats: [Chat]!
     message_notifications: [MessageNotification]!
 }
@@ -23,4 +25,14 @@ type Query {
     getCurrentUser: User!
     getUser(userId: String!): User
     getUsers: [User]!
+}
+
+type Mutation {
+    setAvatar(avatar: String!): String!
+    setBg(bg: String!): String!
+}
+
+type Subscription {
+    newAvatar(userId: String!): String!
+    newBg(userId: String!): String!
 }

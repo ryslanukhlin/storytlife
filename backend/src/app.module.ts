@@ -17,6 +17,7 @@ import { CallModule } from './call/call.module';
 import { PostModule } from './post/post.module';
 import jwt_decode from 'jwt-decode';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { FileModule } from './file/file.module';
 
 function toLowerKeys(obj) {
     // 👇️ [ ['NAME', 'Tom'], ['AGE', 30] ]
@@ -70,6 +71,7 @@ function toLowerKeys(obj) {
         PubsubModule,
         CallModule,
         PostModule,
+        FileModule,
     ],
     providers: [
         {

@@ -12,6 +12,7 @@ import { red } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Card from '../../components/ui/Card';
+import { BackPort } from '../../config';
 import { useGetPostsQuery } from '../../graphql/generated';
 import { dateFormater } from '../../util/dateFormat';
 import { hidingLargeText } from '../../util/hidingLargeText';
@@ -38,7 +39,15 @@ const PostsPage = () => {
                     <Card variant="outlined">
                         <CardHeader
                             avatar={
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                <Avatar
+                                    variant="square"
+                                    sx={{ bgcolor: red[500] }}
+                                    aria-label="recipe"
+                                    src={
+                                        post.user.img
+                                            ? BackPort + 'img/avatar/' + post.user.img
+                                            : undefined
+                                    }>
                                     R
                                 </Avatar>
                             }

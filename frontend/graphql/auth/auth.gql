@@ -27,10 +27,13 @@ query GetCurrentUser {
         phone
         login
         created_at
+        img
+        bg
         chats {
             id
             users {
                 id
+                img
                 login
                 phone
             }
@@ -51,6 +54,8 @@ query GetUser($userId: String!) {
         phone
         login
         created_at
+        img
+        bg
     }
 }
 
@@ -92,4 +97,20 @@ subscription NewNotification($userId: String!) {
             id
         }
     }
+}
+
+mutation SetAvatar($avatar: String!) {
+    setAvatar(avatar: $avatar)
+}
+
+mutation SetBg($bg: String!) {
+    setBg(bg: $bg)
+}
+
+subscription NewAvatar($userId: String!) {
+    newAvatar(userId: $userId)
+}
+
+subscription NewBg($userId: String!) {
+    newBg(userId: $userId)
 }

@@ -6,6 +6,7 @@ query GetPosts {
         description
         img
         user {
+            img
             login
         }
     }
@@ -19,6 +20,7 @@ query GetUserPosts($userId: String!) {
         created_at
         title
         user {
+            img
             login
         }
         likes {
@@ -31,6 +33,7 @@ query GetUserPosts($userId: String!) {
             txt
             created_at
             user {
+                img
                 login
             }
         }
@@ -45,6 +48,7 @@ query GetPost($postId: String!) {
         created_at
         img
         user {
+            img
             login
         }
         likes {
@@ -57,6 +61,7 @@ query GetPost($postId: String!) {
             txt
             created_at
             user {
+                img
                 login
             }
         }
@@ -75,6 +80,7 @@ subscription NewPost($userId: String!) {
         created_at
         title
         user {
+            img
             login
         }
         likes {
@@ -88,6 +94,7 @@ subscription NewPost($userId: String!) {
             created_at
             user {
                 login
+                img
             }
         }
     }
@@ -115,6 +122,7 @@ subscription NewComment($postId: String!) {
         txt
         created_at
         user {
+            img
             login
         }
     }

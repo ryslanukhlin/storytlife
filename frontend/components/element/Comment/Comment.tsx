@@ -5,11 +5,18 @@ import { Avatar, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { Comment } from '../Post/Posts';
 import { dateFormater } from '../../../util/dateFormat';
+import { BackPort } from '../../../config';
 
 const Comment: FC<{ comment: Comment }> = ({ comment }) => {
+    console.log(comment.user.img);
+
     return (
         <div className={styles.Comment}>
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" className={styles.Avatar}>
+            <Avatar
+                sx={{ bgcolor: red[500] }}
+                aria-label="recipe"
+                className={styles.Avatar}
+                src={comment.user.img ? BackPort + 'img/avatar/' + comment.user.img : undefined}>
                 R
             </Avatar>
             <div>

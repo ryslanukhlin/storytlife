@@ -112,6 +112,10 @@ export abstract class IMutation {
     abstract addLike(postId: string): string | Promise<string>;
 
     abstract addComment(createCommentInput: CreateCommentInput): string | Promise<string>;
+
+    abstract setAvatar(avatar: string): string | Promise<string>;
+
+    abstract setBg(bg: string): string | Promise<string>;
 }
 
 export class NewCreateType {
@@ -145,6 +149,10 @@ export abstract class ISubscription {
     abstract newLike(postId: string): Like | Promise<Like>;
 
     abstract newComment(postId: string): Comment | Promise<Comment>;
+
+    abstract newAvatar(userId: string): string | Promise<string>;
+
+    abstract newBg(userId: string): string | Promise<string>;
 }
 
 export class Message {
@@ -223,6 +231,8 @@ export class User {
     phone: string;
     password: string;
     created_at: string;
+    img?: Nullable<string>;
+    bg?: Nullable<string>;
     chats: Nullable<Chat>[];
     message_notifications: Nullable<MessageNotification>[];
 }

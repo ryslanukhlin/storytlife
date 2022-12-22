@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, InputBase, styled, Typography } from '@mui/material';
+import { Avatar, Box, Button, IconButton, InputBase, styled, Typography } from '@mui/material';
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './ChatContent.module.scss';
@@ -17,6 +17,8 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 import CallOffetModal from '../../ui/modal/CallOffetModal';
 import Message from '../Message/Message';
+import { BackPort } from '../../../config';
+import { deepOrange } from '@mui/material/colors';
 
 const CustomHeader = styled(Box)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -150,11 +152,13 @@ const ChatContent = () => {
             <div className={styles.ChatHeader}>
                 <CustomHeader className={classesChatHeader}>
                     <div className={styles.ChatHeaderUserInfo}>
-                        <img
-                            src="https://cdn1.flamp.ru/cb0c3eab2e574f178382f0377d00c68f_300_300.jpg"
+                        <Avatar
+                            src={frend!.img ? BackPort + 'img/avatar/' + frend!.img : undefined}
                             alt="contact"
-                            className={styles.ChatHeaderImg}
-                        />
+                            sx={{ backgroundColor: deepOrange[500] }}
+                            className={styles.ChatHeaderImg}>
+                            R
+                        </Avatar>
                         <div className={styles.ChatHeaderDescription}>
                             <Typography variant="body1">{frend?.login}</Typography>
                             <Typography variant="body2">{frend?.phone}</Typography>

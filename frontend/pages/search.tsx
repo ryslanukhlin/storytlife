@@ -1,9 +1,21 @@
 import { useReactiveVar } from '@apollo/client';
-import { Button, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import {
+    Avatar,
+    Button,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Grid,
+    Typography,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import Card from '../components/ui/Card';
+import { BackPort } from '../config';
 import { useCreateRoomMutation, useGetUsersQuery } from '../graphql/generated';
 import { userData } from '../graphql/store/auth';
+import { red } from '@mui/material/colors';
+
+import styles from '../styles/Search.module.scss';
 
 const Search = () => {
     const router = useRouter();
@@ -28,10 +40,6 @@ const Search = () => {
             },
         });
 
-        console.log(data?.createRoom);
-
-        console.log(errors);
-
         userData({ ...user!, chats: [...user!.chats!, data!.createRoom!] });
         router.push('/chat/' + data?.createRoom?.id);
     };
@@ -43,11 +51,15 @@ const Search = () => {
             {data?.getUsers!.map((user) => (
                 <Grid key={user?.id} item xs={12} lg={3} md={4} sm={6} xl={2}>
                     <Card variant="outlined">
-                        <CardMedia
-                            image="https://cdn1.flamp.ru/df271521a12773528a59498632d7ba6a.jpg"
-                            component="img"
-                            height="200"
-                        />
+                        <CardMedia component="div">
+                            <Avatar
+                                sx={{ bgcolor: red[500] }}
+                                className={styles.Avatar}
+                                aria-label="recipe"
+                                src={user!.img ? BackPort + 'img/avatar/' + user!.img : undefined}>
+                                R
+                            </Avatar>
+                        </CardMedia>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
                                 {user?.phone}

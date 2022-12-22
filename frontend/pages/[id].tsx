@@ -20,6 +20,8 @@ export type UserPageInfo = {
     phone: string;
     login: string;
     created_at: string;
+    img?: string | null;
+    bg?: string | null;
 };
 
 const AccountInfo = () => {

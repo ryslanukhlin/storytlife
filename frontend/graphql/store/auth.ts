@@ -7,6 +7,7 @@ export const authToken = makeVar<string>('');
 export type Frend = {
     __typename?: 'User';
     id: string;
+    img?: string | null;
     login: string;
     phone: string;
 };
@@ -30,6 +31,8 @@ export type TypeUser = {
     phone: string;
     login: string;
     created_at: string;
+    img?: string | null;
+    bg?: string | null;
     chats?: Array<{
         __typename?: 'Chat';
         id: string;

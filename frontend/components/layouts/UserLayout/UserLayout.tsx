@@ -3,6 +3,8 @@ import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { createContext, FC, ReactNode, useState } from 'react';
 import {
+    useNewAvatarSubscription,
+    useNewBgSubscription,
     useNewCreateRoomSubscription,
     useNewCreteCallSubscription,
     useNewNotificationSubscription,
@@ -79,6 +81,24 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
             } else {
                 notificationData([...notification!, newNotification!]);
             }
+        },
+    });
+
+    useNewAvatarSubscription({
+        variables: {
+            userId: user!.id,
+        },
+        onData: (option) => {
+            userData({ ...user!, img: option.data.data!.newAvatar });
+        },
+    });
+
+    useNewBgSubscription({
+        variables: {
+            userId: user!.id,
+        },
+        onData: (option) => {
+            userData({ ...user!, bg: option.data.data!.newBg });
         },
     });
 

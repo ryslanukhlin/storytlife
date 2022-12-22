@@ -1,7 +1,10 @@
+import { useReactiveVar } from '@apollo/client';
 import { Avatar, Button, TextField } from '@mui/material';
 import { red } from '@mui/material/colors';
 import React, { FC, useRef, useState } from 'react';
+import { BackPort } from '../../../config';
 import { useAddCommentMutation } from '../../../graphql/generated';
+import { userData } from '../../../graphql/store/auth';
 
 import styles from './CommentForm.module.scss';
 
@@ -9,6 +12,7 @@ const CommentForm: FC<{
     postId: string;
     commentInput: React.MutableRefObject<HTMLInputElement | undefined>;
 }> = ({ postId, commentInput }) => {
+    const user = useReactiveVar(userData);
     const [txt, setTxt] = useState('');
     const [addComment] = useAddCommentMutation();
 
@@ -31,7 +35,11 @@ const CommentForm: FC<{
 
     return (
         <div className={styles.CommentForm}>
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" className={styles.Avatar}>
+            <Avatar
+                sx={{ bgcolor: red[500] }}
+                aria-label="recipe"
+                className={styles.Avatar}
+                src={user?.img ? BackPort + 'img/avatar/' + user?.img : undefined}>
                 R
             </Avatar>
             <TextField

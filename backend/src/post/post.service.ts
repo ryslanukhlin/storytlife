@@ -1,34 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { FileResourceEnum, FileService } from 'src/file/file.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommentInput, CreatePostInput } from 'src/types/graphql';
 import { ICurrentUser } from 'src/user/currentUser.decorator';
-import * as fs from 'fs';
-import { v4 } from 'uuid';
-import * as path from 'path';
 
 @Injectable()
 export class PostService {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly fileService: FileService,
+    ) {}
 
     async createPost(currentUser: ICurrentUser, createPostInput: CreatePostInput) {
         const { img } = createPostInput;
-        let fileName = null;
-        if (img) {
-            const fileExpansion = img.substring(img.indexOf('/') + 1, img.indexOf(';'));
-
-            fileName = v4() + '.' + fileExpansion;
-            const filePath = path.resolve(__dirname, '..', '..', 'public', 'img', 'post');
-
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath, { recursive: true });
-            }
-
-            const imageFormatBase64 = createPostInput.img.split(',', 2)[1];
-
-            fs.writeFileSync(path.resolve(filePath, fileName), imageFormatBase64, {
-                encoding: 'base64',
-            });
-        }
+        const fileName = img ? this.fileService.saveFile(img, FileResourceEnum.POST) : null;
 
         return await this.prisma.post.create({
             data: {
