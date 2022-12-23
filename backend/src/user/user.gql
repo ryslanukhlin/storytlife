@@ -15,6 +15,7 @@ type User {
     phone: String!
     password: String!
     created_at: String!
+    is_onlite: Boolean!
     img: String
     bg: String
     chats: [Chat]!
@@ -30,9 +31,11 @@ type Query {
 type Mutation {
     setAvatar(avatar: String!): String!
     setBg(bg: String!): String!
+    setOnlineStatus(online: Boolean!): String!
 }
 
 type Subscription {
     newAvatar(userId: String!): String!
     newBg(userId: String!): String!
+    chanhgeOnlineStatus(userId: String!): Boolean!
 }

@@ -8,6 +8,7 @@ import { Inject } from '@nestjs/common';
 enum SUBSCRIPTIONS_EVENT {
     NEW_AVATAR = 'NEW_AVATAR',
     NEW_BG = 'NEW_BG',
+    CHANGE_ONLINE = 'CHANGE_ONLINE',
 }
 
 @Resolver()
@@ -66,5 +67,26 @@ export class UserResolver {
     @Subscription()
     newBg(@Args('userId') userId: string) {
         return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.NEW_BG + userId);
+    }
+
+    @Mutation()
+    async setOnlineStatus(
+        @CurrentUser() currentUser: ICurrentUser,
+        @Args('online') online: boolean,
+    ) {
+        try {
+            const user = await this.userService.updateOnlineStatus(currentUser.id, online);
+            this.pubSub.publish(SUBSCRIPTIONS_EVENT.CHANGE_ONLINE + currentUser.id, {
+                chanhgeOnlineStatus: user.is_onlite,
+            });
+            return 'success';
+        } catch {
+            return 'error';
+        }
+    }
+
+    @Subscription()
+    chanhgeOnlineStatus(@Args('userId') userId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.CHANGE_ONLINE + userId);
     }
 }

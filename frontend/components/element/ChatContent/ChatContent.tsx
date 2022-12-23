@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, IconButton, InputBase, styled, Typography } from '@mui/material';
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './ChatContent.module.scss';
 import SendIcon from '@mui/icons-material/Send';
@@ -11,6 +11,7 @@ import {
     useGetMessagesLazyQuery,
     useNewMessageSubscription,
     useCreateCallMutation,
+    useChanhgeOnlineStatusSubscription,
 } from '../../../graphql/generated';
 import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
@@ -19,6 +20,8 @@ import CallOffetModal from '../../ui/modal/CallOffetModal';
 import Message from '../Message/Message';
 import { BackPort } from '../../../config';
 import { deepOrange } from '@mui/material/colors';
+import { OfflineBadge, OnlineBadge } from '../../ui/OnlineBadge';
+import { chatData } from '../../../graphql/store/chat';
 
 const CustomHeader = styled(Box)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -51,6 +54,7 @@ export type MessageType = {
 } | null;
 
 const ChatContent = () => {
+    const router = useRouter();
     const blockMessagesRef = useRef<HTMLDivElement>(null);
     const { bigNav } = useContext(TypeMenuContext);
     const [message, setMessage] = useState('');
@@ -61,9 +65,9 @@ const ChatContent = () => {
     const [createMessage] = useCreateMessageMutation();
     const [createCall] = useCreateCallMutation();
 
-    const user = useReactiveVar(userData);
+    const chats = useReactiveVar(chatData);
     const chatId = window.location.pathname.split('/').at(-1)!;
-    const frend = user?.chats?.find((chat) => chat?.id === chatId)?.users![0];
+    const [frend, setFrend] = useState(chats.find((chat) => chat?.id === chatId)?.users![0]!);
 
     const closeCall = () => {
         setCall(null);
@@ -115,6 +119,15 @@ const ChatContent = () => {
         window.scrollTo({ top: blockMessagesRef.current?.scrollHeight });
     };
 
+    useChanhgeOnlineStatusSubscription({
+        variables: {
+            userId: frend.id,
+        },
+        onData: (option) => {
+            setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
+        },
+    });
+
     useEffect(() => {
         (async () => {
             const { data } = await getMessages({
@@ -152,13 +165,36 @@ const ChatContent = () => {
             <div className={styles.ChatHeader}>
                 <CustomHeader className={classesChatHeader}>
                     <div className={styles.ChatHeaderUserInfo}>
-                        <Avatar
-                            src={frend!.img ? BackPort + 'img/avatar/' + frend!.img : undefined}
-                            alt="contact"
-                            sx={{ backgroundColor: deepOrange[500] }}
-                            className={styles.ChatHeaderImg}>
-                            R
-                        </Avatar>
+                        {frend?.is_onlite ? (
+                            <OnlineBadge>
+                                <Avatar
+                                    src={
+                                        frend!.img
+                                            ? BackPort + 'img/avatar/' + frend!.img
+                                            : undefined
+                                    }
+                                    alt="contact"
+                                    sx={{ backgroundColor: deepOrange[500] }}
+                                    className={styles.ChatHeaderImg}>
+                                    R
+                                </Avatar>
+                            </OnlineBadge>
+                        ) : (
+                            <OfflineBadge>
+                                <Avatar
+                                    src={
+                                        frend!.img
+                                            ? BackPort + 'img/avatar/' + frend!.img
+                                            : undefined
+                                    }
+                                    alt="contact"
+                                    sx={{ backgroundColor: deepOrange[500] }}
+                                    className={styles.ChatHeaderImg}>
+                                    R
+                                </Avatar>
+                            </OfflineBadge>
+                        )}
+
                         <div className={styles.ChatHeaderDescription}>
                             <Typography variant="body1">{frend?.login}</Typography>
                             <Typography variant="body2">{frend?.phone}</Typography>

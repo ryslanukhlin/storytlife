@@ -3,8 +3,17 @@ import ChatContent from '../../components/element/ChatContent/ChatContent';
 import ChatList from '../../components/element/ChatList/ChatList';
 
 import styles from '../../components/element/ChatList/ChatList.module.scss';
+import { useGetCurrentUserChatsQuery } from '../../graphql/generated';
+import { chatData } from '../../graphql/store/chat';
 
 const ChatActiveted = () => {
+    useGetCurrentUserChatsQuery({
+        onCompleted(data) {
+            chatData(data.getCurrentUser.chats);
+        },
+        fetchPolicy: 'network-only',
+    });
+
     return (
         <div className={styles.ChatPage}>
             <ChatList />

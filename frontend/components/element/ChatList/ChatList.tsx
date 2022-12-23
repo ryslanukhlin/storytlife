@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { userData } from '../../../graphql/store/auth';
+import { chatData } from '../../../graphql/store/chat';
 import { ThemeContext } from '../../../pages/_app';
 import BoxBorderRight from '../../ui/BoxBorderRight';
 import ChatItemList from './ChatItemList';
@@ -11,16 +12,16 @@ import ChatItemList from './ChatItemList';
 import styles from './ChatList.module.scss';
 
 const ChatItem = () => {
-    const user = useReactiveVar(userData);
+    const chats = useReactiveVar(chatData);
 
     return (
         <BoxBorderRight className={styles.ChatList}>
-            {user?.chats?.length === 0 && (
+            {chats.length === 0 && (
                 <Typography variant="body1">
                     Перейдите в раздел 'сообшения' <br /> и выберете кому хотите написать
                 </Typography>
             )}
-            {user?.chats!.map((contact) => (
+            {chats.map((contact) => (
                 <ChatItemList key={contact?.id} contact={contact!} />
             ))}
         </BoxBorderRight>

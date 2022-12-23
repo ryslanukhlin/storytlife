@@ -94,4 +94,15 @@ export class UserService {
 
         return fileName;
     }
+
+    async updateOnlineStatus(userId: string, online: boolean) {
+        return await this.prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                is_onlite: online,
+            },
+        });
+    }
 }

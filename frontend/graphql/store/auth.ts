@@ -10,6 +10,7 @@ export type Frend = {
     img?: string | null;
     login: string;
     phone: string;
+    is_onlite: boolean;
 };
 
 export type Chat = {
@@ -33,11 +34,7 @@ export type TypeUser = {
     created_at: string;
     img?: string | null;
     bg?: string | null;
-    chats?: Array<{
-        __typename?: 'Chat';
-        id: string;
-        users?: Array<Frend | null> | null;
-    } | null> | null;
+    is_onlite: boolean;
 };
 
 export const userData = makeVar<TypeUser | null>(null);

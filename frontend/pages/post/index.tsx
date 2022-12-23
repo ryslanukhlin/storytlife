@@ -13,7 +13,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Card from '../../components/ui/Card';
 import { BackPort } from '../../config';
-import { useGetPostsQuery } from '../../graphql/generated';
+import { useGetCurrentUserChatsQuery, useGetPostsQuery } from '../../graphql/generated';
+import { chatData } from '../../graphql/store/chat';
 import { dateFormater } from '../../util/dateFormat';
 import { hidingLargeText } from '../../util/hidingLargeText';
 

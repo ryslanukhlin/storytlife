@@ -144,6 +144,7 @@ export type Mutation = {
   registerUser?: Maybe<RegisterObject>;
   setAvatar: Scalars['String'];
   setBg: Scalars['String'];
+  setOnlineStatus: Scalars['String'];
 };
 
 
@@ -231,6 +232,11 @@ export type MutationSetBgArgs = {
   bg: Scalars['String'];
 };
 
+
+export type MutationSetOnlineStatusArgs = {
+  online: Scalars['Boolean'];
+};
+
 export type NewCreateType = {
   __typename?: 'NewCreateType';
   connection: TypeCreate;
@@ -251,6 +257,7 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
+  getContacts: User;
   getCurrentUser: User;
   getMessages: Array<Maybe<Message>>;
   getPost?: Maybe<Post>;
@@ -293,6 +300,7 @@ export type RegisterObject = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  chanhgeOnlineStatus: Scalars['Boolean'];
   newAcceptCall: AcceptCallType;
   newAnswerOnCallPage: Scalars['String'];
   newAvatar: Scalars['String'];
@@ -308,6 +316,11 @@ export type Subscription = {
   newMessage: Message;
   newNotification: MessageNotification;
   newPost: Post;
+};
+
+
+export type SubscriptionChanhgeOnlineStatusArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -397,6 +410,7 @@ export type User = {
   created_at: Scalars['String'];
   id: Scalars['String'];
   img?: Maybe<Scalars['String']>;
+  is_onlite: Scalars['Boolean'];
   login: Scalars['String'];
   message_notifications: Array<Maybe<MessageNotification>>;
   password: Scalars['String'];
@@ -420,14 +434,19 @@ export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typen
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, img?: string | null, bg?: string | null, chats: Array<{ __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, img?: string | null, login: string, phone: string } | null> } | null>, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
+export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
+
+export type GetCurrentUserChatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrentUserChatsQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', chats: Array<{ __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, img?: string | null, is_onlite: boolean, login: string, phone: string } | null> } | null> } };
 
 export type GetUserQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, img?: string | null, bg?: string | null } | null };
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean } | null };
 
 export type CreateCallMutationVariables = Exact<{
   createCallInput: CreateCallInput;
@@ -505,6 +524,20 @@ export type NewBgSubscriptionVariables = Exact<{
 
 
 export type NewBgSubscription = { __typename?: 'Subscription', newBg: string };
+
+export type SetOnlineStatusMutationVariables = Exact<{
+  online: Scalars['Boolean'];
+}>;
+
+
+export type SetOnlineStatusMutation = { __typename?: 'Mutation', setOnlineStatus: string };
+
+export type ChanhgeOnlineStatusSubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type ChanhgeOnlineStatusSubscription = { __typename?: 'Subscription', chanhgeOnlineStatus: boolean };
 
 export type CreateOfferMutationVariables = Exact<{
   createOfferInput: CreateOfferInput;
@@ -588,7 +621,7 @@ export type NewCreateRoomSubscriptionVariables = Exact<{
 }>;
 
 
-export type NewCreateRoomSubscription = { __typename?: 'Subscription', newCreateRoom: { __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, login: string, phone: string } | null> } };
+export type NewCreateRoomSubscription = { __typename?: 'Subscription', newCreateRoom: { __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, login: string, is_onlite: boolean, phone: string } | null> } };
 
 export type GetMessagesQueryVariables = Exact<{
   roomId: Scalars['String'];
@@ -746,15 +779,7 @@ export const GetCurrentUserDocument = gql`
     created_at
     img
     bg
-    chats {
-      id
-      users {
-        id
-        img
-        login
-        phone
-      }
-    }
+    is_onlite
     message_notifications {
       id
       messages_id
@@ -792,6 +817,49 @@ export function useGetCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQuery>;
 export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
 export type GetCurrentUserQueryResult = Apollo.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
+export const GetCurrentUserChatsDocument = gql`
+    query GetCurrentUserChats {
+  getCurrentUser {
+    chats {
+      id
+      users {
+        id
+        img
+        is_onlite
+        login
+        phone
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCurrentUserChatsQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentUserChatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserChatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentUserChatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentUserChatsQuery(baseOptions?: Apollo.QueryHookOptions<GetCurrentUserChatsQuery, GetCurrentUserChatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCurrentUserChatsQuery, GetCurrentUserChatsQueryVariables>(GetCurrentUserChatsDocument, options);
+      }
+export function useGetCurrentUserChatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCurrentUserChatsQuery, GetCurrentUserChatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCurrentUserChatsQuery, GetCurrentUserChatsQueryVariables>(GetCurrentUserChatsDocument, options);
+        }
+export type GetCurrentUserChatsQueryHookResult = ReturnType<typeof useGetCurrentUserChatsQuery>;
+export type GetCurrentUserChatsLazyQueryHookResult = ReturnType<typeof useGetCurrentUserChatsLazyQuery>;
+export type GetCurrentUserChatsQueryResult = Apollo.QueryResult<GetCurrentUserChatsQuery, GetCurrentUserChatsQueryVariables>;
 export const GetUserDocument = gql`
     query GetUser($userId: String!) {
   getUser(userId: $userId) {
@@ -801,6 +869,7 @@ export const GetUserDocument = gql`
     created_at
     img
     bg
+    is_onlite
   }
 }
     `;
@@ -1167,6 +1236,65 @@ export function useNewBgSubscription(baseOptions: Apollo.SubscriptionHookOptions
       }
 export type NewBgSubscriptionHookResult = ReturnType<typeof useNewBgSubscription>;
 export type NewBgSubscriptionResult = Apollo.SubscriptionResult<NewBgSubscription>;
+export const SetOnlineStatusDocument = gql`
+    mutation SetOnlineStatus($online: Boolean!) {
+  setOnlineStatus(online: $online)
+}
+    `;
+export type SetOnlineStatusMutationFn = Apollo.MutationFunction<SetOnlineStatusMutation, SetOnlineStatusMutationVariables>;
+
+/**
+ * __useSetOnlineStatusMutation__
+ *
+ * To run a mutation, you first call `useSetOnlineStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetOnlineStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setOnlineStatusMutation, { data, loading, error }] = useSetOnlineStatusMutation({
+ *   variables: {
+ *      online: // value for 'online'
+ *   },
+ * });
+ */
+export function useSetOnlineStatusMutation(baseOptions?: Apollo.MutationHookOptions<SetOnlineStatusMutation, SetOnlineStatusMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetOnlineStatusMutation, SetOnlineStatusMutationVariables>(SetOnlineStatusDocument, options);
+      }
+export type SetOnlineStatusMutationHookResult = ReturnType<typeof useSetOnlineStatusMutation>;
+export type SetOnlineStatusMutationResult = Apollo.MutationResult<SetOnlineStatusMutation>;
+export type SetOnlineStatusMutationOptions = Apollo.BaseMutationOptions<SetOnlineStatusMutation, SetOnlineStatusMutationVariables>;
+export const ChanhgeOnlineStatusDocument = gql`
+    subscription ChanhgeOnlineStatus($userId: String!) {
+  chanhgeOnlineStatus(userId: $userId)
+}
+    `;
+
+/**
+ * __useChanhgeOnlineStatusSubscription__
+ *
+ * To run a query within a React component, call `useChanhgeOnlineStatusSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useChanhgeOnlineStatusSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChanhgeOnlineStatusSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useChanhgeOnlineStatusSubscription(baseOptions: Apollo.SubscriptionHookOptions<ChanhgeOnlineStatusSubscription, ChanhgeOnlineStatusSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<ChanhgeOnlineStatusSubscription, ChanhgeOnlineStatusSubscriptionVariables>(ChanhgeOnlineStatusDocument, options);
+      }
+export type ChanhgeOnlineStatusSubscriptionHookResult = ReturnType<typeof useChanhgeOnlineStatusSubscription>;
+export type ChanhgeOnlineStatusSubscriptionResult = Apollo.SubscriptionResult<ChanhgeOnlineStatusSubscription>;
 export const CreateOfferDocument = gql`
     mutation CreateOffer($createOfferInput: CreateOfferInput!) {
   createOffer(createOfferInput: $createOfferInput)
@@ -1514,6 +1642,7 @@ export const NewCreateRoomDocument = gql`
     users {
       id
       login
+      is_onlite
       phone
     }
   }

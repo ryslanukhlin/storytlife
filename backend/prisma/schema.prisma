@@ -18,6 +18,7 @@ model User {
   created_at DateTime @default(now())
   bg String?
   img String?
+  is_onlite Boolean @default(false)
   chats Chat[]
   message Message[]
   post Post[]

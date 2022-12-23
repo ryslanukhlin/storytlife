@@ -29,20 +29,27 @@ query GetCurrentUser {
         created_at
         img
         bg
-        chats {
-            id
-            users {
-                id
-                img
-                login
-                phone
-            }
-        }
+        is_onlite
         message_notifications {
             id
             messages_id
             chat {
                 id
+            }
+        }
+    }
+}
+
+query GetCurrentUserChats {
+    getCurrentUser {
+        chats {
+            id
+            users {
+                id
+                img
+                is_onlite
+                login
+                phone
             }
         }
     }
@@ -56,6 +63,7 @@ query GetUser($userId: String!) {
         created_at
         img
         bg
+        is_onlite
     }
 }
 
@@ -113,4 +121,12 @@ subscription NewAvatar($userId: String!) {
 
 subscription NewBg($userId: String!) {
     newBg(userId: $userId)
+}
+
+mutation SetOnlineStatus($online: Boolean!) {
+    setOnlineStatus(online: $online)
+}
+
+subscription ChanhgeOnlineStatus($userId: String!) {
+    chanhgeOnlineStatus(userId: $userId)
 }

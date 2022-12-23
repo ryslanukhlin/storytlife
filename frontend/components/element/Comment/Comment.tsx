@@ -8,8 +8,6 @@ import { dateFormater } from '../../../util/dateFormat';
 import { BackPort } from '../../../config';
 
 const Comment: FC<{ comment: Comment }> = ({ comment }) => {
-    console.log(comment.user.img);
-
     return (
         <div className={styles.Comment}>
             <Avatar

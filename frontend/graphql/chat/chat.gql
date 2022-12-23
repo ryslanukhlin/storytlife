@@ -27,6 +27,7 @@ subscription NewCreateRoom($userId: String!) {
         users {
             id
             login
+            is_onlite
             phone
         }
     }

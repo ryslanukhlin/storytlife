@@ -116,6 +116,8 @@ export abstract class IMutation {
     abstract setAvatar(avatar: string): string | Promise<string>;
 
     abstract setBg(bg: string): string | Promise<string>;
+
+    abstract setOnlineStatus(online: boolean): string | Promise<string>;
 }
 
 export class NewCreateType {
@@ -153,6 +155,8 @@ export abstract class ISubscription {
     abstract newAvatar(userId: string): string | Promise<string>;
 
     abstract newBg(userId: string): string | Promise<string>;
+
+    abstract chanhgeOnlineStatus(userId: string): boolean | Promise<boolean>;
 }
 
 export class Message {
@@ -192,6 +196,8 @@ export abstract class IQuery {
     abstract getUser(userId: string): Nullable<User> | Promise<Nullable<User>>;
 
     abstract getUsers(): Nullable<User>[] | Promise<Nullable<User>[]>;
+
+    abstract getContacts(): User | Promise<User>;
 }
 
 export class Comment {
@@ -231,6 +237,7 @@ export class User {
     phone: string;
     password: string;
     created_at: string;
+    is_onlite: boolean;
     img?: Nullable<string>;
     bg?: Nullable<string>;
     chats: Nullable<Chat>[];

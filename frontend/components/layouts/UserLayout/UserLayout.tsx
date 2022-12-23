@@ -1,13 +1,15 @@
 import { useReactiveVar } from '@apollo/client';
 import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { createContext, FC, ReactNode, useState } from 'react';
+import React, { createContext, FC, ReactNode, useEffect, useState } from 'react';
 import {
+    useChanhgeOnlineStatusSubscription,
     useNewAvatarSubscription,
     useNewBgSubscription,
     useNewCreateRoomSubscription,
     useNewCreteCallSubscription,
     useNewNotificationSubscription,
+    useSetOnlineStatusMutation,
 } from '../../../graphql/generated';
 import { notificationData, userData } from '../../../graphql/store/auth';
 import Nav from '../../container/nav/Nav';
@@ -33,6 +35,7 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
     const notification = useReactiveVar(notificationData);
     const [bigNav, setBigNav] = useState(true);
     const [callFrend, setFrendCall] = useState<AnserCallUser | null>(null);
+    const [chanheStatusOnline] = useSetOnlineStatusMutation();
 
     const changeViewNav = () => setBigNav((prev) => !prev);
 
@@ -56,7 +59,7 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
             userId: user?.id!,
         },
         onData: (option) => {
-            userData({ ...user!, chats: [...user!.chats!, option.data.data?.newCreateRoom!] });
+            userData({ ...user!, chats: [...user!.chats!, option.data.data!.newCreateRoom] });
         },
     });
 
@@ -101,6 +104,38 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
             userData({ ...user!, bg: option.data.data!.newBg });
         },
     });
+
+    useChanhgeOnlineStatusSubscription({
+        variables: {
+            userId: user!.id,
+        },
+        onData: (option) => {
+            console.log('online');
+
+            userData({ ...user!, is_onlite: option.data.data!.chanhgeOnlineStatus });
+        },
+    });
+
+    useEffect(() => {
+        chanheStatusOnline({
+            variables: {
+                online: true,
+            },
+        });
+
+        const setOffline = async () =>
+            await chanheStatusOnline({
+                variables: {
+                    online: false,
+                },
+            });
+
+        window.addEventListener('beforeunload', setOffline);
+
+        return () => {
+            window.removeEventListener('beforeunload', setOffline);
+        };
+    }, []);
 
     const PageWrapperClasses = `${styles.PageWrapper} ${
         bigNav ? styles.BigNavMargin : styles.MiniNavMargin

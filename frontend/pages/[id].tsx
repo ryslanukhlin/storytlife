@@ -22,6 +22,7 @@ export type UserPageInfo = {
     created_at: string;
     img?: string | null;
     bg?: string | null;
+    is_onlite: boolean;
 };
 
 const AccountInfo = () => {

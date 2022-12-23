@@ -104,6 +104,15 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
                 </div>
                 <Typography variant="h6">{userPage?.login}</Typography>
                 <Typography variant="body1">{userPage?.phone}</Typography>
+                {userPage.is_onlite || userPage.id === userData()!.id ? (
+                    <Typography variant="body2" color="teal">
+                        В сети
+                    </Typography>
+                ) : (
+                    <Typography variant="body2" color="grey">
+                        Не в сети
+                    </Typography>
+                )}
             </div>
         </Box>
     );
