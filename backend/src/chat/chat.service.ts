@@ -82,8 +82,7 @@ export class ChatService {
 
         return { message, notification };
     }
-    // FIXME: нужно создать не масив из строчек а отдельную сужность в которой будет в качестве id
-    //        id сообшения, так как prisma не может удалить элемент из масиве не скачивая сам масив
+
     async deleteNotification(deleteInput: DeleteInputNotification) {
         await this.prisma
             .$queryRaw`update "MessageNotification" set messages_id = array_remove(messages_id, ${deleteInput.messageId})`;

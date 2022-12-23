@@ -22,6 +22,8 @@ import { BackPort } from '../../../config';
 import { deepOrange } from '@mui/material/colors';
 import { OfflineBadge, OnlineBadge } from '../../ui/OnlineBadge';
 import { chatData } from '../../../graphql/store/chat';
+import ErrorCall from '../../ui/modal/ErrorCall';
+import { checkMediaDevices } from '../../../util/checkMediaDevices';
 
 const CustomHeader = styled(Box)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -61,16 +63,22 @@ const ChatContent = () => {
     const [messages, setMessages] = useState<MessageType[]>([]);
     const [call, setCall] = useState<{ usingVideo: boolean } | null>(null);
 
+    const [callErr, setCallErr] = useState<string | null>(null);
+
     const [getMessages] = useGetMessagesLazyQuery();
     const [createMessage] = useCreateMessageMutation();
     const [createCall] = useCreateCallMutation();
 
-    const chats = useReactiveVar(chatData);
     const chatId = window.location.pathname.split('/').at(-1)!;
-    const [frend, setFrend] = useState(chats.find((chat) => chat?.id === chatId)?.users![0]!);
+
+    const [frend, setFrend] = useState(chatData().find((chat) => chat?.id === chatId)?.users![0]!);
 
     const closeCall = () => {
         setCall(null);
+    };
+
+    const onClose = () => {
+        setCallErr(null);
     };
 
     const changeMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +101,15 @@ const ChatContent = () => {
         }
     };
 
-    const callHandler = (usingVideo: boolean) => {
+    const callHandler = async (usingVideo: boolean) => {
+        if (!frend.is_onlite) {
+            setCallErr('Пользователь должен быть в сети чтобы вы смогли ему позвонить!');
+            return;
+        }
+        if (!(await checkMediaDevices())) {
+            setCallErr('На устройстве должны быть видео и аудио записываюшее устройства!');
+            return;
+        }
         setCall({ usingVideo });
         createCall({
             variables: {
@@ -121,7 +137,7 @@ const ChatContent = () => {
 
     useChanhgeOnlineStatusSubscription({
         variables: {
-            userId: frend.id,
+            userId: frend!.id,
         },
         onData: (option) => {
             setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
@@ -162,6 +178,7 @@ const ChatContent = () => {
                     usingVideo={call.usingVideo}
                 />
             )}
+            {callErr && <ErrorCall onClose={onClose}>{callErr}</ErrorCall>}
             <div className={styles.ChatHeader}>
                 <CustomHeader className={classesChatHeader}>
                     <div className={styles.ChatHeaderUserInfo}>

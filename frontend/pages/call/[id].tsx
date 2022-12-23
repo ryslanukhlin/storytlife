@@ -22,6 +22,7 @@ import CallFooter from '../../components/element/CallFooter/CallFooter';
 import CallHeader from '../../components/element/CallHeader/CallHeader';
 
 import styles from '../../styles/Call.module.scss';
+import { chatData } from '../../graphql/store/chat';
 
 const config = { iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }] };
 
@@ -36,7 +37,7 @@ const CallPage = () => {
     const [createCandidate] = useCreateCandidateMutation();
     const [answerOnCallPage] = useAnswerOnCallPageMutation();
     const [leaveCallMutation] = useLeaveCallMutation();
-    const frend = user?.chats?.find((chat) => chat?.id === router.query.id)?.users![0];
+    const frend = chatData().find((chat) => chat?.id === router.query.id)?.users![0];
     const connected = useRef(false);
     const answerConnected = useRef(false);
     const createtOfferIsWork = useRef(false);

@@ -12,6 +12,7 @@ import {
     useSetOnlineStatusMutation,
 } from '../../../graphql/generated';
 import { notificationData, userData } from '../../../graphql/store/auth';
+import { chatData } from '../../../graphql/store/chat';
 import Nav from '../../container/nav/Nav';
 import CallAnswerModal from '../../ui/modal/CallAnswerModal';
 
@@ -59,7 +60,7 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
             userId: user?.id!,
         },
         onData: (option) => {
-            userData({ ...user!, chats: [...user!.chats!, option.data.data!.newCreateRoom] });
+            chatData([...chatData(), option.data.data!.newCreateRoom]);
         },
     });
 
@@ -110,8 +111,6 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
             userId: user!.id,
         },
         onData: (option) => {
-            console.log('online');
-
             userData({ ...user!, is_onlite: option.data.data!.chanhgeOnlineStatus });
         },
     });

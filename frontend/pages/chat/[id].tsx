@@ -7,12 +7,14 @@ import { useGetCurrentUserChatsQuery } from '../../graphql/generated';
 import { chatData } from '../../graphql/store/chat';
 
 const ChatActiveted = () => {
-    useGetCurrentUserChatsQuery({
+    const { loading } = useGetCurrentUserChatsQuery({
         onCompleted(data) {
             chatData(data.getCurrentUser.chats);
         },
         fetchPolicy: 'network-only',
     });
+
+    if (loading) return null;
 
     return (
         <div className={styles.ChatPage}>

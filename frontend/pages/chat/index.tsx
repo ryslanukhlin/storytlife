@@ -11,12 +11,14 @@ const NotChatBox = styled(Box)(({ theme }) => ({
 }));
 
 const Chat = () => {
-    useGetCurrentUserChatsQuery({
+    const { loading } = useGetCurrentUserChatsQuery({
         onCompleted(data) {
             chatData(data.getCurrentUser.chats);
         },
         fetchPolicy: 'network-only',
     });
+
+    if (loading) return null;
 
     return (
         <div className={styles.ChatPage}>

@@ -42,8 +42,6 @@ const ChatItemList: FC<{ contact: Chat }> = ({ contact }) => {
             userId: contact.users![0]?.id!,
         },
         onData: (option) => {
-            console.log(option.data.data!.chanhgeOnlineStatus);
-
             setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
         },
     });

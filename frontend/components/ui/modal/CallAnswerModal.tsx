@@ -1,5 +1,5 @@
 import { Button, IconButton, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { userData } from '../../../graphql/store/auth';
 import ModalWrapper from './ModalWrapper/ModalWrapper';
 
@@ -14,6 +14,8 @@ import {
 } from '../../../graphql/generated';
 import { useRouter } from 'next/router';
 import { CallType } from '../../../type/call.type';
+import { chatData } from '../../../graphql/store/chat';
+import { checkMediaDevices } from '../../../util/checkMediaDevices';
 
 type CallAnswerModalProps = {
     callPayload: { chatId: string; usingVideo: boolean };
@@ -24,11 +26,12 @@ const CallAnswerModal: FC<CallAnswerModalProps> = ({ callPayload, closeModal }) 
     const router = useRouter();
     const { chatId, usingVideo } = callPayload;
     const user = useReactiveVar(userData);
-    const frend = user?.chats!.find((chat) => chat?.id === chatId)?.users![0];
+    const frend = chatData().find((chat) => chat?.id === chatId)?.users![0];
     const [acceptCall] = useAcceptCallMutation();
 
     const answerCallHandler = async (isAccept: AcceptCall) => {
-        if (isAccept === AcceptCall.Accept)
+        const isHaveMicroAndAudio = await checkMediaDevices();
+        if (isAccept === AcceptCall.Accept && isHaveMicroAndAudio) {
             await router.push({
                 pathname: '/call/[id]',
                 query: {
@@ -37,15 +40,28 @@ const CallAnswerModal: FC<CallAnswerModalProps> = ({ callPayload, closeModal }) 
                     id: chatId,
                 },
             });
-        await acceptCall({
-            variables: {
-                acceptCallInput: {
-                    acceptCall: isAccept,
-                    chatId,
-                    userId: frend?.id!,
+            await acceptCall({
+                variables: {
+                    acceptCallInput: {
+                        acceptCall: isAccept,
+                        chatId,
+                        userId: frend?.id!,
+                    },
                 },
-            },
-        });
+            });
+        } else {
+            console.log('camero not found');
+
+            await acceptCall({
+                variables: {
+                    acceptCallInput: {
+                        acceptCall: AcceptCall.Deny,
+                        chatId,
+                        userId: frend?.id!,
+                    },
+                },
+            });
+        }
         closeModal();
     };
 
@@ -55,6 +71,10 @@ const CallAnswerModal: FC<CallAnswerModalProps> = ({ callPayload, closeModal }) 
         },
         onData: () => closeModal(),
     });
+
+    useEffect(() => {
+        checkMediaDevices();
+    }, []);
 
     return (
         <ModalWrapper>
