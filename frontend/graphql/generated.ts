@@ -257,7 +257,6 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
-  getContacts: User;
   getCurrentUser: User;
   getMessages: Array<Maybe<Message>>;
   getPost?: Maybe<Post>;
@@ -600,7 +599,7 @@ export type CreateRoomMutationVariables = Exact<{
 }>;
 
 
-export type CreateRoomMutation = { __typename?: 'Mutation', createRoom: { __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, login: string, phone: string } | null> } };
+export type CreateRoomMutation = { __typename?: 'Mutation', createRoom: { __typename?: 'Chat', id: string, users: Array<{ __typename?: 'User', id: string, is_onlite: boolean, login: string, phone: string } | null> } };
 
 export type CreateMessageMutationVariables = Exact<{
   messageInput: MessageInput;
@@ -1540,6 +1539,7 @@ export const CreateRoomDocument = gql`
     id
     users {
       id
+      is_onlite
       login
       phone
     }

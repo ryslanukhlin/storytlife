@@ -6,7 +6,7 @@ import {
     StyledEngineProvider,
 } from '@mui/material/styles';
 import type { AppProps } from 'next/app';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import ClientApolloProvider from '../graphql/apollo';
 import type {} from '@mui/lab/themeAugmentation';
 
@@ -15,6 +15,8 @@ import '@mui/lab/themeAugmentation';
 import AuthProvider from '../components/provider/AuthProvider';
 import LayoutProvider from '../components/provider/LayoutProvider';
 import React from 'react';
+import { useGetCurrentUserChatsQuery } from '../graphql/generated';
+import { chatData } from '../graphql/store/chat';
 
 const createTheme =
     process.env.NODE_ENV === 'production' ? createMuiTheme : unstable_createMuiStrictModeTheme;
@@ -65,19 +67,27 @@ const darkTheme = createTheme({
     },
 });
 
+type Theme = 'white' | 'dark';
+
 type typeThemeContext = {
-    theme: 'white' | 'dark';
+    theme: Theme;
     changeTheme: () => void;
 };
 
 export const ThemeContext = createContext<typeThemeContext>({} as typeThemeContext);
 
 export default function App({ Component, pageProps }: AppProps) {
-    const [theme, setTheme] = useState<'white' | 'dark'>('white');
+    const [theme, setTheme] = useState<Theme>('white');
 
     const changeTheme = () => {
+        localStorage.setItem('theme', theme === 'white' ? 'dark' : 'white');
         setTheme(theme === 'white' ? 'dark' : 'white');
     };
+
+    useEffect(() => {
+        if (window && localStorage.getItem('theme'))
+            setTheme(localStorage.getItem('theme') as Theme);
+    }, []);
 
     return (
         <React.StrictMode>

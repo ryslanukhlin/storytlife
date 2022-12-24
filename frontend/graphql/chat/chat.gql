@@ -3,6 +3,7 @@ mutation CreateRoom($userId: String!) {
         id
         users {
             id
+            is_onlite
             login
             phone
         }

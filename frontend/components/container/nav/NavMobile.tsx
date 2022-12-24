@@ -1,6 +1,6 @@
 import { IconButton, styled } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import Link from 'next/link';
 
 import styles from './Nav.module.scss';
@@ -42,79 +42,73 @@ const CustomLoggoutTheme = styled(Box)(({ theme }) => ({
     },
 }));
 
-const Nav = () => {
+const NavMobile: FC<{ onDrawer: () => void }> = ({ onDrawer }) => {
     const notifications = useReactiveVar(notificationData);
     const themeContext = useContext(ThemeContext);
-    const { bigNav, changeViewNav } = useContext(TypeMenuContext);
 
     const countNotification = notifications!.filter(
         (notif) => !!notif && !!notif!.messages_id && notif!.messages_id!.length,
     );
 
+    const themeChange = () => {
+        themeContext.changeTheme();
+        onDrawer();
+    };
+
     const loggoutUser = () => {
         userData(null);
         localStorage.removeItem('auth_token');
+        onDrawer();
     };
 
-    const NavClasses = `${styles.Nav} ${bigNav ? styles.BigNav : ''}`;
+    const NavClasses = `${styles.Nav} ${styles.BigNav}`;
     const NotificationClasses = `${
         themeContext.theme === 'dark' ? styles.NotificationBlack : styles.Notification
-    } ${bigNav ? '' : styles.MiniNotification}`;
+    } ${styles.MiniNotification}`;
 
     return (
         <BoxBorderRight className={NavClasses}>
             <div>
-                <div className={styles.NavHeader}>
-                    <IconButton
-                        onClick={changeViewNav}
-                        className={styles.NavClose}
-                        size="large"
-                        color="inherit"
-                        aria-label="menu">
-                        <MenuIcon />
-                    </IconButton>
-                    {bigNav && <h1 className={styles.NavTitle}>StoryLife</h1>}
-                </div>
                 <nav className={styles.NavContent}>
                     <CustomLink
                         href={'/' + userData()!.id}
+                        onClick={onDrawer}
                         className={styles.NavLink + ' ' + styles.NavLinkActive}>
                         <PersonIcon />
-                        {bigNav && <div className={styles.NavLinkTxt}>Профиль</div>}
+                        <div className={styles.NavLinkTxt}>Профиль</div>
                     </CustomLink>
-                    <CustomLink href="/post" className={styles.NavLink}>
+                    <CustomLink href="/post" className={styles.NavLink} onClick={onDrawer}>
                         <NewspaperIcon />
-                        {bigNav && <div className={styles.NavLinkTxt}>Посты</div>}
+                        <div className={styles.NavLinkTxt}>Посты</div>
                     </CustomLink>
                     <CustomLink
                         href="/chat"
+                        onClick={onDrawer}
                         className={styles.NavLink + ' ' + styles.NavLinkNotification}>
                         <div className={styles.NanContent}>
                             <MessageIcon />
-                            {bigNav && <div className={styles.NavLinkTxt}>Сообшения</div>}
+                            <div className={styles.NavLinkTxt}>Сообшения</div>
                         </div>
                         {countNotification!.length! > 0 && (
                             <div className={NotificationClasses}>{countNotification!.length}</div>
                         )}
                     </CustomLink>
-                    <CustomLink href="/search" className={styles.NavLink}>
+                    <CustomLink href="/search" className={styles.NavLink} onClick={onDrawer}>
                         <SearchIcon />
-                        {bigNav && <div className={styles.NavLinkTxt}>Поиск</div>}
+                        <div className={styles.NavLinkTxt}>Поиск</div>
                     </CustomLink>
-                    <CustomChangeTheme
-                        className={styles.NavLink}
-                        onClick={themeContext.changeTheme}>
+                    <CustomChangeTheme className={styles.NavLink} onClick={themeChange}>
                         {themeContext.theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-                        {bigNav && <div className={styles.NavLinkTxt}>Ночной режим</div>}
+                        <div className={styles.NavLinkTxt}>Ночной режим</div>
                     </CustomChangeTheme>
                 </nav>
             </div>
             <CustomLoggoutTheme className={styles.NavLink} onClick={loggoutUser}>
                 <LogoutIcon />
-                {bigNav && <div className={styles.NavLinkTxt}>Выйти</div>}
+                <div className={styles.NavLinkTxt}>Выйти</div>
             </CustomLoggoutTheme>
         </BoxBorderRight>
     );
 };
 
-export default Nav;
+export default NavMobile;

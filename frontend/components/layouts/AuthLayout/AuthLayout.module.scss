@@ -4,6 +4,14 @@
 
 .AuthContent {
     width: 50%;
+
+    @media (max-width: 1400px) {
+        width: 40%;
+    }
+
+    @media (max-width: 1000px) {
+        width: 100%;
+    }
 }
 
 .AuthHeader {
@@ -50,4 +58,12 @@
     background: url("https://minimalistic-wallpaper.demolab.com/?random") center center/cover no-repeat;
     margin: 20px;
     border-radius: 10px;
+
+    @media (max-width: 1400px) {
+        width: 60%;
+    }
+
+    @media (max-width: 1000px) {
+        display: none;
+    }
 }

@@ -1,6 +1,11 @@
 .AuthWrapper {
     display: flex;
     min-height: 100vh;
+
+    @media (max-width: 768px) {
+        display: block;
+        margin-top: 64px;
+    }
 }
 
 .PageWrapper {
@@ -9,8 +14,16 @@
 
 .BigNavMargin {
     margin-left: 240px;
+
+    @media (max-width: 768px) {
+        margin-left: 0;
+    }
 }
 
 .MiniNavMargin {
     margin-left: 81px;
+
+    @media (max-width: 768px) {
+        margin-left: 0;
+    }
 }

@@ -16,16 +16,16 @@ import { userData } from '../graphql/store/auth';
 import { red } from '@mui/material/colors';
 
 import styles from '../styles/Search.module.scss';
+import { chatData } from '../graphql/store/chat';
 
 const Search = () => {
     const router = useRouter();
-    const user = useReactiveVar(userData);
 
     const { data, loading, error } = useGetUsersQuery();
     const [createRoom] = useCreateRoomMutation();
 
     const sendMessage = async (userId: string) => {
-        const chat = user?.chats?.find(
+        const chat = chatData().find(
             (chat) => (chat!.users as Array<{ id: string }>)[0].id === userId,
         );
 
@@ -40,7 +40,7 @@ const Search = () => {
             },
         });
 
-        userData({ ...user!, chats: [...user!.chats!, data!.createRoom!] });
+        chatData([...chatData(), data!.createRoom!]);
         router.push('/chat/' + data?.createRoom?.id);
     };
 

@@ -41,7 +41,6 @@ const PostsPage = () => {
                         <CardHeader
                             avatar={
                                 <Avatar
-                                    variant="square"
                                     sx={{ bgcolor: red[500] }}
                                     aria-label="recipe"
                                     src={

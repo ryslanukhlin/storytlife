@@ -10,6 +10,7 @@ import {
     useAnswerOnCallPageMutation,
     useCreateCandidateMutation,
     useCreateOfferMutation,
+    useGetCurrentUserChatsQuery,
     useLeaveCallMutation,
     useNewAnswerOnCallPageSubscription,
     useNewCreateCandidateSubscription,
@@ -23,6 +24,12 @@ import CallHeader from '../../components/element/CallHeader/CallHeader';
 
 import styles from '../../styles/Call.module.scss';
 import { chatData } from '../../graphql/store/chat';
+import { Box, styled } from '@mui/material';
+
+const VideoWrapper = styled(Box)(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+    border: `1px solid ${theme.palette.primary.main}`,
+}));
 
 const config = { iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }] };
 
@@ -37,7 +44,9 @@ const CallPage = () => {
     const [createCandidate] = useCreateCandidateMutation();
     const [answerOnCallPage] = useAnswerOnCallPageMutation();
     const [leaveCallMutation] = useLeaveCallMutation();
+
     const frend = chatData().find((chat) => chat?.id === router.query.id)?.users![0];
+
     const connected = useRef(false);
     const answerConnected = useRef(false);
     const createtOfferIsWork = useRef(false);
@@ -202,9 +211,13 @@ const CallPage = () => {
     return (
         <div className={styles.CallWrapper}>
             <CallHeader frend={frend!} />
-            <div className={styles.VideoWrapper}>
-                <video ref={localVideo} autoPlay muted />
-                <video ref={remoteVideo} autoPlay />
+            <div className={styles.VideoContainerWrapper}>
+                <VideoWrapper className={styles.MyVideo}>
+                    <video ref={localVideo} autoPlay muted />
+                </VideoWrapper>
+                <VideoWrapper className={styles.FrendVideo}>
+                    <video ref={remoteVideo} autoPlay />
+                </VideoWrapper>
             </div>
             <CallFooter toggleCamer={toggleCamer} toggleMicro={toggleMicro} leaveCall={leaveCall} />
         </div>

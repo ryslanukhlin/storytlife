@@ -13,6 +13,8 @@ import {
 } from '../../../graphql/generated';
 import { notificationData, userData } from '../../../graphql/store/auth';
 import { chatData } from '../../../graphql/store/chat';
+import useWidth from '../../../hook/useWidth';
+import Header from '../../container/header/Header';
 import Nav from '../../container/nav/Nav';
 import CallAnswerModal from '../../ui/modal/CallAnswerModal';
 
@@ -31,6 +33,7 @@ type AnserCallUser = {
 };
 
 const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
+    const width = useWidth();
     const router = useRouter();
     const user = useReactiveVar(userData);
     const notification = useReactiveVar(notificationData);
@@ -145,7 +148,7 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
     return (
         <div className={styles.AuthWrapper}>
             <TypeMenuContext.Provider value={{ bigNav, changeViewNav }}>
-                <Nav />
+                {width >= 768 ? <Nav /> : <Header />}
                 <Box className={PageWrapperClasses}>{children}</Box>
                 {callFrend && <CallAnswerModal callPayload={callFrend} closeModal={closeModal} />}
             </TypeMenuContext.Provider>
