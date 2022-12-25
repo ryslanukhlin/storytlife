@@ -53,6 +53,11 @@ export type CreateCallInput = {
   usingVideo: Scalars['Boolean'];
 };
 
+export enum CreateCallResult {
+  Rejected = 'REJECTED',
+  Success = 'SUCCESS'
+}
+
 export type CreateCallType = {
   __typename?: 'CreateCallType';
   chatId: Scalars['String'];
@@ -132,7 +137,7 @@ export type Mutation = {
   addLike: Scalars['String'];
   answerOnCallPage: Scalars['String'];
   cancelCall: Scalars['String'];
-  createCall: Scalars['String'];
+  createCall: CreateCallResult;
   createCandidate: Scalars['String'];
   createMessage: Scalars['String'];
   createOffer: Scalars['String'];
@@ -452,7 +457,7 @@ export type CreateCallMutationVariables = Exact<{
 }>;
 
 
-export type CreateCallMutation = { __typename?: 'Mutation', createCall: string };
+export type CreateCallMutation = { __typename?: 'Mutation', createCall: CreateCallResult };
 
 export type NewCreteCallSubscriptionVariables = Exact<{
   userId: Scalars['String'];
@@ -639,21 +644,21 @@ export type DeleteNotificationMutation = { __typename?: 'Mutation', deleteNotifi
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'Post', id: string, created_at: string, title: string, description: string, img?: string | null, user: { __typename?: 'User', img?: string | null, login: string } }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'Post', id: string, created_at: string, title: string, description: string, img?: string | null, user: { __typename?: 'User', id: string, img?: string | null, login: string } }> };
 
 export type GetUserPostsQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, user: { __typename?: 'User', img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', img?: string | null, login: string } }> }> };
+export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, user: { __typename?: 'User', id: string, img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', id: string, img?: string | null, login: string } }> }> };
 
 export type GetPostQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', id: string, title: string, description: string, created_at: string, img?: string | null, user: { __typename?: 'User', img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', img?: string | null, login: string } }> } | null };
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', id: string, title: string, description: string, created_at: string, img?: string | null, user: { __typename?: 'User', id: string, img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', id: string, img?: string | null, login: string } }> } | null };
 
 export type CreatePostMutationVariables = Exact<{
   createPost: CreatePostInput;
@@ -667,7 +672,7 @@ export type NewPostSubscriptionVariables = Exact<{
 }>;
 
 
-export type NewPostSubscription = { __typename?: 'Subscription', newPost: { __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, user: { __typename?: 'User', img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', login: string, img?: string | null } }> } };
+export type NewPostSubscription = { __typename?: 'Subscription', newPost: { __typename?: 'Post', id: string, description: string, img?: string | null, created_at: string, title: string, user: { __typename?: 'User', id: string, img?: string | null, login: string }, likes: Array<{ __typename?: 'Like', user: { __typename?: 'User', id: string } }>, comments: Array<{ __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', id: string, login: string, img?: string | null } }> } };
 
 export type AddLikeMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -695,7 +700,7 @@ export type NewCommentSubscriptionVariables = Exact<{
 }>;
 
 
-export type NewCommentSubscription = { __typename?: 'Subscription', newComment: { __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', img?: string | null, login: string } } };
+export type NewCommentSubscription = { __typename?: 'Subscription', newComment: { __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', id: string, img?: string | null, login: string } } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1748,6 +1753,7 @@ export const GetPostsDocument = gql`
     description
     img
     user {
+      id
       img
       login
     }
@@ -1790,6 +1796,7 @@ export const GetUserPostsDocument = gql`
     created_at
     title
     user {
+      id
       img
       login
     }
@@ -1803,6 +1810,7 @@ export const GetUserPostsDocument = gql`
       txt
       created_at
       user {
+        id
         img
         login
       }
@@ -1847,6 +1855,7 @@ export const GetPostDocument = gql`
     created_at
     img
     user {
+      id
       img
       login
     }
@@ -1860,6 +1869,7 @@ export const GetPostDocument = gql`
       txt
       created_at
       user {
+        id
         img
         login
       }
@@ -1935,6 +1945,7 @@ export const NewPostDocument = gql`
     created_at
     title
     user {
+      id
       img
       login
     }
@@ -1948,6 +1959,7 @@ export const NewPostDocument = gql`
       txt
       created_at
       user {
+        id
         login
         img
       }
@@ -2079,6 +2091,7 @@ export const NewCommentDocument = gql`
     txt
     created_at
     user {
+      id
       img
       login
     }

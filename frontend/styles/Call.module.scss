@@ -13,6 +13,11 @@
         margin: 0 20px;
     }
 
+    @media (max-width: 550px),
+    (max-height: 650px) {
+        height: calc(100vh - 239px);
+    }
+
     video {
         border-radius: 10px;
         width: 100%;
@@ -66,5 +71,11 @@
         bottom: 20px;
         height: 270px;
         width: 360px;
+    }
+
+    @media (max-width: 550px),
+    (max-height: 650px) {
+        height: 90px;
+        width: 120px;
     }
 }

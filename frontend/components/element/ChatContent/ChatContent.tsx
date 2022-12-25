@@ -1,17 +1,15 @@
 import { Avatar, Box, Button, IconButton, InputBase, styled, Typography } from '@mui/material';
-import React, { FC, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './ChatContent.module.scss';
 import SendIcon from '@mui/icons-material/Send';
-import { useReactiveVar } from '@apollo/client';
-import { userData } from '../../../graphql/store/auth';
-import { useRouter } from 'next/router';
 import {
     useCreateMessageMutation,
     useGetMessagesLazyQuery,
     useNewMessageSubscription,
     useCreateCallMutation,
     useChanhgeOnlineStatusSubscription,
+    CreateCallResult,
 } from '../../../graphql/generated';
 import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
@@ -56,7 +54,6 @@ export type MessageType = {
 } | null;
 
 const ChatContent = () => {
-    const router = useRouter();
     const blockMessagesRef = useRef<HTMLDivElement>(null);
     const { bigNav } = useContext(TypeMenuContext);
     const [message, setMessage] = useState('');
@@ -110,8 +107,7 @@ const ChatContent = () => {
             setCallErr('На устройстве должны быть видео и аудио записываюшее устройства!');
             return;
         }
-        setCall({ usingVideo });
-        createCall({
+        const { data } = await createCall({
             variables: {
                 createCallInput: {
                     chatId,
@@ -120,6 +116,8 @@ const ChatContent = () => {
                 },
             },
         });
+        if (data?.createCall === CreateCallResult.Success) setCall({ usingVideo });
+        else setCallErr('Ваш собеседних уже разговаривает с кем-то');
     };
 
     useNewMessageSubscription({
@@ -193,7 +191,7 @@ const ChatContent = () => {
                                     alt="contact"
                                     sx={{ backgroundColor: deepOrange[500] }}
                                     className={styles.ChatHeaderImg}>
-                                    R
+                                    {frend.login[0]}
                                 </Avatar>
                             </OnlineBadge>
                         ) : (
@@ -207,7 +205,7 @@ const ChatContent = () => {
                                     alt="contact"
                                     sx={{ backgroundColor: deepOrange[500] }}
                                     className={styles.ChatHeaderImg}>
-                                    R
+                                    {frend.login[0]}
                                 </Avatar>
                             </OfflineBadge>
                         )}

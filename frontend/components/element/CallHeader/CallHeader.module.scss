@@ -1,7 +1,13 @@
 .CallImg {
     border-radius: 50%;
-    width: 120px;
-    height: 120px;
+    width: 120px !important;
+    height: 120px !important;
+
+    @media (max-width: 550px),
+    (max-height: 650px) {
+        width: 60px !important;
+        height: 60px !important;
+    }
 }
 
 .CallWrapper {
@@ -10,4 +16,8 @@
     align-items: center;
     padding: 30px 5px 5px;
     justify-content: center;
+
+    @media (max-width: 1320px) {
+        padding: 5px 5px 30px;
+    }
 }

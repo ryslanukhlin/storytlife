@@ -11,7 +11,7 @@ export interface Comment {
     id: string;
     txt: string;
     created_at: string;
-    user: { __typename?: 'User'; login: string; img?: string | null };
+    user: { __typename?: 'User'; id: string; login: string; img?: string | null };
 }
 
 export interface Post {
@@ -23,6 +23,7 @@ export interface Post {
     title: string;
     user: {
         __typename?: 'User' | undefined;
+        id: string;
         login: string;
         img?: string | null;
     };
@@ -40,6 +41,7 @@ const Posts: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     const router = useRouter();
     const [posts, setPosts] = useState<Post[]>([]);
     const [getPosts] = useGetUserPostsLazyQuery();
+    console.log(posts);
 
     const downloadPosts = async () => {
         const { data } = await getPosts({
@@ -56,6 +58,8 @@ const Posts: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
             userId: user.id,
         },
         onData: (option) => {
+            console.log(option.data.data?.newPost!);
+
             const { created_at } = option.data.data?.newPost!;
             option.data.data!.newPost.created_at = new Date(created_at).getTime().toString();
             setPosts((prev) => [...prev, option.data.data?.newPost as Post]);
@@ -64,7 +68,7 @@ const Posts: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
 
     useEffect(() => {
         downloadPosts();
-    }, []);
+    }, [router.query.id]);
 
     return (
         <>

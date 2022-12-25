@@ -2,6 +2,12 @@ import React, { FC, useEffect } from 'react';
 
 import styles from './ModalWrapper.module.scss';
 
+import { Box, styled } from '@mui/material';
+
+const BoxModal = styled(Box)(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+}));
+
 const ModalWrapper: FC<{ children: React.ReactNode }> = ({ children }) => {
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -12,7 +18,7 @@ const ModalWrapper: FC<{ children: React.ReactNode }> = ({ children }) => {
 
     return (
         <div className={styles.ModalWrapper}>
-            <div className={styles.Modal}>{children}</div>
+            <BoxModal className={styles.Modal}>{children}</BoxModal>
         </div>
     );
 };

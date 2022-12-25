@@ -11,9 +11,10 @@ import { PropsWithChildren } from 'react';
 import { createClient } from 'graphql-ws';
 import { authToken } from './store/auth';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { BackPort } from '../config';
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:5000/graphql',
+    uri: BackPort + 'graphql',
 });
 
 const wsLink =

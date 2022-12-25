@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { useLoginUserMutation } from '../graphql/generated';
 import { LoadingButton } from '@mui/lab';
 import { authToken } from '../graphql/store/auth';
+import Head from 'next/head';
 
 const Login = () => {
     const [phone, setPhone] = React.useState('');
@@ -46,6 +47,9 @@ const Login = () => {
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
+                <Head>
+                    <title>Авторизация</title>
+                </Head>
                 <h1 className={style.AuthTitle}>Авторизация</h1>
                 {errLogin && (
                     <Alert severity="error" style={{ marginBottom: 20 }}>

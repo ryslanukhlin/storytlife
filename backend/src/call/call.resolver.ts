@@ -3,6 +3,8 @@ import { Args, Mutation, Resolver, Subscription } from '@nestjs/graphql';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { PUB_SUB } from 'src/pubsub/pubsub.module';
 import { CreateCandidateInput, CreateOfferInput } from 'src/types/graphql';
+import { CurrentUser, ICurrentUser } from 'src/user/currentUser.decorator';
+import { CallService } from './call.service';
 
 enum SUBSCRIPTIONS_EVENT {
     CREATE_OFFER = 'CREATE_OFFER',
@@ -13,7 +15,10 @@ enum SUBSCRIPTIONS_EVENT {
 
 @Resolver()
 export class CallResolver {
-    constructor(@Inject(PUB_SUB) private readonly pubSub: RedisPubSub) {}
+    constructor(
+        private readonly callService: CallService,
+        @Inject(PUB_SUB) private readonly pubSub: RedisPubSub,
+    ) {}
 
     @Mutation()
     createOffer(@Args('createOfferInput') createOfferInput: CreateOfferInput) {
@@ -56,7 +61,8 @@ export class CallResolver {
     }
 
     @Mutation()
-    leaveCall(@Args('userId') userId: string) {
+    async leaveCall(@CurrentUser() currentUser: ICurrentUser, @Args('userId') userId: string) {
+        await this.callService.removeCallStatusUsers(currentUser.id, userId);
         this.pubSub.publish(SUBSCRIPTIONS_EVENT.LEAVE_CALL + userId, {
             newLeaveCall: userId,
         });

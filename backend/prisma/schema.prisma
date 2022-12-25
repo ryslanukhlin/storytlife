@@ -19,6 +19,7 @@ model User {
   bg String?
   img String?
   is_onlite Boolean @default(false)
+  on_call Boolean @default(false)
   chats Chat[]
   message Message[]
   post Post[]

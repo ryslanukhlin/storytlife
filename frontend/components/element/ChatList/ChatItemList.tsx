@@ -59,7 +59,7 @@ const ChatItemList: FC<{ contact: Chat }> = ({ contact }) => {
                             sx={{ backgroundColor: deepOrange[500] }}
                             alt="contact"
                             className={styles.ChatImg}>
-                            R
+                            {frend.login[0]}
                         </Avatar>
                     </OnlineBadge>
                 ) : (
@@ -69,7 +69,7 @@ const ChatItemList: FC<{ contact: Chat }> = ({ contact }) => {
                             sx={{ backgroundColor: deepOrange[500] }}
                             alt="contact"
                             className={styles.ChatImg}>
-                            R
+                            {frend.login[0]}
                         </Avatar>
                     </OfflineBadge>
                 )}

@@ -6,6 +6,7 @@ import {
     AcceptCallInput,
     AcceptCallType,
     CreateCallInput,
+    CreateCallResult,
     DeleteInputNotification,
     MessageInput,
 } from './../types/graphql';
@@ -91,12 +92,20 @@ export class ChatResolver {
     }
 
     @Mutation()
-    createCall(@Args('createCallInput') createCallInput: CreateCallInput) {
+    async createCall(
+        @CurrentUser() currentUser: ICurrentUser,
+        @Args('createCallInput') createCallInput: CreateCallInput,
+    ) {
         const { userId, ...result } = createCallInput;
+        const on_call = await this.chatService.checkIsCalledUser(createCallInput.userId);
+        if (on_call) {
+            return CreateCallResult.REJECTED;
+        }
+        await this.chatService.changeStatusCalledUser(currentUser.id, userId, true);
         this.pubSub.publish(SUBSCRIPTIONS_EVENT.NEW_CALL + userId, {
             newCreteCall: result,
         });
-        return 'success';
+        return CreateCallResult.SUCCESS;
     }
 
     @Subscription()
@@ -105,8 +114,13 @@ export class ChatResolver {
     }
 
     @Mutation()
-    acceptCall(@Args('acceptCallInput') acceptCallInput: AcceptCallInput) {
+    async acceptCall(
+        @CurrentUser() currentUser: ICurrentUser,
+        @Args('acceptCallInput') acceptCallInput: AcceptCallInput,
+    ) {
         const { userId, ...result } = acceptCallInput;
+        if (acceptCallInput.acceptCall === AcceptCall.Deny)
+            await this.chatService.changeStatusCalledUser(currentUser.id, userId, false);
         this.pubSub.publish(SUBSCRIPTIONS_EVENT.ACCEPT_CALL + userId, {
             newAcceptCall: result,
         });
@@ -119,7 +133,8 @@ export class ChatResolver {
     }
 
     @Mutation()
-    cancelCall(@Args('userId') userId: string) {
+    async cancelCall(@CurrentUser() currentUser: ICurrentUser, @Args('userId') userId: string) {
+        await this.chatService.changeStatusCalledUser(currentUser.id, userId, false);
         this.pubSub.publish(SUBSCRIPTIONS_EVENT.CANCEL_CALL + userId, {
             newCancelCall: userId,
         });
@@ -139,8 +154,6 @@ export class ChatResolver {
             await this.chatService.deleteNotification(deleteInput);
             return 'success';
         } catch (e) {
-            console.log(e);
-
             return 'error';
         }
     }

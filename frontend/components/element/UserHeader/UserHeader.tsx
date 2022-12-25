@@ -1,6 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
 import { Avatar, Box, Button, IconButton, Typography } from '@mui/material';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { TypeUser, userData } from '../../../graphql/store/auth';
 import { UserPageInfo } from '../../../pages/[id]';
 
@@ -47,6 +47,10 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
         };
     };
 
+    useEffect(() => {
+        if (userPage.id !== user.id) setUserPage(user);
+    }, [user.id]);
+
     useNewAvatarSubscription({
         variables: {
             userId: user!.id,
@@ -67,6 +71,8 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
         },
     });
 
+    const isAnotherUser = user?.id === userData()?.id;
+
     return (
         <Box sx={{ boxShadow: 3 }} className={styles.UserHeader}>
             <div
@@ -76,10 +82,12 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
                         userPage.bg ? BackPort + 'img/bg/' + userPage.bg : '/img/bgDefault.jpg'
                     }')`,
                 }}>
-                <Button className={styles.ChangeBack} variant="contained" component="label">
-                    <input hidden accept="image/*" type="file" onChange={chanheBg} />
-                    Изменить фон
-                </Button>
+                {isAnotherUser && (
+                    <Button className={styles.ChangeBack} variant="contained" component="label">
+                        <input hidden accept="image/*" type="file" onChange={chanheBg} />
+                        Изменить фон
+                    </Button>
+                )}
             </div>
             <div className={styles.UserInfo}>
                 <div
@@ -90,17 +98,19 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
                         src={userPage.img ? BackPort + 'img/avatar/' + userPage.img : undefined}
                         sx={{ backgroundColor: deepOrange[500] }}
                         className={styles.UserImg}>
-                        R
+                        {userPage.login[0]}
                     </Avatar>
-                    <div
-                        className={
-                            showPhotoChange ? styles.ChangeAvatar : styles.ChangeAvatarHidden
-                        }>
-                        <IconButton component="label" className={styles.ChangeAvatarBtn}>
-                            <input hidden accept="image/*" type="file" onChange={chanhePhoto} />
-                            <PhotoCameraIcon />
-                        </IconButton>
-                    </div>
+                    {isAnotherUser && (
+                        <div
+                            className={
+                                showPhotoChange ? styles.ChangeAvatar : styles.ChangeAvatarHidden
+                            }>
+                            <IconButton component="label" className={styles.ChangeAvatarBtn}>
+                                <input hidden accept="image/*" type="file" onChange={chanhePhoto} />
+                                <PhotoCameraIcon />
+                            </IconButton>
+                        </div>
+                    )}
                 </div>
                 <Typography variant="h6">{userPage?.login}</Typography>
                 <Typography variant="body1">{userPage?.phone}</Typography>

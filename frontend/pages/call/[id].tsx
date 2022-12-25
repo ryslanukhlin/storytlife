@@ -1,16 +1,13 @@
 import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import React, { LegacyRef, useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 //@ts-ignore
 import freeice from 'freeice';
 import {
-    AcceptCall,
     TypeCreate,
-    useAcceptCallMutation,
     useAnswerOnCallPageMutation,
     useCreateCandidateMutation,
     useCreateOfferMutation,
-    useGetCurrentUserChatsQuery,
     useLeaveCallMutation,
     useNewAnswerOnCallPageSubscription,
     useNewCreateCandidateSubscription,
@@ -25,13 +22,14 @@ import CallHeader from '../../components/element/CallHeader/CallHeader';
 import styles from '../../styles/Call.module.scss';
 import { chatData } from '../../graphql/store/chat';
 import { Box, styled } from '@mui/material';
+import Head from 'next/head';
 
 const VideoWrapper = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${theme.palette.primary.main}`,
 }));
 
-const config = { iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }] };
+const config = { iceServers: freeice() };
 
 const CallPage = () => {
     const router = useRouter();
@@ -50,6 +48,9 @@ const CallPage = () => {
     const connected = useRef(false);
     const answerConnected = useRef(false);
     const createtOfferIsWork = useRef(false);
+
+    const [offMicro, setOffMicro] = useState(false);
+    const [offVideo, setOffVideo] = useState(false);
 
     const createOffer = async () => {
         createtOfferIsWork.current = true;
@@ -185,14 +186,24 @@ const CallPage = () => {
 
     const toggleCamer = () => {
         const videoTrack = localStream.current?.getTracks().find((track) => track.kind === 'video');
-        if (videoTrack?.enabled) videoTrack.enabled = false;
-        else videoTrack!.enabled = true;
+        if (videoTrack?.enabled) {
+            videoTrack.enabled = false;
+            setOffVideo(true);
+        } else {
+            videoTrack!.enabled = true;
+            setOffVideo(false);
+        }
     };
 
     const toggleMicro = () => {
-        const videoTrack = localStream.current?.getTracks().find((track) => track.kind === 'audio');
-        if (videoTrack?.enabled) videoTrack.enabled = false;
-        else videoTrack!.enabled = true;
+        const audioTrack = localStream.current?.getTracks().find((track) => track.kind === 'audio');
+        if (audioTrack?.enabled) {
+            audioTrack.enabled = false;
+            setOffMicro(true);
+        } else {
+            audioTrack!.enabled = true;
+            setOffMicro(false);
+        }
     };
 
     const leaveCall = () => {
@@ -210,6 +221,9 @@ const CallPage = () => {
 
     return (
         <div className={styles.CallWrapper}>
+            <Head>
+                <title>Звонок {frend?.login}</title>
+            </Head>
             <CallHeader frend={frend!} />
             <div className={styles.VideoContainerWrapper}>
                 <VideoWrapper className={styles.MyVideo}>
@@ -219,7 +233,13 @@ const CallPage = () => {
                     <video ref={remoteVideo} autoPlay />
                 </VideoWrapper>
             </div>
-            <CallFooter toggleCamer={toggleCamer} toggleMicro={toggleMicro} leaveCall={leaveCall} />
+            <CallFooter
+                offMicro={offMicro}
+                offVideo={offVideo}
+                toggleCamer={toggleCamer}
+                toggleMicro={toggleMicro}
+                leaveCall={leaveCall}
+            />
         </div>
     );
 };

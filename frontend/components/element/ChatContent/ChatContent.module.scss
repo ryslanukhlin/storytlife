@@ -3,6 +3,14 @@
     min-height: 100vh;
     width: 100%;
     margin-left: 350px;
+
+    @media (max-width: 768px) {
+        margin-left: 270px;
+    }
+
+    @media (max-width: 640px) {
+        margin-left: 0px;
+    }
 }
 
 .ChatHeader {
@@ -27,6 +35,14 @@
     padding: 10px;
     position: fixed;
     top: 0;
+
+    @media (max-width: 768px) {
+        margin-top: 64px;
+    }
+
+    @media (max-width: 599px) {
+        margin-top: 56px;
+    }
 }
 
 .ChatHeaderImg {
@@ -76,8 +92,24 @@
 
 .maxWidthBigNav {
     max-width: calc(100% - 590px);
+
+    @media (max-width: 768px) {
+        max-width: calc(100% - 270px);
+    }
+
+    @media (max-width: 640px) {
+        max-width: 100%;
+    }
 }
 
 .maxWidthSmallNav {
     max-width: calc(100% - 431px);
+
+    @media (max-width: 768px) {
+        max-width: calc(100% - 270px);
+    }
+
+    @media (max-width: 640px) {
+        max-width: 100%;
+    }
 }

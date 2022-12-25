@@ -50,8 +50,6 @@ const CallAnswerModal: FC<CallAnswerModalProps> = ({ callPayload, closeModal }) 
                 },
             });
         } else {
-            console.log('camero not found');
-
             await acceptCall({
                 variables: {
                     acceptCallInput: {

@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Post from '../../components/element/Post/Post';
@@ -20,6 +21,9 @@ const PostPage = () => {
 
     return (
         <Container>
+            <Head>
+                <title>{data?.getPost?.title}</title>
+            </Head>
             <Post post={data?.getPost!} />
         </Container>
     );

@@ -18,6 +18,11 @@ export enum AcceptCall {
     Deny = "Deny"
 }
 
+export enum CreateCallResult {
+    SUCCESS = "SUCCESS",
+    REJECTED = "REJECTED"
+}
+
 export class RegisterInput {
     login: string;
     phone: string;
@@ -99,7 +104,7 @@ export abstract class IMutation {
 
     abstract createMessage(messageInput: MessageInput): string | Promise<string>;
 
-    abstract createCall(createCallInput: CreateCallInput): string | Promise<string>;
+    abstract createCall(createCallInput: CreateCallInput): CreateCallResult | Promise<CreateCallResult>;
 
     abstract acceptCall(acceptCallInput: AcceptCallInput): string | Promise<string>;
 

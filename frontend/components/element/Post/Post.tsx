@@ -27,6 +27,7 @@ import { userData } from '../../../graphql/store/auth';
 import CommentForm from '../CommentForm/CommentForm';
 import Comments from '../Comment/Comments';
 import { BackPort } from '../../../config';
+import LinkContent from '../../ui/LinkWrapper';
 
 const CustomCard = styled(Card)(({ theme }) => ({
     backgroundColor: theme.palette.background.default,
@@ -72,12 +73,16 @@ const Post: FC<{ post: Post }> = ({ post }) => {
         <CustomCard variant="outlined" className={styles.Post}>
             <CardHeader
                 avatar={
-                    <Avatar
-                        sx={{ bgcolor: red[500] }}
-                        aria-label="recipe"
-                        src={post.user.img ? BackPort + 'img/avatar/' + post.user.img : undefined}>
-                        R
-                    </Avatar>
+                    <LinkContent href={'/' + post.user.id}>
+                        <Avatar
+                            sx={{ bgcolor: red[500] }}
+                            aria-label="recipe"
+                            src={
+                                post.user.img ? BackPort + 'img/avatar/' + post.user.img : undefined
+                            }>
+                            {post.user.login[0]}
+                        </Avatar>
+                    </LinkContent>
                 }
                 title={post.user.login}
                 subheader={dateFormater(post.created_at)}
@@ -85,7 +90,7 @@ const Post: FC<{ post: Post }> = ({ post }) => {
             {post.img && (
                 <CardMedia
                     component="img"
-                    image={'http://localhost:5000/img/post/' + post.img}
+                    image={BackPort + 'img/post/' + post.img}
                     alt="Post image"
                     height={300}
                 />

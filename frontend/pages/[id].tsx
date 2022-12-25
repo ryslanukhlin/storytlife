@@ -1,5 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
 import { Divider } from '@mui/material';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Post from '../components/element/Post/Post';
@@ -34,6 +35,7 @@ const AccountInfo = () => {
     const fetchAnotherUser = async () => {
         const { data } = await getAnotherUser({
             variables: { userId: router.query.id as string },
+            fetchPolicy: 'network-only',
         });
         if (data?.getUser) setCurrentUser(data.getUser);
         else await router.push('/404');
@@ -43,15 +45,19 @@ const AccountInfo = () => {
 
     useEffect(() => {
         if (isAnotherUser) {
-            const { chats, ...result } = user!;
-            setCurrentUser(result);
+            setCurrentUser(userData()!);
         } else fetchAnotherUser();
-    }, []);
+    }, [router.query.id]);
 
     if (!currentUser) return null;
 
     return (
         <Container>
+            <Head>
+                <title>
+                    {isAnotherUser ? 'Моя страничка' : 'Страничка - ' + currentUser.login}
+                </title>
+            </Head>
             <UserHeader user={currentUser!} />
             {isAnotherUser && <PostForm />}
             <Posts user={currentUser!} />

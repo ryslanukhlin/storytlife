@@ -8,6 +8,7 @@ import style from '../components/layouts/AuthLayout/AuthLayout.module.scss';
 import Link from '../components/ui/Link';
 import { useRegisterUserMutation } from '../graphql/generated';
 import TextMaskCustom from '../components/ui/PhoneInput';
+import Head from 'next/head';
 
 interface ErrorsValid {
     phone?: string;
@@ -56,6 +57,9 @@ const Register = () => {
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
+                <Head>
+                    <title>Регистрация</title>
+                </Head>
                 <h1 className={style.AuthTitle}>Зарегистрироваться</h1>
                 {success && (
                     <Alert severity="success" style={{ marginBottom: 20 }}>

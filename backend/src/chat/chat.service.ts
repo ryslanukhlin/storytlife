@@ -87,4 +87,25 @@ export class ChatService {
         await this.prisma
             .$queryRaw`update "MessageNotification" set messages_id = array_remove(messages_id, ${deleteInput.messageId})`;
     }
+
+    async changeStatusCalledUser(userId: string, frendId: string, on_call: boolean) {
+        await this.prisma.user.updateMany({
+            where: {
+                OR: [{ id: userId }, { id: frendId }],
+            },
+            data: {
+                on_call,
+            },
+        });
+    }
+
+    async checkIsCalledUser(userId: string) {
+        const user = await this.prisma.user.findFirst({
+            where: {
+                id: userId,
+            },
+        });
+
+        return user.on_call;
+    }
 }

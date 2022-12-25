@@ -10,6 +10,8 @@ const PostForm = () => {
     const [createPost] = useCreatePostMutation();
 
     const formik = useFormik({
+        validateOnChange: false,
+        validateOnBlur: false,
         initialValues: { title: '', description: '', image: null },
         onSubmit: async ({ title, description, image }) => {
             if (nameImage) {
@@ -39,6 +41,14 @@ const PostForm = () => {
                 });
             }
         },
+        validate: (values) => {
+            let errors: any = {};
+
+            if (!values.title.trim()) errors.title = 'Обезательное поле!';
+            if (!values.description.trim()) errors.description = 'Обезательное поле!';
+
+            return errors;
+        },
     });
 
     const chandeImagePost = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +67,8 @@ const PostForm = () => {
                     name="title"
                     value={formik.values.title}
                     onChange={formik.handleChange}
+                    error={!!formik.errors.title}
+                    helperText={formik.errors.title}
                 />
                 <TextField
                     label="Описание"
@@ -66,6 +78,8 @@ const PostForm = () => {
                     name="description"
                     value={formik.values.description}
                     onChange={formik.handleChange}
+                    error={!!formik.errors.description}
+                    helperText={formik.errors.description}
                 />
                 <div className={styles.PostActions}>
                     <Button variant="text" component="label">

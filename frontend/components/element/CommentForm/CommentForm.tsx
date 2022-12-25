@@ -21,7 +21,7 @@ const CommentForm: FC<{
     };
 
     const sendComment = () => {
-        if (!txt) return;
+        if (!txt.trim()) return;
         addComment({
             variables: {
                 createCommentInput: {
@@ -40,7 +40,7 @@ const CommentForm: FC<{
                 aria-label="recipe"
                 className={styles.Avatar}
                 src={user?.img ? BackPort + 'img/avatar/' + user?.img : undefined}>
-                R
+                {user?.login[0]}
             </Avatar>
             <TextField
                 label="Написать коментарий"

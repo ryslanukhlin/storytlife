@@ -9,6 +9,15 @@
     align-items: center;
     height: 100vh;
     margin-left: 350px;
+    text-align: center;
+
+    @media (max-width: 768px) {
+        margin-left: 270px;
+    }
+
+    @media (max-width: 640px) {
+        display: none;
+    }
 }
 
 .ChatList {
@@ -17,6 +26,16 @@
     padding: 20px;
     min-height: 100vh;
     z-index: 1;
+
+    @media (max-width: 768px) {
+        padding: 5px;
+        min-width: 270px;
+    }
+
+    @media (max-width: 640px) {
+        width: 100%;
+        border-right: none;
+    }
 }
 
 .ChatListItem {

@@ -6,17 +6,23 @@ import { red } from '@mui/material/colors';
 import { Comment } from '../Post/Posts';
 import { dateFormater } from '../../../util/dateFormat';
 import { BackPort } from '../../../config';
+import LinkContent from '../../ui/LinkWrapper';
 
 const Comment: FC<{ comment: Comment }> = ({ comment }) => {
     return (
         <div className={styles.Comment}>
-            <Avatar
-                sx={{ bgcolor: red[500] }}
-                aria-label="recipe"
-                className={styles.Avatar}
-                src={comment.user.img ? BackPort + 'img/avatar/' + comment.user.img : undefined}>
-                R
-            </Avatar>
+            <LinkContent href={'/' + comment.user.id}>
+                <Avatar
+                    sx={{ bgcolor: red[500] }}
+                    aria-label="recipe"
+                    className={styles.Avatar}
+                    src={
+                        comment.user.img ? BackPort + 'img/avatar/' + comment.user.img : undefined
+                    }>
+                    {comment.user.login[0]}
+                </Avatar>
+            </LinkContent>
+
             <div>
                 <Typography variant="body1">{comment.user.login}</Typography>
                 <Typography variant="body2">{dateFormater(comment.created_at)}</Typography>

@@ -17,6 +17,7 @@ import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
 import BoxBorderRight from '../../ui/BoxBorderRight';
 import { useReactiveVar } from '@apollo/client';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useRouter } from 'next/router';
 
 const CustomLink = styled(Link)(({ theme }) => ({
     color: theme.palette.text.primary,
@@ -43,6 +44,7 @@ const CustomLoggoutTheme = styled(Box)(({ theme }) => ({
 }));
 
 const NavMobile: FC<{ onDrawer: () => void }> = ({ onDrawer }) => {
+    const router = useRouter();
     const notifications = useReactiveVar(notificationData);
     const themeContext = useContext(ThemeContext);
 
@@ -59,6 +61,7 @@ const NavMobile: FC<{ onDrawer: () => void }> = ({ onDrawer }) => {
         userData(null);
         localStorage.removeItem('auth_token');
         onDrawer();
+        router.push('/login');
     };
 
     const NavClasses = `${styles.Nav} ${styles.BigNav}`;

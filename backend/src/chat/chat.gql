@@ -52,10 +52,15 @@ input DeleteInputNotification {
     messageId: String!
 }
 
+enum CreateCallResult {
+    SUCCESS
+    REJECTED
+}
+
 type Mutation {
     createRoom(userId: String!): Chat!
     createMessage(messageInput: MessageInput!): String!
-    createCall(createCallInput: CreateCallInput!): String!
+    createCall(createCallInput: CreateCallInput!): CreateCallResult!
     acceptCall(acceptCallInput: AcceptCallInput!): String!
     cancelCall(userId: String!): String!
     deleteNotification(deleteInputNotification: DeleteInputNotification!): String!

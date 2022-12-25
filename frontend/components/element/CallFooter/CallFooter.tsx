@@ -12,16 +12,24 @@ type CallFooterProps = {
     toggleCamer: () => void;
     toggleMicro: () => void;
     leaveCall: () => void;
+    offMicro: boolean;
+    offVideo: boolean;
 };
 
-const CallFooter: FC<CallFooterProps> = ({ toggleCamer, toggleMicro, leaveCall }) => {
+const CallFooter: FC<CallFooterProps> = ({
+    toggleCamer,
+    toggleMicro,
+    leaveCall,
+    offMicro,
+    offVideo,
+}) => {
     return (
         <div className={styles.CallFooter}>
             <IconButton variant="contained" onClick={toggleMicro}>
-                <MicIcon />
+                {offMicro ? <MicOffIcon /> : <MicIcon />}
             </IconButton>
             <IconButton variant="contained" onClick={toggleCamer}>
-                <VideocamIcon />
+                {offVideo ? <VideocamOffIcon /> : <VideocamIcon />}
             </IconButton>
             <IconButton variant="contained" color="error" onClick={leaveCall}>
                 <CallEndIcon />

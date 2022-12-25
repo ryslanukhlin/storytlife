@@ -37,11 +37,14 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
     const router = useRouter();
     const user = useReactiveVar(userData);
     const notification = useReactiveVar(notificationData);
-    const [bigNav, setBigNav] = useState(true);
+    const [bigNav, setBigNav] = useState(localStorage && localStorage.getItem('bigNav') === 'true');
     const [callFrend, setFrendCall] = useState<AnserCallUser | null>(null);
     const [chanheStatusOnline] = useSetOnlineStatusMutation();
 
-    const changeViewNav = () => setBigNav((prev) => !prev);
+    const changeViewNav = () => {
+        localStorage.setItem('bigNav', String(!bigNav));
+        setBigNav((prev) => !prev);
+    };
 
     const closeModal = () => setFrendCall(null);
 
