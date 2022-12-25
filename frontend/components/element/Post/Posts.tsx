@@ -48,6 +48,7 @@ const Posts: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
             variables: {
                 userId: router.query.id as string,
             },
+            fetchPolicy: 'network-only',
         });
 
         setPosts(data?.getUserPosts as Post[]);
