@@ -13,7 +13,7 @@ const PostForm = () => {
         validateOnChange: false,
         validateOnBlur: false,
         initialValues: { title: '', description: '', image: null },
-        onSubmit: async ({ title, description, image }) => {
+        onSubmit: async ({ title, description, image }, { resetForm }) => {
             if (nameImage) {
                 const file: File = image as unknown as File;
                 const reader = new FileReader();
@@ -29,7 +29,7 @@ const PostForm = () => {
                         },
                     });
                 };
-            } else {
+            } else
                 createPost({
                     variables: {
                         createPost: {
@@ -39,7 +39,7 @@ const PostForm = () => {
                         },
                     },
                 });
-            }
+            resetForm();
         },
         validate: (values) => {
             let errors: any = {};
