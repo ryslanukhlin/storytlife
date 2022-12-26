@@ -11,4 +11,4 @@
 ##### backend
 - nest, typescript, graphql, prisma, postgres, docker
 
-для аудио и видео звонков нужен статус https
+для аудио и видео звонков нужен https
