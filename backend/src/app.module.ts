@@ -37,19 +37,7 @@ function toLowerKeys(obj) {
             playground: false,
             subscriptions: {
                 'graphql-ws': true,
-                'subscriptions-transport-ws': {
-                    onConnect: (headersRaw: Record<string, unknown>) => {
-                        const headers = Object.keys(headersRaw).reduce((dest, key) => {
-                            dest[key.toLowerCase()] = headersRaw[key];
-                            return dest;
-                        }, {});
-                        return {
-                            req: {
-                                headers: headers,
-                            },
-                        };
-                    },
-                },
+                'subscriptions-transport-ws': true,
             },
             plugins: [ApolloServerPluginLandingPageLocalDefault()],
             typePaths: ['./**/*.gql'],

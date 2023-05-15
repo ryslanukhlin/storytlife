@@ -529,20 +529,6 @@ export type NewBgSubscriptionVariables = Exact<{
 
 export type NewBgSubscription = { __typename?: 'Subscription', newBg: string };
 
-export type SetOnlineStatusMutationVariables = Exact<{
-  online: Scalars['Boolean'];
-}>;
-
-
-export type SetOnlineStatusMutation = { __typename?: 'Mutation', setOnlineStatus: string };
-
-export type ChanhgeOnlineStatusSubscriptionVariables = Exact<{
-  userId: Scalars['String'];
-}>;
-
-
-export type ChanhgeOnlineStatusSubscription = { __typename?: 'Subscription', chanhgeOnlineStatus: boolean };
-
 export type CreateOfferMutationVariables = Exact<{
   createOfferInput: CreateOfferInput;
 }>;
@@ -1240,65 +1226,6 @@ export function useNewBgSubscription(baseOptions: Apollo.SubscriptionHookOptions
       }
 export type NewBgSubscriptionHookResult = ReturnType<typeof useNewBgSubscription>;
 export type NewBgSubscriptionResult = Apollo.SubscriptionResult<NewBgSubscription>;
-export const SetOnlineStatusDocument = gql`
-    mutation SetOnlineStatus($online: Boolean!) {
-  setOnlineStatus(online: $online)
-}
-    `;
-export type SetOnlineStatusMutationFn = Apollo.MutationFunction<SetOnlineStatusMutation, SetOnlineStatusMutationVariables>;
-
-/**
- * __useSetOnlineStatusMutation__
- *
- * To run a mutation, you first call `useSetOnlineStatusMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetOnlineStatusMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [setOnlineStatusMutation, { data, loading, error }] = useSetOnlineStatusMutation({
- *   variables: {
- *      online: // value for 'online'
- *   },
- * });
- */
-export function useSetOnlineStatusMutation(baseOptions?: Apollo.MutationHookOptions<SetOnlineStatusMutation, SetOnlineStatusMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetOnlineStatusMutation, SetOnlineStatusMutationVariables>(SetOnlineStatusDocument, options);
-      }
-export type SetOnlineStatusMutationHookResult = ReturnType<typeof useSetOnlineStatusMutation>;
-export type SetOnlineStatusMutationResult = Apollo.MutationResult<SetOnlineStatusMutation>;
-export type SetOnlineStatusMutationOptions = Apollo.BaseMutationOptions<SetOnlineStatusMutation, SetOnlineStatusMutationVariables>;
-export const ChanhgeOnlineStatusDocument = gql`
-    subscription ChanhgeOnlineStatus($userId: String!) {
-  chanhgeOnlineStatus(userId: $userId)
-}
-    `;
-
-/**
- * __useChanhgeOnlineStatusSubscription__
- *
- * To run a query within a React component, call `useChanhgeOnlineStatusSubscription` and pass it any options that fit your needs.
- * When your component renders, `useChanhgeOnlineStatusSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useChanhgeOnlineStatusSubscription({
- *   variables: {
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useChanhgeOnlineStatusSubscription(baseOptions: Apollo.SubscriptionHookOptions<ChanhgeOnlineStatusSubscription, ChanhgeOnlineStatusSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<ChanhgeOnlineStatusSubscription, ChanhgeOnlineStatusSubscriptionVariables>(ChanhgeOnlineStatusDocument, options);
-      }
-export type ChanhgeOnlineStatusSubscriptionHookResult = ReturnType<typeof useChanhgeOnlineStatusSubscription>;
-export type ChanhgeOnlineStatusSubscriptionResult = Apollo.SubscriptionResult<ChanhgeOnlineStatusSubscription>;
 export const CreateOfferDocument = gql`
     mutation CreateOffer($createOfferInput: CreateOfferInput!) {
   createOffer(createOfferInput: $createOfferInput)

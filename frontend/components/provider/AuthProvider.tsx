@@ -8,6 +8,9 @@ import {
 } from '../../graphql/generated';
 import { authToken, notificationData, userData } from '../../graphql/store/auth';
 import { chatData } from '../../graphql/store/chat';
+import { SocketIo } from '../../util/socket';
+import { SocketIoPort } from '../../config';
+import { io } from 'socket.io-client';
 
 const publicPath = ['/login', '/register'];
 

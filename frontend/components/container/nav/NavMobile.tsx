@@ -18,7 +18,7 @@ import BoxBorderRight from '../../ui/BoxBorderRight';
 import { useReactiveVar } from '@apollo/client';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/router';
-import { useSetOnlineStatusMutation } from '../../../graphql/generated';
+import { SocketIo } from '../../../util/socket';
 
 const CustomLink = styled(Link)(({ theme }) => ({
     color: theme.palette.text.primary,
@@ -48,7 +48,6 @@ const NavMobile: FC<{ onDrawer: () => void }> = ({ onDrawer }) => {
     const router = useRouter();
     const notifications = useReactiveVar(notificationData);
     const themeContext = useContext(ThemeContext);
-    const [chanheStatusOnline] = useSetOnlineStatusMutation();
 
     const countNotification = notifications!.filter(
         (notif) => !!notif && !!notif!.messages_id && notif!.messages_id!.length,
@@ -60,11 +59,7 @@ const NavMobile: FC<{ onDrawer: () => void }> = ({ onDrawer }) => {
     };
 
     const loggoutUser = () => {
-        chanheStatusOnline({
-            variables: {
-                online: false,
-            },
-        });
+        SocketIo()?.disconnect();
         userData(null);
         localStorage.removeItem('auth_token');
         onDrawer();

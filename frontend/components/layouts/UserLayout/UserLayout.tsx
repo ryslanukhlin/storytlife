@@ -3,13 +3,11 @@ import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { createContext, FC, ReactNode, useEffect, useState } from 'react';
 import {
-    useChanhgeOnlineStatusSubscription,
     useNewAvatarSubscription,
     useNewBgSubscription,
     useNewCreateRoomSubscription,
     useNewCreteCallSubscription,
     useNewNotificationSubscription,
-    useSetOnlineStatusMutation,
 } from '../../../graphql/generated';
 import { notificationData, userData } from '../../../graphql/store/auth';
 import { chatData } from '../../../graphql/store/chat';
@@ -19,6 +17,9 @@ import Nav from '../../container/nav/Nav';
 import CallAnswerModal from '../../ui/modal/CallAnswerModal';
 
 import styles from './UserLayout.module.scss';
+import { io } from 'socket.io-client';
+import { SocketIoPort } from '../../../config';
+import { SocketIo } from '../../../util/socket';
 
 type ViewMenuContext = {
     bigNav: boolean;
@@ -39,7 +40,6 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
     const notification = useReactiveVar(notificationData);
     const [bigNav, setBigNav] = useState(localStorage && localStorage.getItem('bigNav') === 'true');
     const [callFrend, setFrendCall] = useState<AnserCallUser | null>(null);
-    const [chanheStatusOnline] = useSetOnlineStatusMutation();
 
     const changeViewNav = () => {
         localStorage.setItem('bigNav', String(!bigNav));
@@ -112,35 +112,24 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
         },
     });
 
-    useChanhgeOnlineStatusSubscription({
-        variables: {
-            userId: user!.id,
-        },
-        onData: (option) => {
-            userData({ ...user!, is_onlite: option.data.data!.chanhgeOnlineStatus });
-        },
-    });
+    // useChanhgeOnlineStatusSubscription({
+    //     variables: {
+    //         userId: user!.id,
+    //     },
+    //     onData: (option) => {
+    //         userData({ ...user!, is_onlite: option.data.data!.chanhgeOnlineStatus });
+    //     },
+    // });
 
     useEffect(() => {
-        chanheStatusOnline({
-            variables: {
-                online: true,
-            },
-        });
-
-        const setOffline = async () =>
-            await chanheStatusOnline({
-                variables: {
-                    online: false,
+        SocketIo(
+            io(SocketIoPort, {
+                query: {
+                    userId: userData()?.id,
                 },
-            });
-
-        window.addEventListener('beforeunload', setOffline);
-
-        return () => {
-            window.removeEventListener('beforeunload', setOffline);
-        };
-    }, []);
+            }),
+        );
+    });
 
     const PageWrapperClasses = `${styles.PageWrapper} ${
         bigNav ? styles.BigNavMargin : styles.MiniNavMargin

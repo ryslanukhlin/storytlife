@@ -122,11 +122,3 @@ subscription NewAvatar($userId: String!) {
 subscription NewBg($userId: String!) {
     newBg(userId: $userId)
 }
-
-mutation SetOnlineStatus($online: Boolean!) {
-    setOnlineStatus(online: $online)
-}
-
-subscription ChanhgeOnlineStatus($userId: String!) {
-    chanhgeOnlineStatus(userId: $userId)
-}

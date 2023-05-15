@@ -1,7 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { Avatar, Badge, Box, styled, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { BackPort } from '../../../config';
 import { Chat, notificationData, userData } from '../../../graphql/store/auth';
 import { ThemeContext } from '../../../pages/_app';
@@ -9,7 +9,7 @@ import { ThemeContext } from '../../../pages/_app';
 import styles from './ChatList.module.scss';
 import { deepOrange } from '@mui/material/colors';
 import { OfflineBadge, OnlineBadge } from '../../ui/OnlineBadge';
-import { useChanhgeOnlineStatusSubscription } from '../../../graphql/generated';
+import { SocketIo } from '../../../util/socket';
 
 const CustomBox = styled(Box)(({ theme }) => ({
     color: theme.palette.text.primary,
@@ -37,14 +37,23 @@ const ChatItemList: FC<{ contact: Chat }> = ({ contact }) => {
         theme === 'dark' ? styles.NotificationBd : styles.Notification
     }`;
 
-    useChanhgeOnlineStatusSubscription({
-        variables: {
+    // useChanhgeOnlineStatusSubscription({
+    //     variables: {
+    //         userId: contact.users![0]?.id!,
+    //     },
+    //     onData: (option) => {
+    //         setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
+    //     },
+    // });
+
+    useEffect(() => {
+        SocketIo()?.emit('join', {
             userId: contact.users![0]?.id!,
-        },
-        onData: (option) => {
-            setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
-        },
-    });
+        });
+        SocketIo()?.on('ChangeOnline', (is_onlite: boolean, id: string) => {
+            if (id === contact.users![0]?.id!) setFrend({ ...frend, is_onlite });
+        });
+    }, []);
 
     return (
         <CustomBox

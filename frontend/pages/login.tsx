@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import style from '../components/layouts/AuthLayout/AuthLayout.module.scss';
 import Link from '../components/ui/Link';
 import TextMaskCustom from '../components/ui/PhoneInput';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLoginUserMutation } from '../graphql/generated';
 import { LoadingButton } from '@mui/lab';
 import { authToken } from '../graphql/store/auth';

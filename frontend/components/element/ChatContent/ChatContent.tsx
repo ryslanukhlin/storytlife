@@ -8,7 +8,6 @@ import {
     useGetMessagesLazyQuery,
     useNewMessageSubscription,
     useCreateCallMutation,
-    useChanhgeOnlineStatusSubscription,
     CreateCallResult,
 } from '../../../graphql/generated';
 import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
@@ -22,6 +21,8 @@ import { OfflineBadge, OnlineBadge } from '../../ui/OnlineBadge';
 import { chatData } from '../../../graphql/store/chat';
 import ErrorCall from '../../ui/modal/ErrorCall';
 import { checkMediaDevices } from '../../../util/checkMediaDevices';
+import { userData } from '../../../graphql/store/auth';
+import { SocketIo } from '../../../util/socket';
 
 const CustomHeader = styled(Box)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -133,14 +134,23 @@ const ChatContent = () => {
         window.scrollTo({ top: blockMessagesRef.current?.scrollHeight });
     };
 
-    useChanhgeOnlineStatusSubscription({
-        variables: {
+    // useChanhgeOnlineStatusSubscription({
+    //     variables: {
+    //         userId: frend!.id,
+    //     },
+    //     onData: (option) => {
+    //         setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
+    //     },
+    // });
+
+    useEffect(() => {
+        SocketIo()?.emit('join', {
             userId: frend!.id,
-        },
-        onData: (option) => {
-            setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
-        },
-    });
+        });
+        SocketIo()?.on('ChangeOnline', (is_onlite: boolean, id: string) =>
+            setFrend({ ...frend, is_onlite }),
+        );
+    }, []);
 
     useEffect(() => {
         (async () => {

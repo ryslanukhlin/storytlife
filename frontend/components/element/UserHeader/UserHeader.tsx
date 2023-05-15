@@ -14,6 +14,7 @@ import {
     useSetBgMutation,
 } from '../../../graphql/generated';
 import { BackPort } from '../../../config';
+import { SocketIo } from '../../../util/socket';
 
 const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     const [userPage, setUserPage] = useState(user);
@@ -50,6 +51,17 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     useEffect(() => {
         if (userPage.id !== user.id) setUserPage(user);
     }, [user.id]);
+
+    useEffect(() => {
+        if (userPage.id !== userData()?.id) {
+            SocketIo()?.emit('join', {
+                userId: userPage.id,
+            });
+            SocketIo()?.on('ChangeOnline', (is_onlite: boolean, id: string) =>
+                setUserPage({ ...userPage, is_onlite }),
+            );
+        }
+    }, []);
 
     useNewAvatarSubscription({
         variables: {
