@@ -42,6 +42,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 10px;
+    position: relative;
 }
 
 .FrendVideo {
@@ -78,4 +79,14 @@
         height: 90px;
         width: 120px;
     }
+}
+
+.VideoDeactivated {
+    display: none;
+}
+
+.MicroOff {
+    position: absolute;
+    top: 15px;
+    right: 15px;
 }

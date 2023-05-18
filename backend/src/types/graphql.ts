@@ -100,6 +100,10 @@ export abstract class IMutation {
 
     abstract leaveCall(userId: string): string | Promise<string>;
 
+    abstract changeVideo(userId: string): string | Promise<string>;
+
+    abstract changeAudio(userId: string): string | Promise<string>;
+
     abstract createRoom(userId: string): Chat | Promise<Chat>;
 
     abstract createMessage(messageInput: MessageInput): string | Promise<string>;
@@ -138,6 +142,10 @@ export abstract class ISubscription {
     abstract newAnswerOnCallPage(userId: string): string | Promise<string>;
 
     abstract newLeaveCall(userId: string): string | Promise<string>;
+
+    abstract newChangeVideo(userId: string): string | Promise<string>;
+
+    abstract newChangeAudio(userId: string): string | Promise<string>;
 
     abstract newCreateRoom(userId: string): Chat | Promise<Chat>;
 

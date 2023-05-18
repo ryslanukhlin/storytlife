@@ -32,3 +32,19 @@ mutation LeaveCall($userId: String!) {
 subscription NewLeaveCall($userId: String!) {
     newLeaveCall(userId: $userId)
 }
+
+mutation ChangeVideo($userId: String!) {
+    changeVideo(userId: $userId)
+}
+
+subscription NewChangeVideo($userId: String!) {
+    newChangeVideo(userId: $userId)
+}
+
+mutation ChangeAudio($userId: String!) {
+    changeAudio(userId: $userId)
+}
+
+subscription NewChangeAudio($userId: String!) {
+    newChangeAudio(userId: $userId)
+}

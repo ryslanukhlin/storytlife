@@ -6,10 +6,14 @@ import freeice from 'freeice';
 import {
     TypeCreate,
     useAnswerOnCallPageMutation,
+    useChangeAudioMutation,
+    useChangeVideoMutation,
     useCreateCandidateMutation,
     useCreateOfferMutation,
     useLeaveCallMutation,
     useNewAnswerOnCallPageSubscription,
+    useNewChangeAudioSubscription,
+    useNewChangeVideoSubscription,
     useNewCreateCandidateSubscription,
     useNewCreateOfferSubscription,
     useNewLeaveCallSubscription,
@@ -18,11 +22,13 @@ import { userData } from '../../graphql/store/auth';
 import { CallType } from '../../type/call.type';
 import CallFooter from '../../components/element/CallFooter/CallFooter';
 import CallHeader from '../../components/element/CallHeader/CallHeader';
+import MicOffIcon from '@mui/icons-material/MicOff';
 
 import styles from '../../styles/Call.module.scss';
 import { chatData } from '../../graphql/store/chat';
-import { Box, styled } from '@mui/material';
+import { Avatar, Box, styled } from '@mui/material';
 import Head from 'next/head';
+import { BackPort } from '../../config';
 
 const VideoWrapper = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -42,6 +48,8 @@ const CallPage = () => {
     const [createCandidate] = useCreateCandidateMutation();
     const [answerOnCallPage] = useAnswerOnCallPageMutation();
     const [leaveCallMutation] = useLeaveCallMutation();
+    const [changeVideo] = useChangeVideoMutation();
+    const [changeMicro] = useChangeAudioMutation();
 
     const frend = chatData().find((chat) => chat?.id === router.query.id)?.users![0];
 
@@ -50,7 +58,9 @@ const CallPage = () => {
     const createtOfferIsWork = useRef(false);
 
     const [offMicro, setOffMicro] = useState(false);
-    const [offVideo, setOffVideo] = useState(false);
+    const [offVideo, setOffVideo] = useState(router.query.usingVideo === 'false');
+    const [offMicroFrend, setOffMicroFrend] = useState(false);
+    const [offVideoFrend, setOffVideoFrend] = useState(router.query.usingVideo === 'false');
 
     const createOffer = async () => {
         createtOfferIsWork.current = true;
@@ -184,14 +194,38 @@ const CallPage = () => {
         onData: () => router.back(),
     });
 
+    useNewChangeVideoSubscription({
+        variables: {
+            userId: user?.id!,
+        },
+        onData: () => setOffVideoFrend((prev) => !prev),
+    });
+
+    useNewChangeAudioSubscription({
+        variables: {
+            userId: user?.id!,
+        },
+        onData: () => setOffMicroFrend((prev) => !prev),
+    });
+
     const toggleCamer = () => {
         const videoTrack = localStream.current?.getTracks().find((track) => track.kind === 'video');
-        if (videoTrack?.enabled) {
-            videoTrack.enabled = false;
+        if (!offVideo) {
+            videoTrack!.enabled = false;
             setOffVideo(true);
+            changeVideo({
+                variables: {
+                    userId: frend?.id!,
+                },
+            });
         } else {
             videoTrack!.enabled = true;
             setOffVideo(false);
+            changeVideo({
+                variables: {
+                    userId: frend?.id!,
+                },
+            });
         }
     };
 
@@ -200,9 +234,19 @@ const CallPage = () => {
         if (audioTrack?.enabled) {
             audioTrack.enabled = false;
             setOffMicro(true);
+            changeMicro({
+                variables: {
+                    userId: frend?.id!,
+                },
+            });
         } else {
             audioTrack!.enabled = true;
             setOffMicro(false);
+            changeMicro({
+                variables: {
+                    userId: frend?.id!,
+                },
+            });
         }
     };
 
@@ -227,10 +271,40 @@ const CallPage = () => {
             <CallHeader frend={frend!} />
             <div className={styles.VideoContainerWrapper}>
                 <VideoWrapper className={styles.MyVideo}>
-                    <video ref={localVideo} autoPlay muted />
+                    <video
+                        className={offVideo ? styles.VideoDeactivated : ''}
+                        ref={localVideo}
+                        autoPlay
+                        muted
+                    />
+                    {offVideo && (
+                        <Avatar
+                            src={user!.img ? BackPort + 'img/avatar/' + user!.img : undefined}
+                            alt="contact"
+                            className={styles.CallImg}>
+                            {user!.login[0]}
+                        </Avatar>
+                    )}
                 </VideoWrapper>
                 <VideoWrapper className={styles.FrendVideo}>
-                    <video ref={remoteVideo} autoPlay />
+                    <video
+                        ref={remoteVideo}
+                        autoPlay
+                        className={offVideoFrend ? styles.VideoDeactivated : ''}
+                    />
+                    {offVideoFrend && (
+                        <Avatar
+                            src={user!.img ? BackPort + 'img/avatar/' + user!.img : undefined}
+                            alt="contact"
+                            className={styles.CallImg}>
+                            {frend!.login[0]}
+                        </Avatar>
+                    )}
+                    {offMicroFrend && (
+                        <div className={styles.MicroOff}>
+                            <MicOffIcon fontSize="large" />
+                        </div>
+                    )}
                 </VideoWrapper>
             </div>
             <CallFooter

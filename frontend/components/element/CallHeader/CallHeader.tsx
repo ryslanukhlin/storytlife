@@ -9,7 +9,7 @@ const CallHeader: FC<{ frend: Frend }> = ({ frend }) => {
     return (
         <div className={styles.CallWrapper}>
             <Avatar
-                src={BackPort + 'img/avatar/' + frend.img}
+                src={frend!.img ? BackPort + 'img/avatar/' + frend!.img : undefined}
                 alt="contact"
                 className={styles.CallImg}>
                 {frend.login[0]}

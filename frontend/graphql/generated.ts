@@ -137,6 +137,8 @@ export type Mutation = {
   addLike: Scalars['String'];
   answerOnCallPage: Scalars['String'];
   cancelCall: Scalars['String'];
+  changeAudio: Scalars['String'];
+  changeVideo: Scalars['String'];
   createCall: CreateCallResult;
   createCandidate: Scalars['String'];
   createMessage: Scalars['String'];
@@ -174,6 +176,16 @@ export type MutationAnswerOnCallPageArgs = {
 
 
 export type MutationCancelCallArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type MutationChangeAudioArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type MutationChangeVideoArgs = {
   userId: Scalars['String'];
 };
 
@@ -310,6 +322,8 @@ export type Subscription = {
   newAvatar: Scalars['String'];
   newBg: Scalars['String'];
   newCancelCall: Scalars['String'];
+  newChangeAudio: Scalars['String'];
+  newChangeVideo: Scalars['String'];
   newComment: Comment;
   newCreateCandidate: Scalars['String'];
   newCreateOffer: NewCreateType;
@@ -349,6 +363,16 @@ export type SubscriptionNewBgArgs = {
 
 
 export type SubscriptionNewCancelCallArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type SubscriptionNewChangeAudioArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type SubscriptionNewChangeVideoArgs = {
   userId: Scalars['String'];
 };
 
@@ -584,6 +608,34 @@ export type NewLeaveCallSubscriptionVariables = Exact<{
 
 
 export type NewLeaveCallSubscription = { __typename?: 'Subscription', newLeaveCall: string };
+
+export type ChangeVideoMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type ChangeVideoMutation = { __typename?: 'Mutation', changeVideo: string };
+
+export type NewChangeVideoSubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewChangeVideoSubscription = { __typename?: 'Subscription', newChangeVideo: string };
+
+export type ChangeAudioMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type ChangeAudioMutation = { __typename?: 'Mutation', changeAudio: string };
+
+export type NewChangeAudioSubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewChangeAudioSubscription = { __typename?: 'Subscription', newChangeAudio: string };
 
 export type CreateRoomMutationVariables = Exact<{
   userId: Scalars['String'];
@@ -1465,6 +1517,124 @@ export function useNewLeaveCallSubscription(baseOptions: Apollo.SubscriptionHook
       }
 export type NewLeaveCallSubscriptionHookResult = ReturnType<typeof useNewLeaveCallSubscription>;
 export type NewLeaveCallSubscriptionResult = Apollo.SubscriptionResult<NewLeaveCallSubscription>;
+export const ChangeVideoDocument = gql`
+    mutation ChangeVideo($userId: String!) {
+  changeVideo(userId: $userId)
+}
+    `;
+export type ChangeVideoMutationFn = Apollo.MutationFunction<ChangeVideoMutation, ChangeVideoMutationVariables>;
+
+/**
+ * __useChangeVideoMutation__
+ *
+ * To run a mutation, you first call `useChangeVideoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeVideoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeVideoMutation, { data, loading, error }] = useChangeVideoMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useChangeVideoMutation(baseOptions?: Apollo.MutationHookOptions<ChangeVideoMutation, ChangeVideoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeVideoMutation, ChangeVideoMutationVariables>(ChangeVideoDocument, options);
+      }
+export type ChangeVideoMutationHookResult = ReturnType<typeof useChangeVideoMutation>;
+export type ChangeVideoMutationResult = Apollo.MutationResult<ChangeVideoMutation>;
+export type ChangeVideoMutationOptions = Apollo.BaseMutationOptions<ChangeVideoMutation, ChangeVideoMutationVariables>;
+export const NewChangeVideoDocument = gql`
+    subscription NewChangeVideo($userId: String!) {
+  newChangeVideo(userId: $userId)
+}
+    `;
+
+/**
+ * __useNewChangeVideoSubscription__
+ *
+ * To run a query within a React component, call `useNewChangeVideoSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewChangeVideoSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewChangeVideoSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewChangeVideoSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewChangeVideoSubscription, NewChangeVideoSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewChangeVideoSubscription, NewChangeVideoSubscriptionVariables>(NewChangeVideoDocument, options);
+      }
+export type NewChangeVideoSubscriptionHookResult = ReturnType<typeof useNewChangeVideoSubscription>;
+export type NewChangeVideoSubscriptionResult = Apollo.SubscriptionResult<NewChangeVideoSubscription>;
+export const ChangeAudioDocument = gql`
+    mutation ChangeAudio($userId: String!) {
+  changeAudio(userId: $userId)
+}
+    `;
+export type ChangeAudioMutationFn = Apollo.MutationFunction<ChangeAudioMutation, ChangeAudioMutationVariables>;
+
+/**
+ * __useChangeAudioMutation__
+ *
+ * To run a mutation, you first call `useChangeAudioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeAudioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeAudioMutation, { data, loading, error }] = useChangeAudioMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useChangeAudioMutation(baseOptions?: Apollo.MutationHookOptions<ChangeAudioMutation, ChangeAudioMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeAudioMutation, ChangeAudioMutationVariables>(ChangeAudioDocument, options);
+      }
+export type ChangeAudioMutationHookResult = ReturnType<typeof useChangeAudioMutation>;
+export type ChangeAudioMutationResult = Apollo.MutationResult<ChangeAudioMutation>;
+export type ChangeAudioMutationOptions = Apollo.BaseMutationOptions<ChangeAudioMutation, ChangeAudioMutationVariables>;
+export const NewChangeAudioDocument = gql`
+    subscription NewChangeAudio($userId: String!) {
+  newChangeAudio(userId: $userId)
+}
+    `;
+
+/**
+ * __useNewChangeAudioSubscription__
+ *
+ * To run a query within a React component, call `useNewChangeAudioSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewChangeAudioSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewChangeAudioSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewChangeAudioSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewChangeAudioSubscription, NewChangeAudioSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewChangeAudioSubscription, NewChangeAudioSubscriptionVariables>(NewChangeAudioDocument, options);
+      }
+export type NewChangeAudioSubscriptionHookResult = ReturnType<typeof useNewChangeAudioSubscription>;
+export type NewChangeAudioSubscriptionResult = Apollo.SubscriptionResult<NewChangeAudioSubscription>;
 export const CreateRoomDocument = gql`
     mutation CreateRoom($userId: String!) {
   createRoom(userId: $userId) {

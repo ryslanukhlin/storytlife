@@ -24,6 +24,8 @@ type Mutation {
     createCandidate(createCandidateInput: CreateCandidateInput!): String!
     answerOnCallPage(userId: String!): String!
     leaveCall(userId: String!): String!
+    changeVideo(userId: String!): String!
+    changeAudio(userId: String!): String!
 }
 
 type Subscription {
@@ -31,4 +33,6 @@ type Subscription {
     newCreateCandidate(userId: String!): String!
     newAnswerOnCallPage(userId: String!): String!
     newLeaveCall(userId: String!): String!
+    newChangeVideo(userId: String!): String!
+    newChangeAudio(userId: String!): String!
 }

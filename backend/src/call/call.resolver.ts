@@ -11,6 +11,8 @@ enum SUBSCRIPTIONS_EVENT {
     CREATE_CANDIDATE = 'CREATE_CANDIDATE',
     ANSWE_ON_CALLPAGE = 'ANSWE_ON_CALLPAGE',
     LEAVE_CALL = 'LEAVE_CALL',
+    CHANGE_VIDEO = 'CHANGE_VIDEO',
+    CHANGE_AUDIO = 'CHANGE_AUDIO',
 }
 
 @Resolver()
@@ -72,5 +74,31 @@ export class CallResolver {
     @Subscription()
     newLeaveCall(@Args('userId') userId: string) {
         return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.LEAVE_CALL + userId);
+    }
+
+    @Mutation()
+    async changeVideo(@Args('userId') userId: string) {
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.CHANGE_VIDEO + userId, {
+            newChangeVideo: userId,
+        });
+        return 'success';
+    }
+
+    @Subscription()
+    newChangeVideo(@Args('userId') userId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.CHANGE_VIDEO + userId);
+    }
+
+    @Mutation()
+    async changeAudio(@Args('userId') userId: string) {
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.CHANGE_AUDIO + userId, {
+            newChangeAudio: userId,
+        });
+        return 'success';
+    }
+
+    @Subscription()
+    newChangeAudio(@Args('userId') userId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.CHANGE_AUDIO + userId);
     }
 }

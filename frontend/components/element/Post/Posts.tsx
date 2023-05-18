@@ -41,7 +41,6 @@ const Posts: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     const router = useRouter();
     const [posts, setPosts] = useState<Post[]>([]);
     const [getPosts] = useGetUserPostsLazyQuery();
-    console.log(posts);
 
     const downloadPosts = async () => {
         const { data } = await getPosts({
