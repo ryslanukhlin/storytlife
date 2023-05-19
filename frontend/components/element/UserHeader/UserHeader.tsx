@@ -15,12 +15,14 @@ import {
 } from '../../../graphql/generated';
 import { BackPort } from '../../../config';
 import { SocketIo } from '../../../util/socket';
+import { useRouter } from 'next/router';
 
 const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     const [userPage, setUserPage] = useState(user);
     const [setAvatar] = useSetAvatarMutation();
     const [setBg] = useSetBgMutation();
     const [showPhotoChange, setShowPhotoChange] = useState(false);
+    const router = useRouter();
 
     const chanheBg = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
@@ -53,15 +55,16 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     }, [user.id]);
 
     useEffect(() => {
-        if (userPage.id !== userData()?.id) {
+        if (router.query.id !== userData()?.id) {
             SocketIo()?.emit('join', {
-                userId: userPage.id,
+                userId: router.query.id,
             });
+
             SocketIo()?.on('ChangeOnline', (is_onlite: boolean, id: string) =>
-                setUserPage({ ...userPage, is_onlite }),
+                setUserPage((prev: any) => ({ ...prev, is_onlite })),
             );
         }
-    }, []);
+    }, [router.query.id]);
 
     useNewAvatarSubscription({
         variables: {

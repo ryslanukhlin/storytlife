@@ -37,15 +37,6 @@ const ChatItemList: FC<{ contact: Chat }> = ({ contact }) => {
         theme === 'dark' ? styles.NotificationBd : styles.Notification
     }`;
 
-    // useChanhgeOnlineStatusSubscription({
-    //     variables: {
-    //         userId: contact.users![0]?.id!,
-    //     },
-    //     onData: (option) => {
-    //         setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
-    //     },
-    // });
-
     useEffect(() => {
         SocketIo()?.emit('join', {
             userId: contact.users![0]?.id!,
