@@ -135,3 +135,23 @@ subscription NewComment($postId: String!) {
         }
     }
 }
+
+mutation DeletePost($postId: String!) {
+    deletePost(postId: $postId)
+}
+
+subscription NewDeletePost($postId: String!) {
+    newDeletePost(postId: $postId)
+}
+
+mutation EditPost($postId: String!, $editPost: CreatePostInput!) {
+    editPost(postId: $postId, editPost: $editPost)
+}
+
+subscription NewEditPost($postId: String!) {
+    newEditPost(postId: $postId) {
+        title
+        description
+        img
+    }
+}

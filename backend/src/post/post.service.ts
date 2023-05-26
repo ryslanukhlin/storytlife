@@ -121,4 +121,27 @@ export class PostService {
             },
         });
     }
+
+    async deletePost(id: string) {
+        return await this.prisma.post.delete({
+            where: {
+                id,
+            },
+        });
+    }
+
+    async editPost(id: string, editData: CreatePostInput) {
+        const { img } = editData;
+        const fileName = img ? this.fileService.saveFile(img, FileResourceEnum.POST) : null;
+
+        return await this.prisma.post.update({
+            where: {
+                id,
+            },
+            data: {
+                ...editData,
+                img: fileName,
+            },
+        });
+    }
 }

@@ -19,7 +19,7 @@ import { BackPort } from '../../../config';
 import { deepOrange } from '@mui/material/colors';
 import { OfflineBadge, OnlineBadge } from '../../ui/OnlineBadge';
 import { chatData } from '../../../graphql/store/chat';
-import ErrorCall from '../../ui/modal/ErrorCall';
+import ErrorCallModal from '../../ui/modal/ErrorCallModal';
 import { checkMediaDevices } from '../../../util/checkMediaDevices';
 import { userData } from '../../../graphql/store/auth';
 import { SocketIo } from '../../../util/socket';
@@ -186,7 +186,7 @@ const ChatContent = () => {
                     usingVideo={call.usingVideo}
                 />
             )}
-            {callErr && <ErrorCall onClose={onClose}>{callErr}</ErrorCall>}
+            {callErr && <ErrorCallModal onClose={onClose}>{callErr}</ErrorCallModal>}
             <div className={styles.ChatHeader}>
                 <CustomHeader className={classesChatHeader}>
                     <div className={styles.ChatHeaderUserInfo}>

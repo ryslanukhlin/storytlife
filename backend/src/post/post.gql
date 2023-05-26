@@ -23,6 +23,12 @@ type Post {
     comments: [Comment!]!
 }
 
+type EditPost {
+    id: String!
+    title: String!
+    img: String
+}
+
 input CreatePostInput {
     title: String!
     description: String!
@@ -44,10 +50,14 @@ type Mutation {
     createPost(createPost: CreatePostInput!): String!
     addLike(postId: String!): String!
     addComment(createCommentInput: CreateCommentInput!): String!
+    deletePost(postId: String!): String!
+    editPost(postId: String!, editPost: CreatePostInput!): String!
 }
 
 type Subscription {
     newPost(userId: String!): Post!
     newLike(postId: String!): Like!
     newComment(postId: String!): Comment!
+    newDeletePost(postId: String!): String!
+    newEditPost(postId: String!): Post!
 }

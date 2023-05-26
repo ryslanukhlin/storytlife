@@ -10,6 +10,8 @@ enum SUBSCRIPTIONS_EVENT {
     NEW_POST = 'NEW_POST',
     ADD_LIKE = 'ADD_LIKE',
     ADD_COMMENT = 'ADD_COMMENT',
+    DELETE_POST = 'DELETE_POST',
+    EDIT_POST = 'EDIT_POST',
 }
 
 @Resolver()
@@ -80,5 +82,33 @@ export class PostResolver {
     @Subscription()
     newComment(@Args('postId') postId: string) {
         return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.ADD_COMMENT + postId);
+    }
+
+    @Mutation()
+    async deletePost(@Args('postId') postId: string) {
+        await this.postService.deletePost(postId);
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.DELETE_POST + postId, {
+            newDeletePost: 'success',
+        });
+        return 'success';
+    }
+
+    @Subscription()
+    newDeletePost(@Args('postId') postId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.DELETE_POST + postId);
+    }
+
+    @Mutation()
+    async editPost(@Args('postId') postId: string, @Args('editPost') editPost: CreatePostInput) {
+        const updatePost = await this.postService.editPost(postId, editPost);
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.EDIT_POST + postId, {
+            newEditPost: updatePost,
+        });
+        return 'succeess';
+    }
+
+    @Subscription()
+    newEditPost(@Args('postId') postId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.EDIT_POST + postId);
     }
 }

@@ -22,3 +22,23 @@
 .CommentsWrapper {
     padding: 16px;
 }
+
+.PostContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.PostWrapperPhoto {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.PostPhoto {
+    max-height: 400px;
+    max-width: 100%;
+}
+
+.PostEditActions {
+    padding: 10px 20px;
+}

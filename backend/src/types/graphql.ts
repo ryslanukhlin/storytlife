@@ -122,6 +122,10 @@ export abstract class IMutation {
 
     abstract addComment(createCommentInput: CreateCommentInput): string | Promise<string>;
 
+    abstract deletePost(postId: string): string | Promise<string>;
+
+    abstract editPost(postId: string, editPost: CreatePostInput): string | Promise<string>;
+
     abstract setAvatar(avatar: string): string | Promise<string>;
 
     abstract setBg(bg: string): string | Promise<string>;
@@ -164,6 +168,10 @@ export abstract class ISubscription {
     abstract newLike(postId: string): Like | Promise<Like>;
 
     abstract newComment(postId: string): Comment | Promise<Comment>;
+
+    abstract newDeletePost(postId: string): string | Promise<string>;
+
+    abstract newEditPost(postId: string): Post | Promise<Post>;
 
     abstract newAvatar(userId: string): string | Promise<string>;
 
@@ -234,6 +242,12 @@ export class Post {
     user: User;
     likes: Like[];
     comments: Comment[];
+}
+
+export class EditPost {
+    id: string;
+    title: string;
+    img?: Nullable<string>;
 }
 
 export class MessageNotification {

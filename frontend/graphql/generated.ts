@@ -91,6 +91,13 @@ export type DeleteInputNotification = {
   notificationId: Scalars['String'];
 };
 
+export type EditPost = {
+  __typename?: 'EditPost';
+  id: Scalars['String'];
+  img?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+};
+
 export type Like = {
   __typename?: 'Like';
   id: Scalars['String'];
@@ -146,6 +153,8 @@ export type Mutation = {
   createPost: Scalars['String'];
   createRoom: Chat;
   deleteNotification: Scalars['String'];
+  deletePost: Scalars['String'];
+  editPost: Scalars['String'];
   leaveCall: Scalars['String'];
   loginUser?: Maybe<LoginObject>;
   registerUser?: Maybe<RegisterObject>;
@@ -222,6 +231,17 @@ export type MutationCreateRoomArgs = {
 
 export type MutationDeleteNotificationArgs = {
   deleteInputNotification: DeleteInputNotification;
+};
+
+
+export type MutationDeletePostArgs = {
+  postId: Scalars['String'];
+};
+
+
+export type MutationEditPostArgs = {
+  editPost: CreatePostInput;
+  postId: Scalars['String'];
 };
 
 
@@ -329,6 +349,8 @@ export type Subscription = {
   newCreateOffer: NewCreateType;
   newCreateRoom: Chat;
   newCreteCall: CreateCallType;
+  newDeletePost: Scalars['String'];
+  newEditPost: Post;
   newLeaveCall: Scalars['String'];
   newLike: Like;
   newMessage: Message;
@@ -399,6 +421,16 @@ export type SubscriptionNewCreateRoomArgs = {
 
 export type SubscriptionNewCreteCallArgs = {
   userId: Scalars['String'];
+};
+
+
+export type SubscriptionNewDeletePostArgs = {
+  postId: Scalars['String'];
+};
+
+
+export type SubscriptionNewEditPostArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -739,6 +771,35 @@ export type NewCommentSubscriptionVariables = Exact<{
 
 
 export type NewCommentSubscription = { __typename?: 'Subscription', newComment: { __typename?: 'Comment', id: string, txt: string, created_at: string, user: { __typename?: 'User', id: string, img?: string | null, login: string } } };
+
+export type DeletePostMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', deletePost: string };
+
+export type NewDeletePostSubscriptionVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type NewDeletePostSubscription = { __typename?: 'Subscription', newDeletePost: string };
+
+export type EditPostMutationVariables = Exact<{
+  postId: Scalars['String'];
+  editPost: CreatePostInput;
+}>;
+
+
+export type EditPostMutation = { __typename?: 'Mutation', editPost: string };
+
+export type NewEditPostSubscriptionVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type NewEditPostSubscription = { __typename?: 'Subscription', newEditPost: { __typename?: 'Post', title: string, description: string, img?: string | null } };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2218,6 +2279,129 @@ export function useNewCommentSubscription(baseOptions: Apollo.SubscriptionHookOp
       }
 export type NewCommentSubscriptionHookResult = ReturnType<typeof useNewCommentSubscription>;
 export type NewCommentSubscriptionResult = Apollo.SubscriptionResult<NewCommentSubscription>;
+export const DeletePostDocument = gql`
+    mutation DeletePost($postId: String!) {
+  deletePost(postId: $postId)
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+
+/**
+ * __useDeletePostMutation__
+ *
+ * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const NewDeletePostDocument = gql`
+    subscription NewDeletePost($postId: String!) {
+  newDeletePost(postId: $postId)
+}
+    `;
+
+/**
+ * __useNewDeletePostSubscription__
+ *
+ * To run a query within a React component, call `useNewDeletePostSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewDeletePostSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewDeletePostSubscription({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useNewDeletePostSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewDeletePostSubscription, NewDeletePostSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewDeletePostSubscription, NewDeletePostSubscriptionVariables>(NewDeletePostDocument, options);
+      }
+export type NewDeletePostSubscriptionHookResult = ReturnType<typeof useNewDeletePostSubscription>;
+export type NewDeletePostSubscriptionResult = Apollo.SubscriptionResult<NewDeletePostSubscription>;
+export const EditPostDocument = gql`
+    mutation EditPost($postId: String!, $editPost: CreatePostInput!) {
+  editPost(postId: $postId, editPost: $editPost)
+}
+    `;
+export type EditPostMutationFn = Apollo.MutationFunction<EditPostMutation, EditPostMutationVariables>;
+
+/**
+ * __useEditPostMutation__
+ *
+ * To run a mutation, you first call `useEditPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editPostMutation, { data, loading, error }] = useEditPostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      editPost: // value for 'editPost'
+ *   },
+ * });
+ */
+export function useEditPostMutation(baseOptions?: Apollo.MutationHookOptions<EditPostMutation, EditPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditPostMutation, EditPostMutationVariables>(EditPostDocument, options);
+      }
+export type EditPostMutationHookResult = ReturnType<typeof useEditPostMutation>;
+export type EditPostMutationResult = Apollo.MutationResult<EditPostMutation>;
+export type EditPostMutationOptions = Apollo.BaseMutationOptions<EditPostMutation, EditPostMutationVariables>;
+export const NewEditPostDocument = gql`
+    subscription NewEditPost($postId: String!) {
+  newEditPost(postId: $postId) {
+    title
+    description
+    img
+  }
+}
+    `;
+
+/**
+ * __useNewEditPostSubscription__
+ *
+ * To run a query within a React component, call `useNewEditPostSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewEditPostSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewEditPostSubscription({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useNewEditPostSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewEditPostSubscription, NewEditPostSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewEditPostSubscription, NewEditPostSubscriptionVariables>(NewEditPostDocument, options);
+      }
+export type NewEditPostSubscriptionHookResult = ReturnType<typeof useNewEditPostSubscription>;
+export type NewEditPostSubscriptionResult = Apollo.SubscriptionResult<NewEditPostSubscription>;
 export const GetUsersDocument = gql`
     query getUsers {
   getUsers {

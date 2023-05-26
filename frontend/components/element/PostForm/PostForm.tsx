@@ -51,7 +51,7 @@ const PostForm = () => {
         },
     });
 
-    const chandeImagePost = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const changeImagePost = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
         await formik.setFieldValue('image', file);
         setNameImage(file.name);
@@ -84,7 +84,7 @@ const PostForm = () => {
                 <div className={styles.PostActions}>
                     <Button variant="text" component="label">
                         {nameImage ?? 'Загрузиить изображение'}
-                        <input type="file" accept="image/*" hidden onChange={chandeImagePost} />
+                        <input type="file" accept="image/*" hidden onChange={changeImagePost} />
                     </Button>
                     <Button variant="contained" type="submit">
                         Опубликовать
