@@ -7,6 +7,7 @@ import {
     useNewBgSubscription,
     useNewCreateRoomSubscription,
     useNewCreteCallSubscription,
+    useNewEditUserSubscription,
     useNewNotificationSubscription,
 } from '../../../graphql/generated';
 import { notificationData, userData } from '../../../graphql/store/auth';
@@ -112,14 +113,16 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
         },
     });
 
-    // useChanhgeOnlineStatusSubscription({
-    //     variables: {
-    //         userId: user!.id,
-    //     },
-    //     onData: (option) => {
-    //         userData({ ...user!, is_onlite: option.data.data!.chanhgeOnlineStatus });
-    //     },
-    // });
+    useNewEditUserSubscription({
+        variables: {
+            userId: user!.id,
+        },
+        onData: (option) => {
+            const { __typename, ...data } = option.data.data?.newEditUser!;
+            data.birthday = data!.birthday ? new Date(data.birthday!).getTime().toString() : null;
+            userData({ ...userData()!, ...data });
+        },
+    });
 
     useEffect(() => {
         SocketIo(

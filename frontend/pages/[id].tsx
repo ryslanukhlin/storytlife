@@ -12,6 +12,7 @@ import {
     useGetCurrentUserLazyQuery,
     useGetUserLazyQuery,
     useGetUserQuery,
+    useNewEditUserSubscription,
 } from '../graphql/generated';
 import { userData } from '../graphql/store/auth';
 
@@ -19,6 +20,13 @@ export type UserPageInfo = {
     __typename?: 'User' | undefined;
     id: string;
     phone: string;
+    name: string;
+    surname: string;
+    patronymic?: string | null;
+    about_me?: string | null;
+    email?: string | null;
+    place_work?: string | null;
+    birthday?: string | null;
     login: string;
     created_at: string;
     img?: string | null;
@@ -45,9 +53,9 @@ const AccountInfo = () => {
 
     useEffect(() => {
         if (isAnotherUser) {
-            setCurrentUser(userData()!);
+            setCurrentUser(user!);
         } else fetchAnotherUser();
-    }, [router.query.id]);
+    }, [router.query.id, user]);
 
     if (!currentUser) return null;
 

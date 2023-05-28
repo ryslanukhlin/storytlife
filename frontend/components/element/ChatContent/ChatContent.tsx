@@ -134,15 +134,6 @@ const ChatContent = () => {
         window.scrollTo({ top: blockMessagesRef.current?.scrollHeight });
     };
 
-    // useChanhgeOnlineStatusSubscription({
-    //     variables: {
-    //         userId: frend!.id,
-    //     },
-    //     onData: (option) => {
-    //         setFrend({ ...frend, is_onlite: option.data.data!.chanhgeOnlineStatus });
-    //     },
-    // });
-
     useEffect(() => {
         SocketIo()?.emit('join', {
             userId: frend!.id,
@@ -225,7 +216,7 @@ const ChatContent = () => {
                             <Typography variant="body2">{frend?.phone}</Typography>
                         </div>
                     </div>
-                    <div>
+                    <div className={styles.ChatListCallActions}>
                         <IconButton size="large" onClick={callHandler.bind(null, false)}>
                             <LocalPhoneIcon fontSize="inherit" />
                         </IconButton>

@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import { Avatar, Box, Button, IconButton, Typography } from '@mui/material';
+import { Avatar, Box, Button, Dialog, IconButton, Typography, styled } from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
 import { TypeUser, userData } from '../../../graphql/store/auth';
 import { UserPageInfo } from '../../../pages/[id]';
@@ -10,12 +10,23 @@ import { deepOrange } from '@mui/material/colors';
 import {
     useNewAvatarSubscription,
     useNewBgSubscription,
+    useNewEditUserSubscription,
     useSetAvatarMutation,
     useSetBgMutation,
 } from '../../../graphql/generated';
 import { BackPort } from '../../../config';
 import { SocketIo } from '../../../util/socket';
 import { useRouter } from 'next/router';
+import EditInfoUserModel from '../../ui/modal/EditInfoUserModel';
+import ShowUserDopInfo from '../../ui/modal/ShowUserDopInfo';
+
+const BoxCardContent = styled(Box)(({ theme }) => ({
+    background: theme.palette.background.default,
+}));
+
+const BorderAvatar = styled(Box)(({ theme }) => ({
+    borderColor: theme.palette.background.default,
+}));
 
 const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     const [userPage, setUserPage] = useState(user);
@@ -23,6 +34,9 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     const [setBg] = useSetBgMutation();
     const [showPhotoChange, setShowPhotoChange] = useState(false);
     const router = useRouter();
+
+    const [showEditUser, setShowEditUser] = useState(false);
+    const [showDopInfoUser, setShowDopInfoUser] = useState(false);
 
     const chanheBg = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
@@ -50,9 +64,29 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
         };
     };
 
+    const openModalEdit = () => {
+        setShowEditUser(true);
+    };
+
+    const closeModalEdit = () => {
+        setShowEditUser(false);
+    };
+
+    const openDopInfoUser = () => {
+        setShowDopInfoUser(true);
+    };
+
+    const closeDopInfoUser = () => {
+        setShowDopInfoUser(false);
+    };
+
     useEffect(() => {
         if (userPage.id !== user.id) setUserPage(user);
     }, [user.id]);
+
+    useEffect(() => {
+        setUserPage(user);
+    }, [user]);
 
     useEffect(() => {
         if (router.query.id !== userData()?.id) {
@@ -88,8 +122,30 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
 
     const isAnotherUser = user?.id === userData()?.id;
 
+    useNewEditUserSubscription({
+        variables: {
+            userId: userPage.id,
+        },
+        onData: (option) => {
+            const { __typename, ...data } = option.data.data?.newEditUser!;
+            data.birthday = data!.birthday ? new Date(data.birthday!).getTime().toString() : null;
+            setUserPage({ ...userPage!, ...data });
+        },
+        skip: isAnotherUser,
+    });
+
     return (
         <Box sx={{ boxShadow: 3 }} className={styles.UserHeader}>
+            {showEditUser && (
+                <Dialog open={showEditUser} onClose={closeModalEdit}>
+                    <EditInfoUserModel user={userPage} close={closeModalEdit} />
+                </Dialog>
+            )}
+            {showDopInfoUser && (
+                <Dialog open={showDopInfoUser} onClose={closeDopInfoUser}>
+                    <ShowUserDopInfo user={userPage} />
+                </Dialog>
+            )}
             <div
                 className={styles.UserBackground}
                 style={{
@@ -104,41 +160,73 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
                     </Button>
                 )}
             </div>
-            <div className={styles.UserInfo}>
-                <div
-                    className={styles.AvatarWrapper}
-                    onMouseEnter={() => setShowPhotoChange(true)}
-                    onMouseLeave={() => setShowPhotoChange(false)}>
-                    <Avatar
-                        src={userPage.img ? BackPort + 'img/avatar/' + userPage.img : undefined}
-                        sx={{ backgroundColor: deepOrange[500] }}
-                        className={styles.UserImg}>
-                        {userPage.login[0]}
-                    </Avatar>
-                    {isAnotherUser && (
-                        <div
-                            className={
-                                showPhotoChange ? styles.ChangeAvatar : styles.ChangeAvatarHidden
-                            }>
-                            <IconButton component="label" className={styles.ChangeAvatarBtn}>
-                                <input hidden accept="image/*" type="file" onChange={chanhePhoto} />
-                                <PhotoCameraIcon />
-                            </IconButton>
-                        </div>
+            <BoxCardContent className={styles.UserContent}>
+                <div className={styles.UserInfo}>
+                    <BorderAvatar
+                        className={styles.AvatarWrapper}
+                        onMouseEnter={() => setShowPhotoChange(true)}
+                        onMouseLeave={() => setShowPhotoChange(false)}>
+                        <Avatar
+                            src={userPage.img ? BackPort + 'img/avatar/' + userPage.img : undefined}
+                            sx={{ backgroundColor: deepOrange[500] }}
+                            className={styles.UserImg}>
+                            {userPage.name[0] + userPage.surname[0]}
+                        </Avatar>
+                        {isAnotherUser && (
+                            <div
+                                className={
+                                    showPhotoChange
+                                        ? styles.ChangeAvatar
+                                        : styles.ChangeAvatarHidden
+                                }>
+                                <IconButton component="label" className={styles.ChangeAvatarBtn}>
+                                    <input
+                                        hidden
+                                        accept="image/*"
+                                        type="file"
+                                        onChange={chanhePhoto}
+                                    />
+                                    <PhotoCameraIcon />
+                                </IconButton>
+                            </div>
+                        )}
+                    </BorderAvatar>
+                    <Typography style={{ marginBottom: 2 }} variant="h5">{`${userPage.surname} ${
+                        userPage.name
+                    } ${userPage.patronymic && userPage.patronymic}`}</Typography>
+                    <Typography style={{ marginBottom: 2 }} variant="h6">
+                        Логин: {userPage?.login}
+                    </Typography>
+                    <Typography style={{ marginBottom: 4 }} variant="body1">
+                        Телефон: {userPage?.phone}
+                    </Typography>
+                    {userPage.is_onlite || userPage.id === userData()!.id ? (
+                        <Typography variant="body2" color="teal">
+                            В сети
+                        </Typography>
+                    ) : (
+                        <Typography variant="body2" color="grey">
+                            Не в сети
+                        </Typography>
                     )}
+                    <div className={styles.UserActions}>
+                        {isAnotherUser && (
+                            <Button
+                                style={{ marginRight: 6, marginTop: 10 }}
+                                onClick={openModalEdit}
+                                variant="outlined">
+                                Редактировать
+                            </Button>
+                        )}
+                        <Button
+                            style={{ marginTop: 10 }}
+                            onClick={openDopInfoUser}
+                            variant="outlined">
+                            Подробнее
+                        </Button>
+                    </div>
                 </div>
-                <Typography variant="h6">{userPage?.login}</Typography>
-                <Typography variant="body1">{userPage?.phone}</Typography>
-                {userPage.is_onlite || userPage.id === userData()!.id ? (
-                    <Typography variant="body2" color="teal">
-                        В сети
-                    </Typography>
-                ) : (
-                    <Typography variant="body2" color="grey">
-                        Не в сети
-                    </Typography>
-                )}
-            </div>
+            </BoxCardContent>
         </Box>
     );
 };

@@ -67,3 +67,17 @@
         display: none;
     }
 }
+
+.authIconShowPassword {
+    width: 48px;
+    height: 48px;
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        margin-left: 0;
+    }
+}

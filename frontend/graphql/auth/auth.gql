@@ -25,6 +25,13 @@ query GetCurrentUser {
     getCurrentUser {
         id
         phone
+        name
+        surname
+        patronymic
+        about_me
+        email
+        place_work
+        birthday
         login
         created_at
         img
@@ -59,7 +66,14 @@ query GetUser($userId: String!) {
     getUser(userId: $userId) {
         id
         phone
+        name
+        surname
+        patronymic
         login
+        about_me
+        email
+        place_work
+        birthday
         created_at
         img
         bg
@@ -121,4 +135,21 @@ subscription NewAvatar($userId: String!) {
 
 subscription NewBg($userId: String!) {
     newBg(userId: $userId)
+}
+
+mutation EditUser($editUser: EditUserInput!) {
+    editUser(editUser: $editUser)
+}
+
+subscription NewEditUser($userId: String!) {
+    newEditUser(userId: $userId) {
+        name
+        surname
+        patronymic
+        about_me
+        email
+        place_work
+        birthday
+        login
+    }
 }

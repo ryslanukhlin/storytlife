@@ -1,6 +1,5 @@
 .UserHeader {
     position: relative;
-    height: 545px;
     border-radius: 10px;
     margin-bottom: 30px;
 }
@@ -14,27 +13,41 @@
 }
 
 .UserImg {
-    position: absolute !important;
     width: 100% !important;
     height: 100% !important;
     border-radius: 50%;
 }
 
+.UserContent {
+    width: 100%;
+    border-radius: 24px;
+    z-index: 3;
+    bottom: 20px;
+    position: relative;
+}
+
+.UserActions {
+    margin-top: 20px;
+}
+
 .UserInfo {
-    position: absolute;
-    margin-left: 45px;
-    bottom: 0;
-    margin-bottom: 20px;
+    position: relative;
+    padding: 75px 45px 25px;
+
+    @media (max-width: 450px) {
+        padding: 75px 20px 25px;
+    }
 }
 
 .AvatarWrapper {
-    position: relative;
     margin: 4px !important;
     overflow: hidden;
     height: 130px !important;
     width: 130px !important;
     border-radius: 50%;
-    border: 3px solid white;
+    border: 3px solid;
+    position: absolute;
+    top: -65px;
 }
 
 .ChangeAvatar {

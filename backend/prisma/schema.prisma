@@ -13,6 +13,13 @@ datasource db {
 model User {
   id String @id @default(uuid())
   login String
+  name String
+  surname String
+  patronymic String?
+  about_me String?
+  email String?
+  place_work String?
+  birthday DateTime? @db.Date
   phone String @unique
   password String
   created_at DateTime @default(now())

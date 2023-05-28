@@ -3,6 +3,16 @@ import { UniqueUserField } from 'src/decorator/uniqueUserField.decorator';
 import { RegisterInput } from 'src/types/graphql';
 
 export class RegisterInputDto extends RegisterInput {
+    @IsString({ message: 'В имени должна быть хотябы одна буква' })
+    @Length(3, 20, { message: 'Длина имени должна быть в диапозоне от 3 до 20 символов' })
+    name: string;
+
+    @IsString({ message: 'В фамилии должна быть хотябы одна буква' })
+    @Length(3, 20, { message: 'Длина фамилии должна быть в диапозоне от 3 до 20 символов' })
+    surname: string;
+
+    patronymic?: string;
+
     @IsString({ message: 'В логине должна быть хотябы одна буква' })
     @Length(3, 20, { message: 'Длина логина должна быть в диапозоне от 3 до 20 символов' })
     login: string;

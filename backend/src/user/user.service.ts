@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RegisterInput } from 'src/types/graphql';
+import { EditUserInput, RegisterInput } from 'src/types/graphql';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import { ICurrentUser } from './currentUser.decorator';
@@ -102,6 +102,21 @@ export class UserService {
             },
             data: {
                 is_onlite: online,
+            },
+        });
+    }
+
+    async editUser(id: string, editUser: EditUserInput) {
+        const { birthday, ...data } = editUser;
+        const date = new Date(birthday);
+
+        return await this.prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                ...data,
+                birthday: birthday && date,
             },
         });
     }

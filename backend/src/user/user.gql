@@ -12,6 +12,13 @@ type MessageNotification {
 type User {
     id: String!
     login: String!
+    name: String!
+    surname: String!
+    patronymic: String
+    about_me: String
+    email: String
+    place_work: String
+    birthday: String
     phone: String!
     password: String!
     created_at: String!
@@ -20,6 +27,28 @@ type User {
     bg: String
     chats: [Chat]!
     message_notifications: [MessageNotification]!
+}
+
+type ResultEditUser {
+    login: String!
+    name: String!
+    surname: String!
+    patronymic: String
+    about_me: String
+    email: String
+    place_work: String
+    birthday: String
+}
+
+input EditUserInput {
+    login: String
+    name: String
+    surname: String
+    patronymic: String
+    about_me: String
+    email: String
+    place_work: String
+    birthday: String
 }
 
 type Query {
@@ -32,10 +61,12 @@ type Mutation {
     setAvatar(avatar: String!): String!
     setBg(bg: String!): String!
     setOnlineStatus(online: Boolean!): String!
+    editUser(editUser: EditUserInput!): String!
 }
 
 type Subscription {
     newAvatar(userId: String!): String!
     newBg(userId: String!): String!
     chanhgeOnlineStatus(userId: String!): Boolean!
+    newEditUser(userId: String!): ResultEditUser!
 }

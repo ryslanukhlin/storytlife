@@ -24,6 +24,9 @@ export enum CreateCallResult {
 }
 
 export class RegisterInput {
+    name: string;
+    surname: string;
+    patronymic?: Nullable<string>;
     login: string;
     phone: string;
     password: string;
@@ -79,6 +82,17 @@ export class CreateCommentInput {
     txt: string;
 }
 
+export class EditUserInput {
+    login?: Nullable<string>;
+    name?: Nullable<string>;
+    surname?: Nullable<string>;
+    patronymic?: Nullable<string>;
+    about_me?: Nullable<string>;
+    email?: Nullable<string>;
+    place_work?: Nullable<string>;
+    birthday?: Nullable<string>;
+}
+
 export class RegisterObject {
     success: boolean;
 }
@@ -131,6 +145,8 @@ export abstract class IMutation {
     abstract setBg(bg: string): string | Promise<string>;
 
     abstract setOnlineStatus(online: boolean): string | Promise<string>;
+
+    abstract editUser(editUser: EditUserInput): string | Promise<string>;
 }
 
 export class NewCreateType {
@@ -178,6 +194,8 @@ export abstract class ISubscription {
     abstract newBg(userId: string): string | Promise<string>;
 
     abstract chanhgeOnlineStatus(userId: string): boolean | Promise<boolean>;
+
+    abstract newEditUser(userId: string): ResultEditUser | Promise<ResultEditUser>;
 }
 
 export class Message {
@@ -259,6 +277,13 @@ export class MessageNotification {
 export class User {
     id: string;
     login: string;
+    name: string;
+    surname: string;
+    patronymic?: Nullable<string>;
+    about_me?: Nullable<string>;
+    email?: Nullable<string>;
+    place_work?: Nullable<string>;
+    birthday?: Nullable<string>;
     phone: string;
     password: string;
     created_at: string;
@@ -267,6 +292,17 @@ export class User {
     bg?: Nullable<string>;
     chats: Nullable<Chat>[];
     message_notifications: Nullable<MessageNotification>[];
+}
+
+export class ResultEditUser {
+    login: string;
+    name: string;
+    surname: string;
+    patronymic?: Nullable<string>;
+    about_me?: Nullable<string>;
+    email?: Nullable<string>;
+    place_work?: Nullable<string>;
+    birthday?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;

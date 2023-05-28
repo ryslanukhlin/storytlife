@@ -1,4 +1,7 @@
 input RegisterInput {
+    name: String!
+    surname: String!
+    patronymic: String
     login: String!
     phone: String!
     password: String!

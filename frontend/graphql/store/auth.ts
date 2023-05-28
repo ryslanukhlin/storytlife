@@ -31,6 +31,13 @@ export type TypeUser = {
     id: string;
     phone: string;
     login: string;
+    name: string;
+    surname: string;
+    patronymic?: string | null;
+    about_me?: string | null;
+    email?: string | null;
+    place_work?: string | null;
+    birthday?: string | null;
     created_at: string;
     img?: string | null;
     bg?: string | null;

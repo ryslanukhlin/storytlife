@@ -4,11 +4,13 @@ import { CurrentUser, ICurrentUser } from './currentUser.decorator';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { PUB_SUB } from 'src/pubsub/pubsub.module';
 import { Inject } from '@nestjs/common';
+import { EditUserInput } from 'src/types/graphql';
 
 enum SUBSCRIPTIONS_EVENT {
     NEW_AVATAR = 'NEW_AVATAR',
     NEW_BG = 'NEW_BG',
     CHANGE_ONLINE = 'CHANGE_ONLINE',
+    EDIT_USER = 'EDIT_USER',
 }
 
 @Resolver()
@@ -67,5 +69,22 @@ export class UserResolver {
     @Subscription()
     newBg(@Args('userId') userId: string) {
         return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.NEW_BG + userId);
+    }
+
+    @Mutation()
+    async editUser(
+        @CurrentUser() currentUser: ICurrentUser,
+        @Args('editUser') editUser: EditUserInput,
+    ) {
+        const updateUser = await this.userService.editUser(currentUser.id, editUser);
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.EDIT_USER + currentUser.id, {
+            newEditUser: updateUser,
+        });
+        return 'success';
+    }
+
+    @Subscription()
+    newEditUser(@Args('userId') userId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.EDIT_USER + userId);
     }
 }

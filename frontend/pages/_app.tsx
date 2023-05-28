@@ -16,7 +16,6 @@ import AuthProvider from '../components/provider/AuthProvider';
 import LayoutProvider from '../components/provider/LayoutProvider';
 import React from 'react';
 import { useGetCurrentUserChatsQuery } from '../graphql/generated';
-import { chatData } from '../graphql/store/chat';
 
 const createTheme =
     process.env.NODE_ENV === 'production' ? createMuiTheme : unstable_createMuiStrictModeTheme;

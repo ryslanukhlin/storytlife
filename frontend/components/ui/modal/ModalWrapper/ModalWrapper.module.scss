@@ -32,3 +32,10 @@
     align-items: center;
     margin-top: 5px;
 }
+
+.EditUserInputsWrapper {
+    &>div {
+        width: 100%;
+        margin-top: 20px;
+    }
+}

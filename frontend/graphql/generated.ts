@@ -98,6 +98,17 @@ export type EditPost = {
   title: Scalars['String'];
 };
 
+export type EditUserInput = {
+  about_me?: InputMaybe<Scalars['String']>;
+  birthday?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  login?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  patronymic?: InputMaybe<Scalars['String']>;
+  place_work?: InputMaybe<Scalars['String']>;
+  surname?: InputMaybe<Scalars['String']>;
+};
+
 export type Like = {
   __typename?: 'Like';
   id: Scalars['String'];
@@ -155,6 +166,7 @@ export type Mutation = {
   deleteNotification: Scalars['String'];
   deletePost: Scalars['String'];
   editPost: Scalars['String'];
+  editUser: Scalars['String'];
   leaveCall: Scalars['String'];
   loginUser?: Maybe<LoginObject>;
   registerUser?: Maybe<RegisterObject>;
@@ -245,6 +257,11 @@ export type MutationEditPostArgs = {
 };
 
 
+export type MutationEditUserArgs = {
+  editUser: EditUserInput;
+};
+
+
 export type MutationLeaveCallArgs = {
   userId: Scalars['String'];
 };
@@ -325,13 +342,28 @@ export type QueryGetUserPostsArgs = {
 
 export type RegisterInput = {
   login: Scalars['String'];
+  name: Scalars['String'];
   password: Scalars['String'];
+  patronymic?: InputMaybe<Scalars['String']>;
   phone: Scalars['String'];
+  surname: Scalars['String'];
 };
 
 export type RegisterObject = {
   __typename?: 'RegisterObject';
   success: Scalars['Boolean'];
+};
+
+export type ResultEditUser = {
+  __typename?: 'ResultEditUser';
+  about_me?: Maybe<Scalars['String']>;
+  birthday?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  login: Scalars['String'];
+  name: Scalars['String'];
+  patronymic?: Maybe<Scalars['String']>;
+  place_work?: Maybe<Scalars['String']>;
+  surname: Scalars['String'];
 };
 
 export type Subscription = {
@@ -351,6 +383,7 @@ export type Subscription = {
   newCreteCall: CreateCallType;
   newDeletePost: Scalars['String'];
   newEditPost: Post;
+  newEditUser: ResultEditUser;
   newLeaveCall: Scalars['String'];
   newLike: Like;
   newMessage: Message;
@@ -434,6 +467,11 @@ export type SubscriptionNewEditPostArgs = {
 };
 
 
+export type SubscriptionNewEditUserArgs = {
+  userId: Scalars['String'];
+};
+
+
 export type SubscriptionNewLeaveCallArgs = {
   userId: Scalars['String'];
 };
@@ -465,16 +503,23 @@ export enum TypeCreate {
 
 export type User = {
   __typename?: 'User';
+  about_me?: Maybe<Scalars['String']>;
   bg?: Maybe<Scalars['String']>;
+  birthday?: Maybe<Scalars['String']>;
   chats: Array<Maybe<Chat>>;
   created_at: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   img?: Maybe<Scalars['String']>;
   is_onlite: Scalars['Boolean'];
   login: Scalars['String'];
   message_notifications: Array<Maybe<MessageNotification>>;
+  name: Scalars['String'];
   password: Scalars['String'];
+  patronymic?: Maybe<Scalars['String']>;
   phone: Scalars['String'];
+  place_work?: Maybe<Scalars['String']>;
+  surname: Scalars['String'];
 };
 
 export type RegisterUserMutationVariables = Exact<{
@@ -494,7 +539,7 @@ export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typen
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
+export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, name: string, surname: string, patronymic?: string | null, about_me?: string | null, email?: string | null, place_work?: string | null, birthday?: string | null, login: string, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
 
 export type GetCurrentUserChatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -506,7 +551,7 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, phone: string, login: string, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean } | null };
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, phone: string, name: string, surname: string, patronymic?: string | null, login: string, about_me?: string | null, email?: string | null, place_work?: string | null, birthday?: string | null, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean } | null };
 
 export type CreateCallMutationVariables = Exact<{
   createCallInput: CreateCallInput;
@@ -584,6 +629,20 @@ export type NewBgSubscriptionVariables = Exact<{
 
 
 export type NewBgSubscription = { __typename?: 'Subscription', newBg: string };
+
+export type EditUserMutationVariables = Exact<{
+  editUser: EditUserInput;
+}>;
+
+
+export type EditUserMutation = { __typename?: 'Mutation', editUser: string };
+
+export type NewEditUserSubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewEditUserSubscription = { __typename?: 'Subscription', newEditUser: { __typename?: 'ResultEditUser', name: string, surname: string, patronymic?: string | null, about_me?: string | null, email?: string | null, place_work?: string | null, birthday?: string | null, login: string } };
 
 export type CreateOfferMutationVariables = Exact<{
   createOfferInput: CreateOfferInput;
@@ -878,6 +937,13 @@ export const GetCurrentUserDocument = gql`
   getCurrentUser {
     id
     phone
+    name
+    surname
+    patronymic
+    about_me
+    email
+    place_work
+    birthday
     login
     created_at
     img
@@ -968,7 +1034,14 @@ export const GetUserDocument = gql`
   getUser(userId: $userId) {
     id
     phone
+    name
+    surname
+    patronymic
     login
+    about_me
+    email
+    place_work
+    birthday
     created_at
     img
     bg
@@ -1339,6 +1412,74 @@ export function useNewBgSubscription(baseOptions: Apollo.SubscriptionHookOptions
       }
 export type NewBgSubscriptionHookResult = ReturnType<typeof useNewBgSubscription>;
 export type NewBgSubscriptionResult = Apollo.SubscriptionResult<NewBgSubscription>;
+export const EditUserDocument = gql`
+    mutation EditUser($editUser: EditUserInput!) {
+  editUser(editUser: $editUser)
+}
+    `;
+export type EditUserMutationFn = Apollo.MutationFunction<EditUserMutation, EditUserMutationVariables>;
+
+/**
+ * __useEditUserMutation__
+ *
+ * To run a mutation, you first call `useEditUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editUserMutation, { data, loading, error }] = useEditUserMutation({
+ *   variables: {
+ *      editUser: // value for 'editUser'
+ *   },
+ * });
+ */
+export function useEditUserMutation(baseOptions?: Apollo.MutationHookOptions<EditUserMutation, EditUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditUserMutation, EditUserMutationVariables>(EditUserDocument, options);
+      }
+export type EditUserMutationHookResult = ReturnType<typeof useEditUserMutation>;
+export type EditUserMutationResult = Apollo.MutationResult<EditUserMutation>;
+export type EditUserMutationOptions = Apollo.BaseMutationOptions<EditUserMutation, EditUserMutationVariables>;
+export const NewEditUserDocument = gql`
+    subscription NewEditUser($userId: String!) {
+  newEditUser(userId: $userId) {
+    name
+    surname
+    patronymic
+    about_me
+    email
+    place_work
+    birthday
+    login
+  }
+}
+    `;
+
+/**
+ * __useNewEditUserSubscription__
+ *
+ * To run a query within a React component, call `useNewEditUserSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewEditUserSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewEditUserSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewEditUserSubscription(baseOptions: Apollo.SubscriptionHookOptions<NewEditUserSubscription, NewEditUserSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewEditUserSubscription, NewEditUserSubscriptionVariables>(NewEditUserDocument, options);
+      }
+export type NewEditUserSubscriptionHookResult = ReturnType<typeof useNewEditUserSubscription>;
+export type NewEditUserSubscriptionResult = Apollo.SubscriptionResult<NewEditUserSubscription>;
 export const CreateOfferDocument = gql`
     mutation CreateOffer($createOfferInput: CreateOfferInput!) {
   createOffer(createOfferInput: $createOfferInput)
