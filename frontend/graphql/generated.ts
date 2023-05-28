@@ -340,6 +340,11 @@ export type QueryGetUserPostsArgs = {
   userId: Scalars['String'];
 };
 
+
+export type QueryGetUsersArgs = {
+  search?: InputMaybe<Scalars['String']>;
+};
+
 export type RegisterInput = {
   login: Scalars['String'];
   name: Scalars['String'];
@@ -860,10 +865,12 @@ export type NewEditPostSubscriptionVariables = Exact<{
 
 export type NewEditPostSubscription = { __typename?: 'Subscription', newEditPost: { __typename?: 'Post', title: string, description: string, img?: string | null } };
 
-export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUsersQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']>;
+}>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, login: string, phone: string, img?: string | null } | null> };
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, name: string, surname: string, patronymic?: string | null, login: string, phone: string, img?: string | null } | null> };
 
 
 export const RegisterUserDocument = gql`
@@ -2544,9 +2551,12 @@ export function useNewEditPostSubscription(baseOptions: Apollo.SubscriptionHookO
 export type NewEditPostSubscriptionHookResult = ReturnType<typeof useNewEditPostSubscription>;
 export type NewEditPostSubscriptionResult = Apollo.SubscriptionResult<NewEditPostSubscription>;
 export const GetUsersDocument = gql`
-    query getUsers {
-  getUsers {
+    query getUsers($search: String) {
+  getUsers(search: $search) {
     id
+    name
+    surname
+    patronymic
     login
     phone
     img
@@ -2566,6 +2576,7 @@ export const GetUsersDocument = gql`
  * @example
  * const { data, loading, error } = useGetUsersQuery({
  *   variables: {
+ *      search: // value for 'search'
  *   },
  * });
  */

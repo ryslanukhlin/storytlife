@@ -55,14 +55,14 @@ export class UserService {
         });
     }
 
-    getUsers(id: string) {
-        return this.prisma.user.findMany({
-            where: {
-                NOT: {
-                    id,
-                },
-            },
-        });
+    async getUsers(id: string, search: string | null) {
+        if (!search)
+            return await this.prisma.$queryRaw`SELECT * FROM public."User" WHERE id != ${id}`;
+        else {
+            search += '%';
+            return await this.prisma.$queryRaw`SELECT *
+        FROM public."User" WHERE id != ${id} AND (login LIKE ${search} OR name Like ${search} OR surname LIKE ${search} OR patronymic LIKE ${search} OR phone LIKE ${search})`;
+        }
     }
 
     async setAvatar(userId: string, avatar: string) {

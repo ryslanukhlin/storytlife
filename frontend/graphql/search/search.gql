@@ -1,6 +1,9 @@
-query getUsers {
-    getUsers {
+query getUsers($search: String) {
+    getUsers(search: $search) {
         id
+        name
+        surname
+        patronymic
         login
         phone
         img
