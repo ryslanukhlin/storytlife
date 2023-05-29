@@ -1,10 +1,16 @@
+@import "../../../styles/mixin.scss";
+
 .ChatContent {
     position: relative;
     min-height: 100vh;
     width: 100%;
     margin-left: 350px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
+        margin-left: 270px;
+    }
+
+    @include mobile {
         margin-left: 270px;
     }
 
@@ -35,8 +41,9 @@
     padding: 10px;
     position: fixed;
     top: 0;
+    z-index: 1;
 
-    @media (max-width: 768px) {
+    @include mobile {
         margin-top: 64px;
     }
 
@@ -67,10 +74,21 @@
     position: relative;
     width: 100%;
     padding: 5px 15px;
+    margin: 0 6px;
+    margin-right: 10px !important;
 }
 
-.ChatButton {
-    border-radius: 0px 10px 10px 0 !important;
+.FilesButton {
+    width: 56px;
+    margin-right: 10px !important;
+
+    svg {
+        transform: rotate(45deg);
+    }
+}
+
+.SendButton {
+    width: 56px;
 }
 
 .ChatMessages {
@@ -80,6 +98,14 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
+
+    @include mobile {
+        margin-top: 175px;
+    }
+
+    @media (max-width: 600px) {
+        margin-top: 167px;
+    }
 
     div {
         margin-bottom: 20px;
@@ -93,7 +119,11 @@
 .maxWidthBigNav {
     max-width: calc(100% - 590px);
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
+        max-width: calc(100% - 510px);
+    }
+
+    @include mobile {
         max-width: calc(100% - 270px);
     }
 
@@ -105,7 +135,11 @@
 .maxWidthSmallNav {
     max-width: calc(100% - 431px);
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
+        max-width: calc(100% - 352px);
+    }
+
+    @include mobile {
         max-width: calc(100% - 270px);
     }
 

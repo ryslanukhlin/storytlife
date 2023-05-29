@@ -24,7 +24,7 @@ const ChatActiveted = () => {
             <Head>
                 <title>Сообшения</title>
             </Head>
-            {width >= 640 && <ChatList />}
+            {width > 640 && <ChatList />}
             <ChatContent />
         </div>
     );

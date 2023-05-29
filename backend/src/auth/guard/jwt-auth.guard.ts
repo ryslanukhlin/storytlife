@@ -21,11 +21,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
             context.getClass(),
         ]);
 
+        //Если сделать запрос не по graphql то ниже будет ошибка
+        if (isPublic) return true;
+
         //я не нашел способа как использовать jwt для подписок, пока мы его отключим
         //будем передавать userId через параметр
         const isSubscribe = (context.getArgs()[3] as any).parentType.name === 'Subscription';
 
-        if (isPublic || isSubscribe) return true;
+        if (isSubscribe) return true;
 
         return super.canActivate(context);
     }

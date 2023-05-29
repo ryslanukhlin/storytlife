@@ -114,7 +114,10 @@ const Nav = () => {
                     </CustomChangeTheme>
                 </nav>
             </div>
-            <CustomLoggoutTheme className={styles.NavLink} onClick={loggoutUser}>
+            <CustomLoggoutTheme
+                style={{ height: 51 }}
+                className={styles.NavLink}
+                onClick={loggoutUser}>
                 <LogoutIcon />
                 {bigNav && <div className={styles.NavLinkTxt}>Выйти</div>}
             </CustomLoggoutTheme>

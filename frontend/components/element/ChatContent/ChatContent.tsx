@@ -1,4 +1,15 @@
-import { Avatar, Box, Button, IconButton, InputBase, styled, Typography } from '@mui/material';
+import {
+    Avatar,
+    Backdrop,
+    Box,
+    Button,
+    IconButton,
+    InputAdornment,
+    InputBase,
+    styled,
+    TextField,
+    Typography,
+} from '@mui/material';
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './ChatContent.module.scss';
@@ -14,6 +25,7 @@ import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 import CallOffetModal from '../../ui/modal/CallOffetModal';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Message from '../Message/Message';
 import { BackPort } from '../../../config';
 import { deepOrange } from '@mui/material/colors';
@@ -34,15 +46,6 @@ const CustomFooter = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.default,
 }));
 
-const ChatInput = styled(InputBase)(({ theme }) => ({
-    border: `1px solid ${theme.palette.text.disabled}`,
-    borderRight: 0,
-    borderRadius: `10px 0 0 10px`,
-    ':focus': {
-        border: `1px solid ${theme.palette.text.secondary}`,
-    },
-}));
-
 const MessageContainer = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
@@ -51,6 +54,10 @@ export type MessageType = {
     __typename?: 'Message' | undefined;
     id: string;
     user_id: string;
+    files: Array<{
+        basicName: string;
+        generateName: string;
+    }>;
     text: string;
 } | null;
 
@@ -60,6 +67,7 @@ const ChatContent = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<MessageType[]>([]);
     const [call, setCall] = useState<{ usingVideo: boolean } | null>(null);
+    const [files, setFiles] = useState<FileList | null>(null);
 
     const [callErr, setCallErr] = useState<string | null>(null);
 
@@ -84,8 +92,27 @@ const ChatContent = () => {
     };
 
     const sendMesssage = async () => {
-        if (message.replace(/\s+/g, '')) {
-            const { data, errors } = await createMessage({
+        if (files) {
+            const data = new FormData();
+
+            Array.from(files).forEach((file) => {
+                data.append('files', file);
+            });
+
+            data.append('roomId', chatId);
+            data.append('txt', message);
+            data.append('userId', frend?.id!);
+
+            await fetch(BackPort + 'chat', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('auth_token'),
+                    ContentType: 'application/json',
+                },
+                body: data,
+            });
+        } else if (message.replace(/\s+/g, '')) {
+            await createMessage({
                 variables: {
                     messageInput: {
                         roomId: chatId,
@@ -119,6 +146,11 @@ const ChatContent = () => {
         });
         if (data?.createCall === CreateCallResult.Success) setCall({ usingVideo });
         else setCallErr('Ваш собеседних уже разговаривает с кем-то');
+    };
+
+    const changeFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFiles(e.target.files);
+        console.log(files);
     };
 
     useNewMessageSubscription({
@@ -232,20 +264,21 @@ const ChatContent = () => {
                 ))}
             </MessageContainer>
             <CustomFooter className={classesChatFooter}>
-                <ChatInput
+                <IconButton component="label" size="medium" className={styles.FilesButton}>
+                    <AttachFileIcon />
+                    <input type="file" multiple hidden onChange={changeFiles} />
+                </IconButton>
+                <TextField
+                    autoFocus
                     placeholder="Введите сообшение"
                     className={styles.ChatInput}
                     value={message}
+                    fullWidth
                     onChange={changeMessage}
                 />
-                <Button
-                    onClick={sendMesssage}
-                    disableRipple
-                    variant="contained"
-                    endIcon={<SendIcon />}
-                    className={styles.ChatButton}>
-                    Отправить
-                </Button>
+                <IconButton className={styles.SendButton} onClick={sendMesssage}>
+                    <SendIcon />
+                </IconButton>
             </CustomFooter>
         </div>
     );

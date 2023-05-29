@@ -28,12 +28,18 @@ export class ChatService {
         });
     }
 
-    async createMessage(currentUser: ICurrentUser, messageInput: MessageInput) {
+    async createMessage(
+        userId: string,
+        messageInput: MessageInput,
+        files: Array<{ basicName: string; generateName: string }> = [],
+    ) {
         const message = await this.prisma.message.create({
             data: {
                 text: messageInput.txt,
+                // @ts-ignore
+                files: files,
                 user: {
-                    connect: { id: currentUser.id },
+                    connect: { id: userId },
                 },
                 chat: {
                     connect: { id: messageInput.roomId },

@@ -47,6 +47,7 @@
 
     a {
         text-decoration: none;
+        height: 51px;
     }
 }
 
@@ -99,6 +100,7 @@
 
 .NanContent {
     display: flex;
+    align-items: center;
 }
 
 .MiniNotification {

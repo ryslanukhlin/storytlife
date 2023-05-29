@@ -130,9 +130,16 @@ export type Message = {
   __typename?: 'Message';
   chat_id: Scalars['String'];
   created_at: Scalars['String'];
+  files: Array<MessageFile>;
   id: Scalars['String'];
   text: Scalars['String'];
   user_id: Scalars['String'];
+};
+
+export type MessageFile = {
+  __typename?: 'MessageFile';
+  basicName: Scalars['String'];
+  generateName: Scalars['String'];
 };
 
 export type MessageInput = {
@@ -759,7 +766,7 @@ export type NewMessageSubscriptionVariables = Exact<{
 }>;
 
 
-export type NewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'Message', id: string, user_id: string, text: string } };
+export type NewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'Message', id: string, user_id: string, text: string, files: Array<{ __typename?: 'MessageFile', basicName: string, generateName: string }> } };
 
 export type NewCreateRoomSubscriptionVariables = Exact<{
   userId: Scalars['String'];
@@ -773,7 +780,7 @@ export type GetMessagesQueryVariables = Exact<{
 }>;
 
 
-export type GetMessagesQuery = { __typename?: 'Query', getMessages: Array<{ __typename?: 'Message', id: string, user_id: string, text: string } | null> };
+export type GetMessagesQuery = { __typename?: 'Query', getMessages: Array<{ __typename?: 'Message', id: string, user_id: string, text: string, files: Array<{ __typename?: 'MessageFile', basicName: string, generateName: string }> } | null> };
 
 export type DeleteNotificationMutationVariables = Exact<{
   deleteInputNotification: DeleteInputNotification;
@@ -1930,6 +1937,10 @@ export const NewMessageDocument = gql`
   newMessage(roomId: $roomId) {
     id
     user_id
+    files {
+      basicName
+      generateName
+    }
     text
   }
 }
@@ -1998,6 +2009,10 @@ export const GetMessagesDocument = gql`
   getMessages(roomId: $roomId) {
     id
     user_id
+    files {
+      basicName
+      generateName
+    }
     text
   }
 }

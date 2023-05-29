@@ -57,6 +57,7 @@ const PostsPage = () => {
 
     const handleChange = (event: SelectChangeEvent) => {
         setSotr(event.target.value as SortOption);
+        setPaginIter(0);
     };
 
     const downloadMorePosts = async () => {

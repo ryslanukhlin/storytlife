@@ -198,9 +198,15 @@ export abstract class ISubscription {
     abstract newEditUser(userId: string): ResultEditUser | Promise<ResultEditUser>;
 }
 
+export class MessageFile {
+    basicName: string;
+    generateName: string;
+}
+
 export class Message {
     id: string;
     text: string;
+    files: MessageFile[];
     created_at: string;
     user_id: string;
     chat_id: string;

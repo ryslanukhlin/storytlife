@@ -19,17 +19,6 @@ import jwt_decode from 'jwt-decode';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { FileModule } from './file/file.module';
 
-function toLowerKeys(obj) {
-    // 👇️ [ ['NAME', 'Tom'], ['AGE', 30] ]
-    const entries = Object.entries(obj);
-
-    return Object.fromEntries(
-        entries.map(([key, value]) => {
-            return [key.toLowerCase(), value];
-        }),
-    );
-}
-
 @Module({
     imports: [
         GraphQLModule.forRoot<ApolloDriverConfig>({

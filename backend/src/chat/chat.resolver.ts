@@ -14,6 +14,7 @@ import { Inject } from '@nestjs/common';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { PUB_SUB } from 'src/pubsub/pubsub.module';
 import { Public } from 'src/decorator/public.decorator';
+import { Message, MessageNotification } from '@prisma/client';
 
 enum SUBSCRIPTIONS_EVENT {
     NEW_ROOM = 'NEW_ROOM',
@@ -66,7 +67,7 @@ export class ChatResolver {
     ) {
         try {
             const { message, notification } = await this.chatService.createMessage(
-                currentUser,
+                currentUser.id,
                 messageInput,
             );
             this.pubSub.publish(SUBSCRIPTIONS_EVENT.NEW_MESSAGE + messageInput.roomId, {
@@ -79,6 +80,20 @@ export class ChatResolver {
         } catch (e) {
             return 'error';
         }
+    }
+
+    messagePublishApi(
+        message: Message,
+        notification: MessageNotification,
+        chadId: string,
+        userId: string,
+    ) {
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.NEW_MESSAGE + chadId, {
+            newMessage: message,
+        });
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.NEW_NOTIFICATION + userId, {
+            newNotification: notification,
+        });
     }
 
     @Subscription()

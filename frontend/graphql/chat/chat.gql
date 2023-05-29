@@ -18,6 +18,10 @@ subscription NewMessage($roomId: String!) {
     newMessage(roomId: $roomId) {
         id
         user_id
+        files {
+            basicName
+            generateName
+        }
         text
     }
 }
@@ -38,6 +42,10 @@ query GetMessages($roomId: String!) {
     getMessages(roomId: $roomId) {
         id
         user_id
+        files {
+            basicName
+            generateName
+        }
         text
     }
 }

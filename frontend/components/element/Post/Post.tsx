@@ -74,6 +74,7 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
         errTitle: null,
         errDescription: null,
     });
+    const [isStart, setIsStart] = useState(true);
 
     const [addLike] = useAddLikeMutation();
     const [deletePostMutation] = useDeletePostMutation();
@@ -83,10 +84,12 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
     const changeImagePost = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
         setEditForm((prev) => ({ ...prev, image: file }));
+        setIsStart(false);
     };
 
     const deleteImagePost = () => {
         setEditForm((prev) => ({ ...prev, image: null }));
+        setIsStart(false);
     };
 
     const chanheEditForm = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -130,6 +133,7 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
 
         setEditForm((prev) => ({ ...prev, img: null, errDescription: null, errTitle: null }));
         setEditMode(false);
+        setIsStart(true);
     };
 
     const setLike = () => {
@@ -169,6 +173,7 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
 
     const closeEditMode = () => {
         setEditMode(false);
+        setIsStart(true);
         closeMenu();
     };
 
@@ -215,21 +220,32 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
 
     const open = Boolean(anchorEl);
 
-    const srcImg = useMemo(
-        () =>
-            editMode
-                ? editForm.image
-                    ? URL.createObjectURL(editForm.image)
-                    : ''
-                : post.img
-                ? BackPort + 'img/post/' + post.img
-                : '',
-        [editMode, editForm.image, post.img],
-    );
+    const srcImg = useMemo(() => {
+        if (editMode) {
+            if (isStart) {
+                if (post.img) return BackPort + 'img/post/' + post.img;
+                else return '';
+            } else {
+                if (editForm.image) {
+                    return URL.createObjectURL(editForm.image);
+                } else {
+                    return '';
+                }
+            }
+        } else {
+            if (post.img) return BackPort + 'img/post/' + post.img;
+            else return '';
+        }
+    }, [editMode, editForm.image, post.img, isStart]);
 
     const WrapperImgPost = styled(Box)(({ theme }) => ({
         backgroundColor: theme.palette.background.paper,
     }));
+
+    const disabledSaveChanges =
+        editForm.title === post.title &&
+        editForm.description === post.description &&
+        (isStart || editForm.image === post.img);
 
     return (
         <>
@@ -259,7 +275,10 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
                             post.user.id === user?.id &&
                             (editMode ? (
                                 <>
-                                    <IconButton onClick={submitEditForm} color="success">
+                                    <IconButton
+                                        disabled={disabledSaveChanges}
+                                        onClick={submitEditForm}
+                                        color="success">
                                         <CheckIcon />
                                     </IconButton>
                                     <IconButton onClick={closeEditMode} color="error">

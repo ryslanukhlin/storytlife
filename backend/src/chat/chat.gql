@@ -1,6 +1,12 @@
+type MessageFile {
+    basicName: String!
+    generateName: String!
+}
+
 type Message {
     id: String!
     text: String!
+    files: [MessageFile!]!
     created_at: String!
     user_id: String!
     chat_id: String!

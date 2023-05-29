@@ -51,6 +51,7 @@ model Message {
   user_id String
   chat Chat @relation(fields: [chat_id], references: [id])
   chat_id String
+  files Json
 }
 
 model Post {

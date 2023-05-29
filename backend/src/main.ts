@@ -5,7 +5,7 @@ import { CustomValidationPipe } from './pipe/validation.pipe';
 import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, { cors: { origin: 'http://localhost:3000' } });
     app.useGlobalPipes(new CustomValidationPipe());
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
     app.use(bodyParser.json({ limit: '150mb' }));

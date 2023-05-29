@@ -5,7 +5,7 @@
     border-radius: 6px;
     width: fit-content;
     word-wrap: break-word;
-    max-width: 300px;
+    max-width: 90%;
 
     &:last-child {
         margin-bottom: 0;
@@ -25,4 +25,65 @@
     &:last-child {
         margin-bottom: 0;
     }
+}
+
+.FileLink,
+.FileLinkDark {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    padding: 6px;
+    cursor: pointer;
+    position: relative;
+    padding-right: 12px;
+
+    svg {
+        height: 30px;
+        width: 30px;
+        margin-right: 5px;
+    }
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &:hover {
+        &::before {
+            display: block;
+        }
+    }
+
+    &::before {
+        position: absolute;
+        display: none;
+        content: "";
+        width: 100%;
+        bottom: 0px;
+        height: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.FileLink {
+    &::before {
+        background-color: black;
+    }
+}
+
+.FileLinkDark {
+    &::before {
+        background-color: white;
+    }
+}
+
+.FileName {
+    word-break: break-all;
+}
+
+.FilesWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
 }
