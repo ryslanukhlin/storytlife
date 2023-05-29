@@ -138,10 +138,12 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
         bigNav ? styles.BigNavMargin : styles.MiniNavMargin
     } ${router.pathname !== '/chat' && router.pathname !== '/chat/[id]' && 'PageWrapper'}`;
 
+    const isChatPage = router.pathname.indexOf('chat') >= 0;
+
     if (router.pathname === '/call/[id]') return <>{children}</>;
 
     return (
-        <div className={styles.AuthWrapper}>
+        <div className={styles.AuthWrapper} style={{ marginTop: !isChatPage ? 64 : 0 }}>
             <TypeMenuContext.Provider value={{ bigNav, changeViewNav }}>
                 {width >= 768 ? <Nav /> : <Header />}
                 <Box className={PageWrapperClasses}>{children}</Box>

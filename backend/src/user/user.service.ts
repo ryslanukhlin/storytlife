@@ -55,13 +55,19 @@ export class UserService {
         });
     }
 
-    async getUsers(id: string, search: string | null) {
+    async getUsers(id: string, search: string | null, paginIter: number) {
         if (!search)
-            return await this.prisma.$queryRaw`SELECT * FROM public."User" WHERE id != ${id}`;
+            return await this.prisma
+                .$queryRaw`SELECT * FROM public."User" WHERE id != ${id} OFFSET ${
+                paginIter * 10
+            } LIMIT 10`;
         else {
             search += '%';
             return await this.prisma.$queryRaw`SELECT *
-        FROM public."User" WHERE id != ${id} AND (login LIKE ${search} OR name Like ${search} OR surname LIKE ${search} OR patronymic LIKE ${search} OR phone LIKE ${search})`;
+                FROM public."User" WHERE id != ${id} AND 
+                (login LIKE ${search} OR name Like ${search} 
+                OR surname LIKE ${search} OR patronymic 
+                LIKE ${search} OR phone LIKE ${search}) OFFSET ${paginIter * 10} LIMIT 10`;
         }
     }
 

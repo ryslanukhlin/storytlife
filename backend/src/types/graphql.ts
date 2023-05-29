@@ -226,7 +226,7 @@ export abstract class IQuery {
 
     abstract getUserPosts(userId: string): Post[] | Promise<Post[]>;
 
-    abstract getPosts(): Post[] | Promise<Post[]>;
+    abstract getPosts(sort: string, paginIter?: Nullable<number>): Post[] | Promise<Post[]>;
 
     abstract getPost(postId: string): Nullable<Post> | Promise<Nullable<Post>>;
 
@@ -234,7 +234,7 @@ export abstract class IQuery {
 
     abstract getUser(userId: string): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract getUsers(search?: Nullable<string>): Nullable<User>[] | Promise<Nullable<User>[]>;
+    abstract getUsers(search?: Nullable<string>, paginIter?: Nullable<number>): Nullable<User>[] | Promise<Nullable<User>[]>;
 }
 
 export class Comment {

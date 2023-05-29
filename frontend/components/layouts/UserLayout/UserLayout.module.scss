@@ -5,6 +5,10 @@
     @media (max-width: 768px) {
         display: block;
     }
+
+    @media (min-width: 768px) {
+        margin-top: 0 !important;
+    }
 }
 
 .PageWrapper {

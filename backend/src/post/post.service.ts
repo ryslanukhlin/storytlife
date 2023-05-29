@@ -39,10 +39,29 @@ export class PostService {
         });
     }
 
-    getPosts() {
+    getPosts(sort: 'like' | 'time', paginIter: number) {
+        if (sort === 'like') {
+            return this.prisma.post.findMany({
+                skip: paginIter * 9,
+                take: 9,
+                include: {
+                    user: true,
+                },
+                orderBy: {
+                    likes: {
+                        _count: 'desc',
+                    },
+                },
+            });
+        }
         return this.prisma.post.findMany({
+            skip: paginIter * 9,
+            take: 9,
             include: {
                 user: true,
+            },
+            orderBy: {
+                created_at: 'desc',
             },
         });
     }

@@ -27,8 +27,8 @@ export class PostResolver {
     }
 
     @Query()
-    getPosts() {
-        return this.postService.getPosts();
+    getPosts(@Args('sort') sort: 'like' | 'time', @Args('paginIter') paginIter: number = 0) {
+        return this.postService.getPosts(sort, paginIter);
     }
 
     @Query()

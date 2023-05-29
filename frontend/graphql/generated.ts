@@ -331,6 +331,12 @@ export type QueryGetPostArgs = {
 };
 
 
+export type QueryGetPostsArgs = {
+  paginIter?: InputMaybe<Scalars['Int']>;
+  sort: Scalars['String'];
+};
+
+
 export type QueryGetUserArgs = {
   userId: Scalars['String'];
 };
@@ -342,6 +348,7 @@ export type QueryGetUserPostsArgs = {
 
 
 export type QueryGetUsersArgs = {
+  paginIter?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
 };
 
@@ -775,7 +782,10 @@ export type DeleteNotificationMutationVariables = Exact<{
 
 export type DeleteNotificationMutation = { __typename?: 'Mutation', deleteNotification: string };
 
-export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetPostsQueryVariables = Exact<{
+  sort: Scalars['String'];
+  paginIter?: InputMaybe<Scalars['Int']>;
+}>;
 
 
 export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'Post', id: string, created_at: string, title: string, description: string, img?: string | null, user: { __typename?: 'User', id: string, img?: string | null, login: string } }> };
@@ -867,6 +877,7 @@ export type NewEditPostSubscription = { __typename?: 'Subscription', newEditPost
 
 export type GetUsersQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']>;
+  paginIter?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -2051,8 +2062,8 @@ export type DeleteNotificationMutationHookResult = ReturnType<typeof useDeleteNo
 export type DeleteNotificationMutationResult = Apollo.MutationResult<DeleteNotificationMutation>;
 export type DeleteNotificationMutationOptions = Apollo.BaseMutationOptions<DeleteNotificationMutation, DeleteNotificationMutationVariables>;
 export const GetPostsDocument = gql`
-    query GetPosts {
-  getPosts {
+    query GetPosts($sort: String!, $paginIter: Int) {
+  getPosts(sort: $sort, paginIter: $paginIter) {
     id
     created_at
     title
@@ -2079,10 +2090,12 @@ export const GetPostsDocument = gql`
  * @example
  * const { data, loading, error } = useGetPostsQuery({
  *   variables: {
+ *      sort: // value for 'sort'
+ *      paginIter: // value for 'paginIter'
  *   },
  * });
  */
-export function useGetPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
+export function useGetPostsQuery(baseOptions: Apollo.QueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, options);
       }
@@ -2551,8 +2564,8 @@ export function useNewEditPostSubscription(baseOptions: Apollo.SubscriptionHookO
 export type NewEditPostSubscriptionHookResult = ReturnType<typeof useNewEditPostSubscription>;
 export type NewEditPostSubscriptionResult = Apollo.SubscriptionResult<NewEditPostSubscription>;
 export const GetUsersDocument = gql`
-    query getUsers($search: String) {
-  getUsers(search: $search) {
+    query getUsers($search: String, $paginIter: Int) {
+  getUsers(search: $search, paginIter: $paginIter) {
     id
     name
     surname
@@ -2577,6 +2590,7 @@ export const GetUsersDocument = gql`
  * const { data, loading, error } = useGetUsersQuery({
  *   variables: {
  *      search: // value for 'search'
+ *      paginIter: // value for 'paginIter'
  *   },
  * });
  */

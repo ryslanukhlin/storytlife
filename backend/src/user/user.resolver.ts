@@ -31,8 +31,12 @@ export class UserResolver {
     }
 
     @Query()
-    getUsers(@CurrentUser() currentUser: ICurrentUser, @Args('search') search: string | null) {
-        return this.userService.getUsers(currentUser.id, search);
+    getUsers(
+        @CurrentUser() currentUser: ICurrentUser,
+        @Args('search') search: string | null,
+        @Args('paginIter') paginIter: number = 0,
+    ) {
+        return this.userService.getUsers(currentUser.id, search, paginIter);
     }
 
     @Mutation()

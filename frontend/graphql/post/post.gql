@@ -1,5 +1,5 @@
-query GetPosts {
-    getPosts {
+query GetPosts($sort: String!, $paginIter: Int) {
+    getPosts(sort: $sort, paginIter: $paginIter) {
         id
         created_at
         title

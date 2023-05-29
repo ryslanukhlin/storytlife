@@ -1,5 +1,5 @@
-query getUsers($search: String) {
-    getUsers(search: $search) {
+query getUsers($search: String, $paginIter: Int) {
+    getUsers(search: $search, paginIter: $paginIter) {
         id
         name
         surname

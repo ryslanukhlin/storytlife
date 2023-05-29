@@ -42,7 +42,7 @@ input CreateCommentInput {
 
 type Query {
     getUserPosts(userId: String!): [Post!]!
-    getPosts: [Post!]!
+    getPosts(sort: String!, paginIter: Int): [Post!]!
     getPost(postId: String!): Post
 }
 

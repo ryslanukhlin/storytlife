@@ -54,7 +54,7 @@ input EditUserInput {
 type Query {
     getCurrentUser: User!
     getUser(userId: String!): User
-    getUsers(search: String): [User]!
+    getUsers(search: String, paginIter: Int): [User]!
 }
 
 type Mutation {
