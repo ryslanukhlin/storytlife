@@ -13,6 +13,10 @@
     margin-left: 350px;
     text-align: center;
 
+    @media (max-width: 1080px) {
+        margin-left: 270px;
+    }
+
     @include mobile {
         margin-left: 270px;
     }
