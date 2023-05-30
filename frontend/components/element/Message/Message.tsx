@@ -105,12 +105,17 @@ const Message: FC<{ message: MessageType }> = ({ message }) => {
         file: { basicName: string; generateName: string },
         e: React.MouseEvent<HTMLElement>,
     ) => {
-        const tag = document.createElement('a');
-        tag.href = '/messages_file/' + file.generateName;
-        tag.setAttribute('download', file.basicName);
-        document.body.appendChild(tag);
-        tag.click();
-        tag.remove();
+        fetch(BackPort + 'img/messages_file/' + file.generateName)
+            .then((response) => response.blob())
+            .then((blob) => {
+                const blobUrl = URL.createObjectURL(new Blob([blob]));
+                const tag = document.createElement('a');
+                tag.href = blobUrl;
+                tag.setAttribute('download', file.basicName);
+                document.body.appendChild(tag);
+                tag.click();
+                tag.remove();
+            });
     };
 
     return (

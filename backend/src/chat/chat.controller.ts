@@ -41,15 +41,7 @@ export class ChatController {
 
             const fileName = v4() + '.' + fileExpansion;
 
-            const filePath = path.resolve(
-                __dirname,
-                '..',
-                '..',
-                '..',
-                'frontend',
-                'public',
-                'messages_file',
-            );
+            const filePath = path.resolve(__dirname, '..', '..', 'public', 'img', 'messages_file');
 
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath, { recursive: true });
