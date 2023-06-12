@@ -3,7 +3,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { EditUserInput, RegisterInput } from 'src/types/graphql';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
-import { ICurrentUser } from './currentUser.decorator';
 import { FileResourceEnum, FileService } from 'src/file/file.service';
 
 @Injectable()
@@ -125,5 +124,23 @@ export class UserService {
                 birthday: birthday && date,
             },
         });
+    }
+
+    async addGallery(userId: string, filesName: string[]) {
+        await this.prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                gallery: {
+                    push: filesName,
+                },
+            },
+        });
+    }
+
+    async deleteGallery(userId: string, fileName: string) {
+        await this.prisma
+            .$queryRaw`update "User" set gallery = array_remove(gallery, ${fileName}) WHERE id = ${userId}`;
     }
 }

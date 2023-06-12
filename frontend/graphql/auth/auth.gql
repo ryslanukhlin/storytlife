@@ -37,6 +37,7 @@ query GetCurrentUser {
         img
         bg
         is_onlite
+        gallery
         message_notifications {
             id
             messages_id
@@ -76,6 +77,7 @@ query GetUser($userId: String!) {
         birthday
         created_at
         img
+        gallery
         bg
         is_onlite
     }
@@ -152,4 +154,16 @@ subscription NewEditUser($userId: String!) {
         birthday
         login
     }
+}
+
+subscription NewGallery($userId: String!) {
+    newGallery(userId: $userId)
+}
+
+mutation DeleteImgGallery($imgName: String!) {
+    deleteImgGallery(imgName: $imgName)
+}
+
+subscription NewDeleteGallery($userId: String!) {
+    newDeleteGallery(userId: $userId)
 }

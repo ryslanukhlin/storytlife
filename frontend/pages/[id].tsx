@@ -15,6 +15,7 @@ import {
     useNewEditUserSubscription,
 } from '../graphql/generated';
 import { userData } from '../graphql/store/auth';
+import Gallery from '../components/element/Gallery/Gallery';
 
 export type UserPageInfo = {
     __typename?: 'User' | undefined;
@@ -32,6 +33,7 @@ export type UserPageInfo = {
     img?: string | null;
     bg?: string | null;
     is_onlite: boolean;
+    gallery: string[];
 };
 
 const AccountInfo = () => {
@@ -67,6 +69,7 @@ const AccountInfo = () => {
                 </title>
             </Head>
             <UserHeader user={currentUser!} />
+            <Gallery currentUserId={currentUser!.id} gallery={currentUser!.gallery} />
             {isAnotherUser && <PostForm />}
             <Posts user={currentUser!} />
         </Container>

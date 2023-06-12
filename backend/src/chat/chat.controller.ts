@@ -18,12 +18,14 @@ import * as fs from 'fs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ChatService } from './chat.service';
 import { ChatResolver } from './chat.resolver';
+import { FileService, FilesNameMessages, FilesResourceEnum } from 'src/file/file.service';
 
 @Controller('chat')
 export class ChatController {
     constructor(
         private readonly chatService: ChatService,
         private readonly chatReolver: ChatResolver,
+        private readonly fileService: FileService,
     ) {}
 
     @Public()
@@ -35,27 +37,12 @@ export class ChatController {
         @Body() chatBody: ChatDto,
         @UploadedFiles() files: Array<Express.Multer.File>,
     ) {
-        const fileNames = [];
-        files.forEach((file) => {
-            const fileExpansion = file.originalname.split('.').pop();
-
-            const fileName = v4() + '.' + fileExpansion;
-
-            const filePath = path.resolve(__dirname, '..', '..', 'public', 'img', 'messages_file');
-
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath, { recursive: true });
-            }
-
-            fs.writeFileSync(path.resolve(filePath, fileName), file.buffer);
-
-            fileNames.push({ basicName: file.originalname, generateName: fileName });
-        });
+        const fileNames = this.fileService.saveFiles(files, FilesResourceEnum.MESSAGES_FILE);
 
         const { message, notification } = await this.chatService.createMessage(
             request.user.id as string,
             chatBody,
-            fileNames,
+            fileNames as FilesNameMessages,
         );
 
         this.chatReolver.messagePublishApi(message, notification, chatBody.roomId, chatBody.userId);

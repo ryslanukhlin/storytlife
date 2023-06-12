@@ -42,6 +42,7 @@ export type TypeUser = {
     img?: string | null;
     bg?: string | null;
     is_onlite: boolean;
+    gallery: string[];
 };
 
 export const userData = makeVar<TypeUser | null>(null);

@@ -46,10 +46,7 @@ import DeletePostModal from '../../ui/modal/DeletePostModal';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
-
-const CustomCard = styled(Card)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
-}));
+import CardUserPage from '../../ui/CardHeader';
 
 const Post: FC<{ post: Post }> = ({ post: postOption }) => {
     const [post, setPost] = useState(postOption);
@@ -252,7 +249,7 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
             {isDelete ? (
                 <Typography variant="h6">Пост удалён</Typography>
             ) : (
-                <CustomCard variant="outlined" className={styles.Post}>
+                <CardUserPage variant="outlined" className={styles.Post}>
                     {showDeleteModal && (
                         <DeletePostModal deletePost={deletePost} close={closeDeleteModal} />
                     )}
@@ -389,7 +386,7 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
                         />
                         <CommentForm postId={post.id} commentInput={commentInput} />
                     </Collapse>
-                </CustomCard>
+                </CardUserPage>
             )}
         </>
     );

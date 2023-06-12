@@ -170,6 +170,7 @@ export type Mutation = {
   createOffer: Scalars['String'];
   createPost: Scalars['String'];
   createRoom: Chat;
+  deleteImgGallery: Scalars['String'];
   deleteNotification: Scalars['String'];
   deletePost: Scalars['String'];
   editPost: Scalars['String'];
@@ -245,6 +246,11 @@ export type MutationCreatePostArgs = {
 
 export type MutationCreateRoomArgs = {
   userId: Scalars['String'];
+};
+
+
+export type MutationDeleteImgGalleryArgs = {
+  imgName: Scalars['String'];
 };
 
 
@@ -400,9 +406,11 @@ export type Subscription = {
   newCreateOffer: NewCreateType;
   newCreateRoom: Chat;
   newCreteCall: CreateCallType;
+  newDeleteGallery: Scalars['String'];
   newDeletePost: Scalars['String'];
   newEditPost: Post;
   newEditUser: ResultEditUser;
+  newGallery: Array<Scalars['String']>;
   newLeaveCall: Scalars['String'];
   newLike: Like;
   newMessage: Message;
@@ -476,6 +484,11 @@ export type SubscriptionNewCreteCallArgs = {
 };
 
 
+export type SubscriptionNewDeleteGalleryArgs = {
+  userId: Scalars['String'];
+};
+
+
 export type SubscriptionNewDeletePostArgs = {
   postId: Scalars['String'];
 };
@@ -487,6 +500,11 @@ export type SubscriptionNewEditPostArgs = {
 
 
 export type SubscriptionNewEditUserArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type SubscriptionNewGalleryArgs = {
   userId: Scalars['String'];
 };
 
@@ -528,6 +546,7 @@ export type User = {
   chats: Array<Maybe<Chat>>;
   created_at: Scalars['String'];
   email?: Maybe<Scalars['String']>;
+  gallery: Array<Scalars['String']>;
   id: Scalars['String'];
   img?: Maybe<Scalars['String']>;
   is_onlite: Scalars['Boolean'];
@@ -558,7 +577,7 @@ export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typen
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, name: string, surname: string, patronymic?: string | null, about_me?: string | null, email?: string | null, place_work?: string | null, birthday?: string | null, login: string, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
+export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser: { __typename?: 'User', id: string, phone: string, name: string, surname: string, patronymic?: string | null, about_me?: string | null, email?: string | null, place_work?: string | null, birthday?: string | null, login: string, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean, gallery: Array<string>, message_notifications: Array<{ __typename?: 'MessageNotification', id: string, messages_id?: Array<string> | null, chat: { __typename?: 'Chat', id: string } } | null> } };
 
 export type GetCurrentUserChatsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -570,7 +589,7 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, phone: string, name: string, surname: string, patronymic?: string | null, login: string, about_me?: string | null, email?: string | null, place_work?: string | null, birthday?: string | null, created_at: string, img?: string | null, bg?: string | null, is_onlite: boolean } | null };
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: string, phone: string, name: string, surname: string, patronymic?: string | null, login: string, about_me?: string | null, email?: string | null, place_work?: string | null, birthday?: string | null, created_at: string, img?: string | null, gallery: Array<string>, bg?: string | null, is_onlite: boolean } | null };
 
 export type CreateCallMutationVariables = Exact<{
   createCallInput: CreateCallInput;
@@ -662,6 +681,27 @@ export type NewEditUserSubscriptionVariables = Exact<{
 
 
 export type NewEditUserSubscription = { __typename?: 'Subscription', newEditUser: { __typename?: 'ResultEditUser', name: string, surname: string, patronymic?: string | null, about_me?: string | null, email?: string | null, place_work?: string | null, birthday?: string | null, login: string } };
+
+export type NewGallerySubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewGallerySubscription = { __typename?: 'Subscription', newGallery: Array<string> };
+
+export type DeleteImgGalleryMutationVariables = Exact<{
+  imgName: Scalars['String'];
+}>;
+
+
+export type DeleteImgGalleryMutation = { __typename?: 'Mutation', deleteImgGallery: string };
+
+export type NewDeleteGallerySubscriptionVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type NewDeleteGallerySubscription = { __typename?: 'Subscription', newDeleteGallery: string };
 
 export type CreateOfferMutationVariables = Exact<{
   createOfferInput: CreateOfferInput;
@@ -974,6 +1014,7 @@ export const GetCurrentUserDocument = gql`
     img
     bg
     is_onlite
+    gallery
     message_notifications {
       id
       messages_id
@@ -1069,6 +1110,7 @@ export const GetUserDocument = gql`
     birthday
     created_at
     img
+    gallery
     bg
     is_onlite
   }
@@ -1505,6 +1547,93 @@ export function useNewEditUserSubscription(baseOptions: Apollo.SubscriptionHookO
       }
 export type NewEditUserSubscriptionHookResult = ReturnType<typeof useNewEditUserSubscription>;
 export type NewEditUserSubscriptionResult = Apollo.SubscriptionResult<NewEditUserSubscription>;
+export const NewGalleryDocument = gql`
+    subscription NewGallery($userId: String!) {
+  newGallery(userId: $userId)
+}
+    `;
+
+/**
+ * __useNewGallerySubscription__
+ *
+ * To run a query within a React component, call `useNewGallerySubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewGallerySubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewGallerySubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewGallerySubscription(baseOptions: Apollo.SubscriptionHookOptions<NewGallerySubscription, NewGallerySubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewGallerySubscription, NewGallerySubscriptionVariables>(NewGalleryDocument, options);
+      }
+export type NewGallerySubscriptionHookResult = ReturnType<typeof useNewGallerySubscription>;
+export type NewGallerySubscriptionResult = Apollo.SubscriptionResult<NewGallerySubscription>;
+export const DeleteImgGalleryDocument = gql`
+    mutation DeleteImgGallery($imgName: String!) {
+  deleteImgGallery(imgName: $imgName)
+}
+    `;
+export type DeleteImgGalleryMutationFn = Apollo.MutationFunction<DeleteImgGalleryMutation, DeleteImgGalleryMutationVariables>;
+
+/**
+ * __useDeleteImgGalleryMutation__
+ *
+ * To run a mutation, you first call `useDeleteImgGalleryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteImgGalleryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteImgGalleryMutation, { data, loading, error }] = useDeleteImgGalleryMutation({
+ *   variables: {
+ *      imgName: // value for 'imgName'
+ *   },
+ * });
+ */
+export function useDeleteImgGalleryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteImgGalleryMutation, DeleteImgGalleryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteImgGalleryMutation, DeleteImgGalleryMutationVariables>(DeleteImgGalleryDocument, options);
+      }
+export type DeleteImgGalleryMutationHookResult = ReturnType<typeof useDeleteImgGalleryMutation>;
+export type DeleteImgGalleryMutationResult = Apollo.MutationResult<DeleteImgGalleryMutation>;
+export type DeleteImgGalleryMutationOptions = Apollo.BaseMutationOptions<DeleteImgGalleryMutation, DeleteImgGalleryMutationVariables>;
+export const NewDeleteGalleryDocument = gql`
+    subscription NewDeleteGallery($userId: String!) {
+  newDeleteGallery(userId: $userId)
+}
+    `;
+
+/**
+ * __useNewDeleteGallerySubscription__
+ *
+ * To run a query within a React component, call `useNewDeleteGallerySubscription` and pass it any options that fit your needs.
+ * When your component renders, `useNewDeleteGallerySubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewDeleteGallerySubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useNewDeleteGallerySubscription(baseOptions: Apollo.SubscriptionHookOptions<NewDeleteGallerySubscription, NewDeleteGallerySubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<NewDeleteGallerySubscription, NewDeleteGallerySubscriptionVariables>(NewDeleteGalleryDocument, options);
+      }
+export type NewDeleteGallerySubscriptionHookResult = ReturnType<typeof useNewDeleteGallerySubscription>;
+export type NewDeleteGallerySubscriptionResult = Apollo.SubscriptionResult<NewDeleteGallerySubscription>;
 export const CreateOfferDocument = gql`
     mutation CreateOffer($createOfferInput: CreateOfferInput!) {
   createOffer(createOfferInput: $createOfferInput)

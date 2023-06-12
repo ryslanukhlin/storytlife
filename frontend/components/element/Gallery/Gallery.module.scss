@@ -1,0 +1,56 @@
+.Gallery {
+    margin-bottom: 20px;
+}
+
+.GalleryImgWrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+    margin-right: 20px;
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &:hover {
+        .DeleteImg {
+            display: flex;
+        }
+    }
+}
+
+.GalleryImg,
+.GalleryImgDark {
+    max-height: 160px;
+    max-width: 100%;
+    border: 3px solid transparent;
+}
+
+.DeleteImg {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    padding: 4px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.GalleryImg {
+    &:hover {
+        border: 3px solid #9e9e9e;
+    }
+}
+
+.GalleryImgDark {
+    &:hover {
+        border: 3px solid #898989;
+    }
+}
+
+
+.ButtonDownload {
+    margin-top: 4px !important;
+}

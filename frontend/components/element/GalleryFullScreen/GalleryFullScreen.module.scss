@@ -1,0 +1,55 @@
+.GalleryFullScreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ImgContainer {
+    max-width: 100%;
+    max-height: calc(100vh - 60px);
+    position: relative;
+
+    &:hover {
+        .DeleteImg {
+            display: block;
+        }
+    }
+}
+
+.ImgWrapper {
+    padding: 30px 120px;
+    max-width: 100%;
+}
+
+.LeftRow,
+.RightRow {
+    position: absolute !important;
+}
+
+.LeftRow {
+    left: 15px;
+}
+
+.RightRow {
+    right: 15px;
+}
+
+.DeleteImg {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    padding: 4px;
+    border-radius: 50%;
+    height: 32px;
+    cursor: pointer;
+}

@@ -92,7 +92,7 @@ const NavMobile: FC<{ onDrawer: () => void }> = ({ onDrawer }) => {
                         className={styles.NavLink + ' ' + styles.NavLinkNotification}>
                         <div className={styles.NanContent}>
                             <MessageIcon />
-                            <div className={styles.NavLinkTxt}>Сообшения</div>
+                            <div className={styles.NavLinkTxt}>Сообщения</div>
                         </div>
                         {countNotification!.length! > 0 && (
                             <div className={NotificationClasses}>{countNotification!.length}</div>

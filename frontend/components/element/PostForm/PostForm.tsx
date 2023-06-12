@@ -62,7 +62,7 @@ const PostForm = () => {
             <Box sx={{ boxShadow: 3 }} className={styles.PostForm}>
                 <Typography variant="h5">Что нового у вас произошло?</Typography>
                 <TextField
-                    label="Загаловок"
+                    label="Заголовок"
                     className={styles.Input}
                     name="title"
                     value={formik.values.title}
@@ -83,7 +83,7 @@ const PostForm = () => {
                 />
                 <div className={styles.PostActions}>
                     <Button variant="text" component="label">
-                        {nameImage ?? 'Загрузиить изображение'}
+                        {nameImage ?? 'Загрузить изображение'}
                         <input type="file" accept="image/*" hidden onChange={changeImagePost} />
                     </Button>
                     <Button variant="contained" type="submit">

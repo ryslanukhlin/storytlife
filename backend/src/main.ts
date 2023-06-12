@@ -5,6 +5,7 @@ import { CustomValidationPipe } from './pipe/validation.pipe';
 import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
+    // const app = await NestFactory.create(AppModule, { cors: { origin: 'https://storylifesocial.ru' } });
     const app = await NestFactory.create(AppModule, { cors: { origin: 'http://localhost:3000' } });
     app.useGlobalPipes(new CustomValidationPipe());
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
@@ -12,4 +13,5 @@ async function bootstrap() {
     app.use(bodyParser.urlencoded({ limit: '150mb', extended: true }));
     await app.listen(5000);
 }
+
 bootstrap();

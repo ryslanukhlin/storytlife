@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "gallery" SET DEFAULT ARRAY[]::TEXT[];

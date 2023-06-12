@@ -34,6 +34,7 @@ model User {
   like Like[]
   comment Comment[]
   message_notifications MessageNotification[]
+  gallery String[] @default([])
 }
 
 model Chat {

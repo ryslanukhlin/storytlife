@@ -96,7 +96,7 @@ const Nav = () => {
                         className={styles.NavLink + ' ' + styles.NavLinkNotification}>
                         <div className={styles.NanContent}>
                             <MessageIcon />
-                            {bigNav && <div className={styles.NavLinkTxt}>Сообшения</div>}
+                            {bigNav && <div className={styles.NavLinkTxt}>Сообщения</div>}
                         </div>
                         {countNotification!.length! > 0 && (
                             <div className={NotificationClasses}>{countNotification!.length}</div>

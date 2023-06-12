@@ -27,6 +27,7 @@ type User {
     bg: String
     chats: [Chat]!
     message_notifications: [MessageNotification]!
+    gallery: [String!]!
 }
 
 type ResultEditUser {
@@ -62,6 +63,7 @@ type Mutation {
     setBg(bg: String!): String!
     setOnlineStatus(online: Boolean!): String!
     editUser(editUser: EditUserInput!): String!
+    deleteImgGallery(imgName: String!): String!
 }
 
 type Subscription {
@@ -69,4 +71,6 @@ type Subscription {
     newBg(userId: String!): String!
     chanhgeOnlineStatus(userId: String!): Boolean!
     newEditUser(userId: String!): ResultEditUser!
+    newGallery(userId: String!): [String!]!
+    newDeleteGallery(userId: String!): String!
 }

@@ -11,6 +11,8 @@ enum SUBSCRIPTIONS_EVENT {
     NEW_BG = 'NEW_BG',
     CHANGE_ONLINE = 'CHANGE_ONLINE',
     EDIT_USER = 'EDIT_USER',
+    NEW_GALLERY = 'NEW_GALLERY',
+    DELETE_IMG_GALLERY = 'DELETE_IMG_GALLERY',
 }
 
 @Resolver()
@@ -90,5 +92,33 @@ export class UserResolver {
     @Subscription()
     newEditUser(@Args('userId') userId: string) {
         return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.EDIT_USER + userId);
+    }
+
+    startSubsctibeGallery(userId: string, filesName: string[]) {
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.NEW_GALLERY + userId, {
+            newGallery: filesName,
+        });
+    }
+
+    @Subscription()
+    newGallery(@Args('userId') userId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.NEW_GALLERY + userId);
+    }
+
+    @Mutation()
+    async deleteImgGallery(
+        @CurrentUser() currentUser: ICurrentUser,
+        @Args('imgName') imgName: string,
+    ) {
+        await this.userService.deleteGallery(currentUser.id, imgName);
+        this.pubSub.publish(SUBSCRIPTIONS_EVENT.DELETE_IMG_GALLERY + currentUser.id, {
+            newDeleteGallery: imgName,
+        });
+        return 'success';
+    }
+
+    @Subscription()
+    newDeleteGallery(@Args('userId') userId: string) {
+        return this.pubSub.asyncIterator(SUBSCRIPTIONS_EVENT.DELETE_IMG_GALLERY + userId);
     }
 }

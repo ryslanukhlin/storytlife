@@ -147,6 +147,8 @@ export abstract class IMutation {
     abstract setOnlineStatus(online: boolean): string | Promise<string>;
 
     abstract editUser(editUser: EditUserInput): string | Promise<string>;
+
+    abstract deleteImgGallery(imgName: string): string | Promise<string>;
 }
 
 export class NewCreateType {
@@ -196,6 +198,10 @@ export abstract class ISubscription {
     abstract chanhgeOnlineStatus(userId: string): boolean | Promise<boolean>;
 
     abstract newEditUser(userId: string): ResultEditUser | Promise<ResultEditUser>;
+
+    abstract newGallery(userId: string): string[] | Promise<string[]>;
+
+    abstract newDeleteGallery(userId: string): string | Promise<string>;
 }
 
 export class MessageFile {
@@ -298,6 +304,7 @@ export class User {
     bg?: Nullable<string>;
     chats: Nullable<Chat>[];
     message_notifications: Nullable<MessageNotification>[];
+    gallery: string[];
 }
 
 export class ResultEditUser {
