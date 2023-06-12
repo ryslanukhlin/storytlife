@@ -20,7 +20,8 @@ const GalleryFullScreen: FC<{
     images: string[];
     activeImg: number;
     closeImage: () => void;
-}> = ({ images, activeImg, closeImage }) => {
+    isCurrentUser: boolean;
+}> = ({ images, activeImg, closeImage, isCurrentUser }) => {
     const imgRef = useRef<HTMLImageElement>(null);
     const [activeImgIndex, setActiveImgIndex] = useState(activeImg);
     const [deleteImgMutation] = useDeleteImgGalleryMutation();
@@ -71,9 +72,11 @@ const GalleryFullScreen: FC<{
             <div className={styles.ImgWrapper}>
                 <div className={styles.ImgContainer}>
                     <img ref={imgRef} className={styles.ImgContainer} />
-                    <DeleteImg onClick={deleteImg} className={styles.DeleteImg}>
-                        <ClearIcon />
-                    </DeleteImg>
+                    {isCurrentUser && (
+                        <DeleteImg onClick={deleteImg} className={styles.DeleteImg}>
+                            <ClearIcon />
+                        </DeleteImg>
+                    )}
                 </div>
             </div>
             {activeImgIndex !== images.length - 1 && (

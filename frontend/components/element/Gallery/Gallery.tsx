@@ -23,12 +23,15 @@ import ClearIcon from '@mui/icons-material/Clear';
 import GalleryFullScreen from '../GalleryFullScreen/GalleryFullScreen';
 import Image from 'next/image';
 import { ThemeContext } from '../../../pages/_app';
+import { useReactiveVar } from '@apollo/client';
+import { userData } from '../../../graphql/store/auth';
 
 const DeleteImg = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
 const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, currentUserId }) => {
+    const user = useReactiveVar(userData);
     const [images, setImages] = useState(gallery);
     const [activeFullScreeiImg, setActiveFullScreeiImg] = useState<number | null>(null);
     const [deleteImgMutation] = useDeleteImgGalleryMutation();
@@ -82,10 +85,13 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
         },
     });
 
+    const isCurrentUser = currentUserId === user?.id;
+
     return (
         <>
             {activeFullScreeiImg !== null && (
                 <GalleryFullScreen
+                    isCurrentUser={isCurrentUser}
                     activeImg={activeFullScreeiImg}
                     images={images}
                     closeImage={closeImage}
@@ -112,23 +118,25 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
                                     }
                                     src={BackPort + 'img/images_gallery/' + image}
                                 />
-                                <DeleteImg
-                                    onClick={deleteImg.bind(null, image)}
-                                    className={styles.DeleteImg}>
-                                    <ClearIcon />
-                                </DeleteImg>
+                                {isCurrentUser && (
+                                    <DeleteImg
+                                        onClick={deleteImg.bind(null, image)}
+                                        className={styles.DeleteImg}>
+                                        <ClearIcon />
+                                    </DeleteImg>
+                                )}
                             </div>
                         ))
                     ) : (
-                        <Typography style={{ marginBottom: 14 }} variant="body1">
-                            Здесь пусто
-                        </Typography>
+                        <Typography variant="body1">Здесь пусто</Typography>
                     )}
                 </div>
-                <Button component="label" variant="contained" className={styles.ButtonDownload}>
-                    Загрузить фото
-                    <input type="file" multiple hidden onChange={changeFiles} />
-                </Button>
+                {isCurrentUser && (
+                    <Button component="label" variant="contained" className={styles.ButtonDownload}>
+                        Загрузить фото
+                        <input type="file" multiple hidden onChange={changeFiles} />
+                    </Button>
+                )}
             </Box>
         </>
     );
