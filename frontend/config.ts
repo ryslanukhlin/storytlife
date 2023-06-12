@@ -4,4 +4,4 @@ export const SocketIoPort = 'http://localhost:4000/';
 
 // export const BackPort = 'https://server-storylifesocial.ru/';
 // export const WsBackPort = 'wss://server-storylifesocial.ru/';
-// export const SocketIoPort = 'http://socket-storylifesocial.ru/';
+// export const SocketIoPort = 'https://socket-storylifesocial.ru/';
