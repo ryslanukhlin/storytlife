@@ -14,7 +14,7 @@ const ChatActiveted = () => {
         onCompleted(data) {
             chatData(data.getCurrentUser.chats);
         },
-        fetchPolicy: 'network-only',
+        fetchPolicy: 'cache-first',
     });
 
     if (loading) return null;

@@ -1,5 +1,15 @@
 import { useReactiveVar } from '@apollo/client';
-import { Avatar, Box, Button, Dialog, IconButton, Typography, styled } from '@mui/material';
+import {
+    Alert,
+    Avatar,
+    Box,
+    Button,
+    Dialog,
+    IconButton,
+    Snackbar,
+    Typography,
+    styled,
+} from '@mui/material';
 import React, { FC, useEffect, useState } from 'react';
 import { TypeUser, userData } from '../../../graphql/store/auth';
 import { UserPageInfo } from '../../../pages/[id]';
@@ -19,6 +29,7 @@ import { SocketIo } from '../../../util/socket';
 import { useRouter } from 'next/router';
 import EditInfoUserModel from '../../ui/modal/EditInfoUserModel';
 import ShowUserDopInfo from '../../ui/modal/ShowUserDopInfo';
+import { error } from 'console';
 
 const BoxCardContent = styled(Box)(({ theme }) => ({
     background: theme.palette.background.default,
@@ -31,24 +42,32 @@ const BorderAvatar = styled(Box)(({ theme }) => ({
 const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     const [userPage, setUserPage] = useState(user);
     const [setAvatar] = useSetAvatarMutation();
-    const [setBg] = useSetBgMutation();
+    const [setBg] = useSetBgMutation({
+        errorPolicy: 'ignore',
+    });
     const [showPhotoChange, setShowPhotoChange] = useState(false);
     const router = useRouter();
 
     const [showEditUser, setShowEditUser] = useState(false);
     const [showDopInfoUser, setShowDopInfoUser] = useState(false);
+    const [errorRequest, setErrorRequest] = useState(false);
 
     const chanheBg = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setBg({
-                variables: {
-                    bg: reader.result as string,
-                },
-            });
+        reader.onloadend = async () => {
+            try {
+                await setBg({
+                    variables: {
+                        bg: reader.result as string,
+                    },
+                });
+            } catch {
+                setErrorRequest(true);
+            }
         };
+        return;
     };
 
     const chanhePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,11 +75,15 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = async () => {
-            setAvatar({
-                variables: {
-                    avatar: reader.result as string,
-                },
-            });
+            try {
+                await setAvatar({
+                    variables: {
+                        avatar: reader.result as string,
+                    },
+                });
+            } catch {
+                setErrorRequest(true);
+            }
         };
     };
 
@@ -78,6 +101,10 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
 
     const closeDopInfoUser = () => {
         setShowDopInfoUser(false);
+    };
+
+    const closeRequestErrorInfo = (event: React.SyntheticEvent | Event, reason?: string) => {
+        setErrorRequest(false);
     };
 
     useEffect(() => {
@@ -135,7 +162,20 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
     });
 
     return (
-        <Box sx={{ boxShadow: 3 }} className={styles.UserHeader}>
+        <div className={styles.UserHeader}>
+            <Snackbar
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                open={errorRequest}
+                autoHideDuration={6000}
+                onClose={closeRequestErrorInfo}>
+                <Alert
+                    onClose={closeRequestErrorInfo}
+                    variant="filled"
+                    severity="error"
+                    sx={{ width: '100%' }}>
+                    Фотография слишком большая
+                </Alert>
+            </Snackbar>
             {showEditUser && (
                 <Dialog open={showEditUser} onClose={closeModalEdit}>
                     <EditInfoUserModel user={userPage} close={closeModalEdit} />
@@ -161,7 +201,12 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
                 )}
             </div>
             <BoxCardContent className={styles.UserContent}>
-                <div className={styles.UserInfo}>
+                <Box
+                    sx={(theme) => ({
+                        border: '1px solid',
+                        borderColor: theme.palette.divider,
+                    })}
+                    className={styles.UserInfo}>
                     <BorderAvatar
                         className={styles.AvatarWrapper}
                         onMouseEnter={() => setShowPhotoChange(true)}
@@ -225,9 +270,9 @@ const UserHeader: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
                             Подробнее
                         </Button>
                     </div>
-                </div>
+                </Box>
             </BoxCardContent>
-        </Box>
+        </div>
     );
 };
 

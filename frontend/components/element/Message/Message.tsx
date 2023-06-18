@@ -31,18 +31,25 @@ const Message: FC<{ message: MessageType }> = ({ message }) => {
     const visibleHandler = function (target: HTMLDivElement) {
         // Все позиции элемента
         const targetPosition = {
-                top: window.pageYOffset + target.getBoundingClientRect().top + 100,
-                left: window.pageXOffset + target.getBoundingClientRect().left,
-                right: window.pageXOffset + target.getBoundingClientRect().right,
-                bottom: window.pageYOffset + target.getBoundingClientRect().bottom,
+                top: window.scrollY + target.getBoundingClientRect().top + 95,
+                left: window.scrollX + target.getBoundingClientRect().left,
+                right: window.scrollX + target.getBoundingClientRect().right,
+                bottom: window.scrollY + target.getBoundingClientRect().bottom,
             },
             // Получаем позиции окна
             windowPosition = {
-                top: window.pageYOffset,
-                left: window.pageXOffset,
-                right: window.pageXOffset + document.documentElement.clientWidth,
-                bottom: window.pageYOffset + document.documentElement.clientHeight,
+                top: window.scrollY,
+                left: window.scrollX,
+                right: window.scrollX + document.documentElement.clientWidth,
+                bottom: window.scrollY + document.documentElement.clientHeight,
             };
+        console.log(
+            targetPosition.bottom > windowPosition.top && // Если позиция нижней части элемента больше позиции верхней чайти окна, то элемент виден сверху
+                targetPosition.top < windowPosition.bottom && // Если позиция верхней части элемента меньше позиции нижней чайти окна, то элемент виден снизу
+                targetPosition.right > windowPosition.left && // Если позиция правой стороны элемента больше позиции левой части окна, то элемент виден слева
+                targetPosition.left < windowPosition.right,
+        );
+        console.log(targetPosition.top);
 
         if (
             targetPosition.bottom > windowPosition.top && // Если позиция нижней части элемента больше позиции верхней чайти окна, то элемент виден сверху
@@ -88,18 +95,20 @@ const Message: FC<{ message: MessageType }> = ({ message }) => {
     };
 
     useEffect(() => {
-        const notifRoom = notificationData()!.find((not) => not?.chat.id === router.query.id);
-        if (notifRoom) {
-            const messageNot = notifRoom?.messages_id?.find((mess) => mess === message?.id);
-            if (messageNot) {
-                window.addEventListener('scroll', funcVisibleHandler);
-                funcVisibleHandler();
+        if (messageRef.current !== null) {
+            const notifRoom = notificationData()!.find((not) => not?.chat.id === router.query.id);
+            if (notifRoom) {
+                const messageNot = notifRoom?.messages_id?.find((mess) => mess === message?.id);
+                if (messageNot) {
+                    window.addEventListener('scroll', funcVisibleHandler);
+                    funcVisibleHandler();
+                }
             }
         }
         return () => {
             window.removeEventListener('scroll', funcVisibleHandler);
         };
-    }, []);
+    }, [messageRef.current]);
 
     const downloadFile = (
         file: { basicName: string; generateName: string },

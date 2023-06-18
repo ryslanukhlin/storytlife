@@ -50,6 +50,10 @@
     @media (max-width: 599px) {
         margin-top: 56px;
     }
+
+    @media (max-height: 566px) and (max-width: 600px) {
+        margin-top: 48px;
+    }
 }
 
 .ChatHeaderImg {
@@ -105,6 +109,10 @@
 
     @media (max-width: 600px) {
         margin-top: 167px;
+    }
+
+    @media (max-height: 566px) and (max-width: 600px) {
+        margin-top: 159px;
     }
 
     div {

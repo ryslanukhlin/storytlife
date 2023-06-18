@@ -2,6 +2,11 @@
     margin-bottom: 20px;
 }
 
+.GalleryScroll {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
 .GalleryImgWrapper {
     position: relative;
     display: inline-block;

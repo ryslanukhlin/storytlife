@@ -1,4 +1,5 @@
 import {
+    Alert,
     Box,
     Button,
     Card,
@@ -6,6 +7,7 @@ import {
     CardContent,
     CardHeader,
     Paper,
+    Snackbar,
     Typography,
     styled,
 } from '@mui/material';
@@ -35,7 +37,7 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
     const [images, setImages] = useState(gallery);
     const [activeFullScreeiImg, setActiveFullScreeiImg] = useState<number | null>(null);
     const [deleteImgMutation] = useDeleteImgGalleryMutation();
-
+    const [errorRequest, setErrorRequest] = useState(false);
     const { theme } = useContext(ThemeContext);
 
     const changeFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +48,7 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
             data.append('files', file);
         });
 
-        await fetch(BackPort + 'user/gallery', {
+        const request = await fetch(BackPort + 'user/gallery', {
             method: 'POST',
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('auth_token'),
@@ -54,6 +56,7 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
             },
             body: data,
         });
+        if (request.status === 413) setErrorRequest(true);
     };
 
     const deleteImg = async (imgName: string) => {
@@ -66,6 +69,10 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
 
     const openImage = (index: number) => setActiveFullScreeiImg(index);
     const closeImage = () => setActiveFullScreeiImg(null);
+
+    const closeRequestErrorInfo = (event: React.SyntheticEvent | Event, reason?: string) => {
+        setErrorRequest(false);
+    };
 
     useNewGallerySubscription({
         variables: {
@@ -89,6 +96,19 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
 
     return (
         <>
+            <Snackbar
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                open={errorRequest}
+                autoHideDuration={6000}
+                onClose={closeRequestErrorInfo}>
+                <Alert
+                    onClose={closeRequestErrorInfo}
+                    variant="filled"
+                    severity="error"
+                    sx={{ width: '100%' }}>
+                    Фотография слишком большая
+                </Alert>
+            </Snackbar>
             {activeFullScreeiImg !== null && (
                 <GalleryFullScreen
                     isCurrentUser={isCurrentUser}
@@ -105,7 +125,7 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
                     padding: '16px',
                 }}
                 className={styles.Gallery}>
-                <div>
+                <div className={styles.GalleryScroll}>
                     {images.length !== 0 ? (
                         images.map((image, index) => (
                             <div key={image} className={styles.GalleryImgWrapper}>

@@ -1,4 +1,5 @@
 import {
+    Alert,
     Avatar,
     Backdrop,
     Box,
@@ -6,6 +7,7 @@ import {
     IconButton,
     InputAdornment,
     InputBase,
+    Snackbar,
     styled,
     TextField,
     Typography,
@@ -68,7 +70,7 @@ const ChatContent = () => {
     const [messages, setMessages] = useState<MessageType[]>([]);
     const [call, setCall] = useState<{ usingVideo: boolean } | null>(null);
     const [files, setFiles] = useState<FileList | null>(null);
-
+    const [errorRequest, setErrorRequest] = useState(false);
     const [callErr, setCallErr] = useState<string | null>(null);
 
     const [getMessages] = useGetMessagesLazyQuery();
@@ -102,8 +104,7 @@ const ChatContent = () => {
             data.append('roomId', chatId);
             data.append('txt', message);
             data.append('userId', frend?.id!);
-
-            await fetch(BackPort + 'chat', {
+            const response = await fetch(BackPort + 'chat', {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('auth_token'),
@@ -111,6 +112,10 @@ const ChatContent = () => {
                 },
                 body: data,
             });
+            if (response.status === 413) {
+                setErrorRequest(true);
+                setFiles(null);
+            }
         } else if (message.replace(/\s+/g, '')) {
             await createMessage({
                 variables: {
@@ -121,9 +126,9 @@ const ChatContent = () => {
                     },
                 },
             });
-            setMessage('');
-            document.documentElement.scrollTop = document.documentElement.scrollHeight;
         }
+        setMessage('');
+        document.documentElement.scrollTop = document.documentElement.scrollHeight;
     };
 
     const callHandler = async (usingVideo: boolean) => {
@@ -175,7 +180,24 @@ const ChatContent = () => {
         );
     }, []);
 
+    const keyDownCallback = async (e: KeyboardEvent) => {
+        if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+            await sendMesssage();
+        }
+    };
+
+    const closeRequestErrorInfo = (event: React.SyntheticEvent | Event, reason?: string) => {
+        setErrorRequest(false);
+    };
+
+    useLayoutEffect(() => {
+        document.addEventListener('keydown', keyDownCallback);
+
+        return () => document.removeEventListener('keydown', keyDownCallback);
+    }, [message, files]);
+
     useEffect(() => {
+        setFrend(chatData().find((chat) => chat?.id === chatId)?.users![0]!);
         (async () => {
             const { data } = await getMessages({
                 variables: { roomId: chatId },
@@ -202,6 +224,19 @@ const ChatContent = () => {
 
     return (
         <div className={styles.ChatContent}>
+            <Snackbar
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                open={errorRequest}
+                autoHideDuration={6000}
+                onClose={closeRequestErrorInfo}>
+                <Alert
+                    onClose={closeRequestErrorInfo}
+                    variant="filled"
+                    severity="error"
+                    sx={{ width: '100%' }}>
+                    Фотография слишком большая
+                </Alert>
+            </Snackbar>
             {call && (
                 <CallOffetModal
                     frend={frend!}

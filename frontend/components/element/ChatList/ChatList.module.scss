@@ -30,23 +30,28 @@
     position: fixed;
     min-width: 350px;
     padding: 20px;
-    min-height: 100vh;
+    height: 100vh;
     z-index: 1;
+    overflow: auto;
 
     @media (max-width: 1080px) {
         min-width: 270px;
-        padding: 20px 5px;
+        padding: 5px;
     }
 
     @include mobile {
-        padding: 5px;
+        padding: 10px 5px 44px;
         min-width: 270px;
-        margin-top: 64px;
+        margin-top: 56px;
     }
 
     @media (max-width: 640px) {
         width: 100%;
         border-right: none;
+    }
+
+    @media (max-height: 430px) and (max-width: 768px) {
+        margin-top: 48px;
     }
 }
 
@@ -72,6 +77,10 @@
 
 .ChatContent {
     margin-left: 20px;
+
+    @media (max-width: 1080px) {
+        margin-left: 10px;
+    }
 }
 
 .ChatListContent {
@@ -89,6 +98,11 @@
     justify-content: center;
     align-items: center;
     border-radius: 50%;
+
+    @media (max-width: 1080px) {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 .Notification {
@@ -100,4 +114,9 @@
     justify-content: center;
     align-items: center;
     border-radius: 50%;
+
+    @media (max-width: 1080px) {
+        width: 24px;
+        height: 24px;
+    }
 }

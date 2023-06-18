@@ -145,7 +145,7 @@ const UserLayout: FC<{ children: ReactNode }> = ({ children }) => {
     return (
         <div className={styles.AuthWrapper} style={{ marginTop: !isChatPage ? 64 : 0 }}>
             <TypeMenuContext.Provider value={{ bigNav, changeViewNav }}>
-                {width >= 768 ? <Nav /> : <Header />}
+                {width > 768 ? <Nav /> : <Header />}
                 <Box className={PageWrapperClasses}>{children}</Box>
                 {callFrend && <CallAnswerModal callPayload={callFrend} closeModal={closeModal} />}
             </TypeMenuContext.Provider>

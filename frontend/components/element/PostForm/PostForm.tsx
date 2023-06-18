@@ -1,4 +1,4 @@
-import { Box, Button, FormGroup, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, FormGroup, Snackbar, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { useCreatePostMutation } from '../../../graphql/generated';
@@ -8,6 +8,11 @@ import styles from './PostForm.module.scss';
 const PostForm = () => {
     const [nameImage, setNameImage] = useState<String>();
     const [createPost] = useCreatePostMutation();
+    const [errorRequest, setErrorRequest] = useState(false);
+
+    const closeRequestErrorInfo = (event: React.SyntheticEvent | Event, reason?: string) => {
+        setErrorRequest(false);
+    };
 
     const formik = useFormik({
         validateOnChange: false,
@@ -19,15 +24,20 @@ const PostForm = () => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onloadend = async function () {
-                    createPost({
-                        variables: {
-                            createPost: {
-                                img: reader.result as string,
-                                title,
-                                description,
+                    try {
+                        await createPost({
+                            variables: {
+                                createPost: {
+                                    img: reader.result as string,
+                                    title,
+                                    description,
+                                },
                             },
-                        },
-                    });
+                        });
+                    } catch {
+                        setErrorRequest(true);
+                        setNameImage(undefined);
+                    }
                 };
             } else
                 createPost({
@@ -59,7 +69,24 @@ const PostForm = () => {
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <Box sx={{ boxShadow: 3 }} className={styles.PostForm}>
+            <Snackbar
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                open={errorRequest}
+                autoHideDuration={6000}
+                onClose={closeRequestErrorInfo}>
+                <Alert
+                    onClose={closeRequestErrorInfo}
+                    variant="filled"
+                    severity="error"
+                    sx={{ width: '100%' }}>
+                    Фотография слишком большая
+                </Alert>
+            </Snackbar>
+            <Box
+                sx={(theme) => ({
+                    borderColor: theme.palette.divider,
+                })}
+                className={styles.PostForm}>
                 <Typography variant="h5">Что нового у вас произошло?</Typography>
                 <TextField
                     label="Заголовок"
