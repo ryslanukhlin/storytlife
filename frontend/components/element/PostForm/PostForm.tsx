@@ -83,6 +83,7 @@ const PostForm = () => {
             </Snackbar>
             <Box
                 sx={(theme) => ({
+                    border: '1px solid',
                     borderColor: theme.palette.divider,
                 })}
                 className={styles.PostForm}>

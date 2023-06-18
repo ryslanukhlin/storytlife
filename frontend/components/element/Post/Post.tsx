@@ -255,7 +255,9 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
     return (
         <>
             {isDelete ? (
-                <Typography variant="h6">Пост удалён</Typography>
+                <Typography variant="h6" style={{ marginTop: 30 }}>
+                    Пост удалён
+                </Typography>
             ) : (
                 <CardUserPage variant="outlined" className={styles.Post}>
                     {showDeleteModal && (
