@@ -4,8 +4,6 @@ export const checkMediaDevices = async () => {
         if (stream.getAudioTracks().length >= 0 && stream.getVideoTracks().length >= 0) return true;
         else false;
     } catch (e) {
-        console.log(e);
-
         return false;
     }
 };

@@ -1,5 +1,5 @@
 import { Button, Typography } from '@mui/material';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { userData } from '../../../graphql/store/auth';
 import ModalWrapper from './ModalWrapper/ModalWrapper';
 import { useReactiveVar } from '@apollo/client';
@@ -28,6 +28,7 @@ const CallAnswerModal: FC<CallAnswerModalProps> = ({ callPayload, closeModal }) 
     const user = useReactiveVar(userData);
     const frend = chatData().find((chat) => chat?.id === chatId)?.users![0];
     const [acceptCall] = useAcceptCallMutation();
+    const [errorDevice, setErrorDevice] = useState(false);
 
     const answerCallHandler = async (isAccept: AcceptCall) => {
         const isHaveMicroAndAudio = await checkMediaDevices();
@@ -60,7 +61,10 @@ const CallAnswerModal: FC<CallAnswerModalProps> = ({ callPayload, closeModal }) 
                 },
             });
         }
-        closeModal();
+        if (!isHaveMicroAndAudio) closeModal();
+        else {
+            setErrorDevice(true);
+        }
     };
 
     useNewCancelCallSubscription({
@@ -76,24 +80,39 @@ const CallAnswerModal: FC<CallAnswerModalProps> = ({ callPayload, closeModal }) 
 
     return (
         <ModalWrapper>
-            <Typography variant="h6">Входяший звонок от {frend!.login}</Typography>
-            <Typography variant="body1">Примите или отклоните звонок</Typography>
-            <div className={styles.ModalActionCall}>
-                <Button
-                    size="large"
-                    color="success"
-                    variant="contained"
-                    onClick={answerCallHandler.bind(null, AcceptCall.Accept)}>
-                    <CallIcon />
-                </Button>
-                <Button
-                    size="large"
-                    color="error"
-                    variant="contained"
-                    onClick={answerCallHandler.bind(null, AcceptCall.Deny)}>
-                    <CallEndIcon />
-                </Button>
-            </div>
+            {errorDevice ? (
+                <>
+                    {' '}
+                    <Typography variant="h5" component="div" color="error" sx={{ marginBottom: 1 }}>
+                        Предупреждение!
+                    </Typography>
+                    <div>На устройстве должны быть видео и аудио записываюшее устройства!</div>
+                    <Button sx={{ marginTop: 2 }} onClick={closeModal}>
+                        Понятно
+                    </Button>
+                </>
+            ) : (
+                <>
+                    <Typography variant="h6">Входяший звонок от {frend!.login}</Typography>
+                    <Typography variant="body1">Примите или отклоните звонок</Typography>
+                    <div className={styles.ModalActionCall}>
+                        <Button
+                            size="large"
+                            color="success"
+                            variant="contained"
+                            onClick={answerCallHandler.bind(null, AcceptCall.Accept)}>
+                            <CallIcon />
+                        </Button>
+                        <Button
+                            size="large"
+                            color="error"
+                            variant="contained"
+                            onClick={answerCallHandler.bind(null, AcceptCall.Deny)}>
+                            <CallEndIcon />
+                        </Button>
+                    </div>
+                </>
+            )}
         </ModalWrapper>
     );
 };
