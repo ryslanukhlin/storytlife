@@ -12,6 +12,9 @@ export class ChatService {
             where: {
                 chat_id: roomId,
             },
+            orderBy: {
+                created_at: 'asc',
+            },
         });
     }
 
