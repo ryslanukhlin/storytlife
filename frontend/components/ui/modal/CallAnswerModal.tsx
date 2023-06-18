@@ -61,7 +61,7 @@ const CallAnswerModal: FC<CallAnswerModalProps> = ({ callPayload, closeModal }) 
                 },
             });
         }
-        if (!isHaveMicroAndAudio) closeModal();
+        if (isHaveMicroAndAudio) closeModal();
         else {
             setErrorDevice(true);
         }
