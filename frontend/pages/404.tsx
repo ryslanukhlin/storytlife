@@ -6,7 +6,7 @@ const NotFountPage = () => {
             <Head>
                 <title>404 страничка не найдена</title>
             </Head>
-            NotFountPage
+            404 Страничка не найдена
         </div>
     );
 };

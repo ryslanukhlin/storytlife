@@ -27,6 +27,7 @@ import { chatData } from '../../../graphql/store/chat';
 import ErrorCallModal from '../../ui/modal/ErrorCallModal';
 import { checkMediaDevices } from '../../../util/checkMediaDevices';
 import { SocketIo } from '../../../util/socket';
+import { useRouter } from 'next/router';
 
 import styles from './ChatContent.module.scss';
 import SendIcon from '@mui/icons-material/Send';
@@ -59,6 +60,7 @@ export type MessageType = {
 } | null;
 
 const ChatContent = () => {
+    const router = useRouter();
     const blockMessagesRef = useRef<HTMLDivElement>(null);
     const { bigNav } = useContext(TypeMenuContext);
     const [message, setMessage] = useState('');
@@ -167,6 +169,7 @@ const ChatContent = () => {
     };
 
     useEffect(() => {
+        if (!frend) return;
         SocketIo()?.emit('join', {
             userId: frend!.id,
         });
@@ -216,6 +219,11 @@ const ChatContent = () => {
     const classesChatHeader = `${styles.ChatHeaderContent} ${
         bigNav ? styles.maxWidthBigNav : styles.maxWidthSmallNav
     }`;
+
+    if (!frend) {
+        router.push('/404');
+        return null;
+    }
 
     return (
         <div className={styles.ChatContent}>

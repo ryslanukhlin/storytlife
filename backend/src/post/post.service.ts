@@ -150,7 +150,17 @@ export class PostService {
     }
 
     async editPost(id: string, editData: CreatePostInput) {
-        const { img } = editData;
+        const { img, changePhoto, ...anotherData } = editData;
+        if (!changePhoto) {
+            return await this.prisma.post.update({
+                where: {
+                    id,
+                },
+                data: {
+                    ...anotherData,
+                },
+            });
+        }
         const fileName = img ? this.fileService.saveFile(img, FileResourceEnum.POST) : null;
 
         return await this.prisma.post.update({
@@ -158,7 +168,7 @@ export class PostService {
                 id,
             },
             data: {
-                ...editData,
+                ...anotherData,
                 img: fileName,
             },
         });

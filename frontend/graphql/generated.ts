@@ -81,6 +81,7 @@ export type CreateOfferInput = {
 };
 
 export type CreatePostInput = {
+  changePhoto?: InputMaybe<Scalars['Boolean']>;
   description: Scalars['String'];
   img?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];

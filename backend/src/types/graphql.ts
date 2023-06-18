@@ -75,6 +75,7 @@ export class CreatePostInput {
     title: string;
     description: string;
     img?: Nullable<string>;
+    changePhoto?: Nullable<boolean>;
 }
 
 export class CreateCommentInput {

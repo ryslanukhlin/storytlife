@@ -106,22 +106,36 @@ const Post: FC<{ post: Post }> = ({ post: postOption }) => {
                             img: reader.result as string,
                             title: editForm.title,
                             description: editForm.description,
+                            changePhoto: true,
                         },
                     },
                 });
             };
-        } else
-            editPost({
-                variables: {
-                    postId: post.id,
-                    editPost: {
-                        img: null,
-                        title: editForm.title,
-                        description: editForm.description,
+        } else {
+            if (isStart)
+                editPost({
+                    variables: {
+                        postId: post.id,
+                        editPost: {
+                            changePhoto: false,
+                            title: editForm.title,
+                            description: editForm.description,
+                        },
                     },
-                },
-            });
-
+                });
+            else
+                editPost({
+                    variables: {
+                        postId: post.id,
+                        editPost: {
+                            img: null,
+                            title: editForm.title,
+                            description: editForm.description,
+                            changePhoto: true,
+                        },
+                    },
+                });
+        }
         setEditForm((prev) => ({ ...prev, img: null, errDescription: null, errTitle: null }));
         setEditMode(false);
         setIsStart(true);

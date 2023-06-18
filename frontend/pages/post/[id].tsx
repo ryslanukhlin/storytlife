@@ -16,7 +16,10 @@ const PostPage = () => {
 
     if (error || loading) return null;
 
-    if (!data?.getPost) router.push('/404');
+    if (!data?.getPost) {
+        router.push('/404');
+        return null;
+    }
 
     return (
         <Container>

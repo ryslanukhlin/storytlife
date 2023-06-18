@@ -13,7 +13,7 @@ const ChatItem = () => {
         <BoxBorderRight className={styles.ChatList}>
             {chats.length === 0 && (
                 <Typography variant="body1">
-                    Перейдите в раздел 'сообшения' <br /> и выберете кому хотите написать
+                    Перейдите в раздел 'Поиск' <br /> и выберете кому хотите написать
                 </Typography>
             )}
             {chats.map((contact) => (

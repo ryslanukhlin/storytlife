@@ -10,12 +10,8 @@
 .GalleryImgWrapper {
     position: relative;
     display: inline-block;
-    margin-bottom: 20px;
+    margin-top: 20px;
     margin-right: 20px;
-
-    &:last-child {
-        margin-right: 0;
-    }
 
     &:hover {
         .DeleteImg {

@@ -140,7 +140,13 @@ const Gallery: FC<{ gallery: string[]; currentUserId: string }> = ({ gallery, cu
                 {isCurrentUser && (
                     <Button component="label" variant="contained" className={styles.ButtonDownload}>
                         Загрузить фото
-                        <input type="file" multiple hidden onChange={changeFiles} />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            hidden
+                            onChange={changeFiles}
+                        />
                     </Button>
                 )}
             </Box>

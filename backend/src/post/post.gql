@@ -33,6 +33,7 @@ input CreatePostInput {
     title: String!
     description: String!
     img: String
+    changePhoto: Boolean
 }
 
 input CreateCommentInput {

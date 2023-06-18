@@ -56,8 +56,15 @@ const Search = () => {
             },
         });
 
-        if (!errors) chatData([...chatData(), data!.createRoom!]);
-        router.push('/chat/' + data?.createRoom?.id);
+        if (!errors) {
+            chatData([...chatData(), data!.createRoom!]);
+            router.push({
+                pathname: '/chat/' + data?.createRoom?.id,
+                query: {
+                    refetch: true,
+                },
+            });
+        }
     };
 
     const changeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
