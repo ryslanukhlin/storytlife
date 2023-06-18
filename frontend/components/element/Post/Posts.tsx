@@ -57,8 +57,6 @@ const Posts: FC<{ user: UserPageInfo | TypeUser }> = ({ user }) => {
             userId: user.id,
         },
         onData: (option) => {
-            console.log(option.data.data?.newPost!);
-
             const { created_at } = option.data.data?.newPost!;
             option.data.data!.newPost.created_at = new Date(created_at).getTime().toString();
             setPosts((prev) => [...prev, option.data.data?.newPost as Post]);

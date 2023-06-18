@@ -25,7 +25,7 @@ import { FileModule } from './file/file.module';
                 'graphql-ws': true,
                 'subscriptions-transport-ws': true,
             },
-            plugins: [ApolloServerPluginLandingPageLocalDefault()],
+            // plugins: [ApolloServerPluginLandingPageLocalDefault()],
             typePaths: ['./**/*.gql'],
             definitions: {
                 path: join(process.cwd(), 'src/types/graphql.ts'),

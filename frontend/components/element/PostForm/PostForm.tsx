@@ -48,6 +48,7 @@ const PostForm = () => {
                     },
                 });
             resetForm();
+            setNameImage(undefined);
         },
         validate: (values) => {
             let errors: any = {};
