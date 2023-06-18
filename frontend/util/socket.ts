@@ -1,6 +1,4 @@
-import { Socket, io } from 'socket.io-client';
-import { SocketIoPort } from '../config';
-import { userData } from '../graphql/store/auth';
+import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
 
 let _context: Socket<DefaultEventsMap, DefaultEventsMap> | null = null;

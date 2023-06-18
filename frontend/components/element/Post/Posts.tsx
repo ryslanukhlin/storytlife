@@ -1,8 +1,7 @@
-import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useGetUserPostsLazyQuery, useNewPostSubscription } from '../../../graphql/generated';
-import { TypeUser, userData } from '../../../graphql/store/auth';
+import { TypeUser } from '../../../graphql/store/auth';
 import { UserPageInfo } from '../../../pages/[id]';
 import PostComponent from './Post';
 

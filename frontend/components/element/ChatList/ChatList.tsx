@@ -1,11 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
-import { styled, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
-import { userData } from '../../../graphql/store/auth';
+import { Typography } from '@mui/material';
 import { chatData } from '../../../graphql/store/chat';
-import { ThemeContext } from '../../../pages/_app';
 import BoxBorderRight from '../../ui/BoxBorderRight';
 import ChatItemList from './ChatItemList';
 

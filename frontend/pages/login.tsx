@@ -1,17 +1,17 @@
 import { Alert, Checkbox, FormControlLabel, FormGroup, TextField } from '@mui/material';
 import { useFormik } from 'formik';
-
-import style from '../components/layouts/AuthLayout/AuthLayout.module.scss';
 import Link from '../components/ui/Link';
 import TextMaskCustom from '../components/ui/PhoneInput';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLoginUserMutation } from '../graphql/generated';
 import { LoadingButton } from '@mui/lab';
 import { authToken } from '../graphql/store/auth';
 import Head from 'next/head';
 
+import style from '../components/layouts/AuthLayout/AuthLayout.module.scss';
+
 const Login = () => {
-    const [phone, setPhone] = React.useState('');
+    const [phone, setPhone] = useState('');
     const [login, { loading }] = useLoginUserMutation({ errorPolicy: 'all' });
     const [errLogin, setErrLogin] = useState(false);
 

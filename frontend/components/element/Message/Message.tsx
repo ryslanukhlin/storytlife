@@ -1,15 +1,15 @@
 import { useReactiveVar } from '@apollo/client';
-import { Box, Link, styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { FC, useContext, useEffect, useRef } from 'react';
+import { FC, useContext, useEffect, useRef } from 'react';
 import { useDeleteNotificationMutation } from '../../../graphql/generated';
 import { notificationData, userData } from '../../../graphql/store/auth';
 import { MessageType } from '../ChatContent/ChatContent';
+import { BackPort } from '../../../config';
+import { ThemeContext } from '../../../pages/_app';
 
 import styles from './Message.module.scss';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import { BackPort } from '../../../config';
-import { ThemeContext } from '../../../pages/_app';
 
 const MyMessage = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.primary.light,
@@ -49,7 +49,6 @@ const Message: FC<{ message: MessageType }> = ({ message }) => {
                 targetPosition.right > windowPosition.left && // Если позиция правой стороны элемента больше позиции левой части окна, то элемент виден слева
                 targetPosition.left < windowPosition.right,
         );
-        console.log(targetPosition.top);
 
         if (
             targetPosition.bottom > windowPosition.top && // Если позиция нижней части элемента больше позиции верхней чайти окна, то элемент виден сверху
@@ -110,10 +109,7 @@ const Message: FC<{ message: MessageType }> = ({ message }) => {
         };
     }, [messageRef.current]);
 
-    const downloadFile = (
-        file: { basicName: string; generateName: string },
-        e: React.MouseEvent<HTMLElement>,
-    ) => {
+    const downloadFile = (file: { basicName: string; generateName: string }) => {
         fetch(BackPort + 'img/messages_file/' + file.generateName)
             .then((response) => response.blob())
             .then((blob) => {

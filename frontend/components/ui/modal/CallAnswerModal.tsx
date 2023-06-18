@@ -1,11 +1,7 @@
-import { Button, IconButton, Typography } from '@mui/material';
-import React, { FC, useEffect } from 'react';
+import { Button, Typography } from '@mui/material';
+import { FC, useEffect } from 'react';
 import { userData } from '../../../graphql/store/auth';
 import ModalWrapper from './ModalWrapper/ModalWrapper';
-
-import styles from './ModalWrapper/ModalWrapper.module.scss';
-import CallIcon from '@mui/icons-material/Call';
-import CallEndIcon from '@mui/icons-material/CallEnd';
 import { useReactiveVar } from '@apollo/client';
 import {
     AcceptCall,
@@ -16,6 +12,10 @@ import { useRouter } from 'next/router';
 import { CallType } from '../../../type/call.type';
 import { chatData } from '../../../graphql/store/chat';
 import { checkMediaDevices } from '../../../util/checkMediaDevices';
+
+import styles from './ModalWrapper/ModalWrapper.module.scss';
+import CallIcon from '@mui/icons-material/Call';
+import CallEndIcon from '@mui/icons-material/CallEnd';
 
 type CallAnswerModalProps = {
     callPayload: { chatId: string; usingVideo: boolean };

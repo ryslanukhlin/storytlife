@@ -1,6 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 //@ts-ignore
 import freeice from 'freeice';
 import {
@@ -20,15 +20,15 @@ import {
 } from '../../graphql/generated';
 import { userData } from '../../graphql/store/auth';
 import { CallType } from '../../type/call.type';
-import CallFooter from '../../components/element/CallFooter/CallFooter';
-import CallHeader from '../../components/element/CallHeader/CallHeader';
-import MicOffIcon from '@mui/icons-material/MicOff';
-
-import styles from '../../styles/Call.module.scss';
 import { chatData } from '../../graphql/store/chat';
 import { Avatar, Box, styled } from '@mui/material';
 import Head from 'next/head';
 import { BackPort } from '../../config';
+
+import styles from '../../styles/Call.module.scss';
+import CallFooter from '../../components/element/CallFooter/CallFooter';
+import CallHeader from '../../components/element/CallHeader/CallHeader';
+import MicOffIcon from '@mui/icons-material/MicOff';
 
 const VideoWrapper = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,

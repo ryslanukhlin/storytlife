@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import ModalWrapper from './ModalWrapper/ModalWrapper';
 import { Button, Typography } from '@mui/material';
 

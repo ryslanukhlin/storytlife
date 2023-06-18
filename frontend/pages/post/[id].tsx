@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
 import Post from '../../components/element/Post/Post';
 import Container from '../../components/ui/Container';
 import { useGetPostQuery } from '../../graphql/generated';

@@ -1,6 +1,6 @@
-import { Alert, Box, Button, FormGroup, Snackbar, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Snackbar, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useCreatePostMutation } from '../../../graphql/generated';
 
 import styles from './PostForm.module.scss';
@@ -10,9 +10,7 @@ const PostForm = () => {
     const [createPost] = useCreatePostMutation();
     const [errorRequest, setErrorRequest] = useState(false);
 
-    const closeRequestErrorInfo = (event: React.SyntheticEvent | Event, reason?: string) => {
-        setErrorRequest(false);
-    };
+    const closeRequestErrorInfo = () => setErrorRequest(false);
 
     const formik = useFormik({
         validateOnChange: false,

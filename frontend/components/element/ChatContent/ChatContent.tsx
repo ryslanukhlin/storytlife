@@ -1,21 +1,14 @@
 import {
     Alert,
     Avatar,
-    Backdrop,
     Box,
-    Button,
     IconButton,
-    InputAdornment,
-    InputBase,
     Snackbar,
     styled,
     TextField,
     Typography,
 } from '@mui/material';
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-
-import styles from './ChatContent.module.scss';
-import SendIcon from '@mui/icons-material/Send';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
     useCreateMessageMutation,
     useGetMessagesLazyQuery,
@@ -24,8 +17,6 @@ import {
     CreateCallResult,
 } from '../../../graphql/generated';
 import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 import CallOffetModal from '../../ui/modal/CallOffetModal';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Message from '../Message/Message';
@@ -35,8 +26,12 @@ import { OfflineBadge, OnlineBadge } from '../../ui/OnlineBadge';
 import { chatData } from '../../../graphql/store/chat';
 import ErrorCallModal from '../../ui/modal/ErrorCallModal';
 import { checkMediaDevices } from '../../../util/checkMediaDevices';
-import { userData } from '../../../graphql/store/auth';
 import { SocketIo } from '../../../util/socket';
+
+import styles from './ChatContent.module.scss';
+import SendIcon from '@mui/icons-material/Send';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 
 const CustomHeader = styled(Box)(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,

@@ -1,19 +1,12 @@
 import { useReactiveVar } from '@apollo/client';
-import { Divider } from '@mui/material';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import Post from '../components/element/Post/Post';
+import { useEffect, useState } from 'react';
 import Posts from '../components/element/Post/Posts';
 import PostForm from '../components/element/PostForm/PostForm';
 import UserHeader from '../components/element/UserHeader/UserHeader';
 import Container from '../components/ui/Container';
-import {
-    useGetCurrentUserLazyQuery,
-    useGetUserLazyQuery,
-    useGetUserQuery,
-    useNewEditUserSubscription,
-} from '../graphql/generated';
+import { useGetUserLazyQuery } from '../graphql/generated';
 import { userData } from '../graphql/store/auth';
 import Gallery from '../components/element/Gallery/Gallery';
 

@@ -1,32 +1,18 @@
-import {
-    Alert,
-    Box,
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Paper,
-    Snackbar,
-    Typography,
-    styled,
-} from '@mui/material';
-import React, { FC, useContext, useState } from 'react';
-import CardUserPage from '../../ui/CardHeader';
+import { Alert, Box, Button, Snackbar, Typography, styled } from '@mui/material';
+import { FC, useContext, useState } from 'react';
 import { BackPort } from '../../../config';
-
-import styles from './Gallery.module.scss';
 import {
     useDeleteImgGalleryMutation,
     useNewDeleteGallerySubscription,
     useNewGallerySubscription,
 } from '../../../graphql/generated';
-import ClearIcon from '@mui/icons-material/Clear';
 import GalleryFullScreen from '../GalleryFullScreen/GalleryFullScreen';
-import Image from 'next/image';
 import { ThemeContext } from '../../../pages/_app';
 import { useReactiveVar } from '@apollo/client';
 import { userData } from '../../../graphql/store/auth';
+
+import styles from './Gallery.module.scss';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const DeleteImg = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,

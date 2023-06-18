@@ -1,9 +1,7 @@
-import { ExpandMore } from '@mui/icons-material';
 import {
     Avatar,
     Box,
     Button,
-    Card,
     CardActions,
     CardContent,
     CardMedia,
@@ -17,13 +15,7 @@ import {
 } from '@mui/material';
 import CardHeader from '@mui/material/CardHeader';
 import { red } from '@mui/material/colors';
-import React, { FC, useMemo, useRef, useState } from 'react';
-
-import styles from './Post.module.scss';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import CommentIcon from '@mui/icons-material/Comment';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { FC, useMemo, useRef, useState } from 'react';
 import { Post } from './Posts';
 import { dateFormater } from '../../../util/dateFormat';
 import {
@@ -40,13 +32,15 @@ import CommentForm from '../CommentForm/CommentForm';
 import Comments from '../Comment/Comments';
 import { BackPort } from '../../../config';
 import LinkContent from '../../ui/LinkWrapper';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeletePostModal from '../../ui/modal/DeletePostModal';
+import CardUserPage from '../../ui/CardHeader';
 
+import styles from './Post.module.scss';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CommentIcon from '@mui/icons-material/Comment';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useFormik } from 'formik';
-import CardUserPage from '../../ui/CardHeader';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const Post: FC<{ post: Post }> = ({ post: postOption }) => {
     const [post, setPost] = useState(postOption);

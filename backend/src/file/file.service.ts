@@ -21,8 +21,6 @@ type FilesName = FilesNameMessages | string[];
 @Injectable()
 export class FileService {
     saveFile(img: string, type: FileResourceEnum) {
-        // TODO: проверить расширение файлов по типо name.subname.extention
-        // сработает ли загрузка изображение если в названия файла есть много точек
         const fileExpansion = img.substring(img.indexOf('/') + 1, img.indexOf(';'));
 
         const fileName = v4() + '.' + fileExpansion;

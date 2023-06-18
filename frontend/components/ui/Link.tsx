@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import { FC, useContext } from 'react';
 import NextLink from 'next/link';
 import { ThemeContext } from '../../pages/_app';
 

@@ -1,5 +1,5 @@
 import { Avatar, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import { FC, memo } from 'react';
 import { BackPort } from '../../../config';
 import { Frend } from '../../../graphql/store/auth';
 
@@ -20,4 +20,4 @@ const CallHeader: FC<{ frend: Frend }> = ({ frend }) => {
     );
 };
 
-export default React.memo(CallHeader);
+export default memo(CallHeader);

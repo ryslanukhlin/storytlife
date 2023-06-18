@@ -1,10 +1,10 @@
 import { IconButton } from '@mui/material';
 import { FC, ReactNode, useContext } from 'react';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { ThemeContext } from '../../../pages/_app';
 
 import styles from './AuthLayout.module.scss';
-import { ThemeContext } from '../../../pages/_app';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const AuthLayout: FC<{ children: ReactNode }> = ({ children }) => {
     const themeContext = useContext(ThemeContext);

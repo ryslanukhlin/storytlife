@@ -3,19 +3,17 @@ import {
     ThemeProvider,
     createTheme as createMuiTheme,
     unstable_createMuiStrictModeTheme,
-    StyledEngineProvider,
 } from '@mui/material/styles';
 import type { AppProps } from 'next/app';
 import { createContext, useEffect, useState } from 'react';
 import ClientApolloProvider from '../graphql/apollo';
 import type {} from '@mui/lab/themeAugmentation';
-
-import '../styles/globals.scss';
 import '@mui/lab/themeAugmentation';
 import AuthProvider from '../components/provider/AuthProvider';
 import LayoutProvider from '../components/provider/LayoutProvider';
 import React from 'react';
-import { useGetCurrentUserChatsQuery } from '../graphql/generated';
+
+import '../styles/globals.scss';
 
 const createTheme =
     process.env.NODE_ENV === 'production' ? createMuiTheme : unstable_createMuiStrictModeTheme;

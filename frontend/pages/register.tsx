@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Alert, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
-import AuthLayout from '../components/layouts/AuthLayout/AuthLayout';
 import { useFormik } from 'formik';
 import LoadingButton from '@mui/lab/LoadingButton';
-
-import style from '../components/layouts/AuthLayout/AuthLayout.module.scss';
 import Link from '../components/ui/Link';
 import { useRegisterUserMutation } from '../graphql/generated';
 import TextMaskCustom from '../components/ui/PhoneInput';
 import Head from 'next/head';
 
+import style from '../components/layouts/AuthLayout/AuthLayout.module.scss';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -25,9 +23,9 @@ interface ErrorsValid {
 const Register = () => {
     const [register, { loading }] = useRegisterUserMutation({ errorPolicy: 'all' });
 
-    const [phone, setPhone] = React.useState('');
-    const [errors, setErrors] = React.useState<ErrorsValid | null>(null);
-    const [success, setSuccess] = React.useState(false);
+    const [phone, setPhone] = useState('');
+    const [errors, setErrors] = useState<ErrorsValid | null>(null);
+    const [success, setSuccess] = useState(false);
 
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordRepeat, setShowPasswordRepeat] = useState(false);

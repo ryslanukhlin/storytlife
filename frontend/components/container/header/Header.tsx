@@ -1,8 +1,6 @@
 import { AppBar, Drawer, IconButton, Toolbar, Typography } from '@mui/material';
-import React, { useState } from 'react';
-
+import { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import Nav from '../nav/Nav';
 import NavMobile from '../nav/NavMobile';
 
 const Header = () => {

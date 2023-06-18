@@ -1,5 +1,5 @@
 import { Badge, styled } from '@mui/material';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 export const OnlineBadgeWrapper = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {

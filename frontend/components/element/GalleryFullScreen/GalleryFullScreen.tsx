@@ -1,16 +1,12 @@
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { BackPort } from '../../../config';
+import { Box, IconButton, styled } from '@mui/material';
+import { useDeleteImgGalleryMutation } from '../../../graphql/generated';
 
 import styles from './GalleryFullScreen.module.scss';
-import { BackPort } from '../../../config';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ClearIcon from '@mui/icons-material/Clear';
-import { Box, IconButton, styled } from '@mui/material';
-import {
-    useDeleteImgGalleryMutation,
-    useNewDeleteGallerySubscription,
-} from '../../../graphql/generated';
-import { flushSync } from 'react-dom';
 
 const DeleteImg = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,

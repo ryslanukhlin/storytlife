@@ -1,7 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { Avatar, Button, TextField } from '@mui/material';
 import { red } from '@mui/material/colors';
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { BackPort } from '../../../config';
 import { useAddCommentMutation } from '../../../graphql/generated';
 import { userData } from '../../../graphql/store/auth';

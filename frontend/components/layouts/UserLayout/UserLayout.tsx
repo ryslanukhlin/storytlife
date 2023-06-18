@@ -1,7 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { createContext, FC, ReactNode, useEffect, useState } from 'react';
+import { createContext, FC, ReactNode, useEffect, useState } from 'react';
 import {
     useNewAvatarSubscription,
     useNewBgSubscription,
@@ -16,11 +16,11 @@ import useWidth from '../../../hook/useWidth';
 import Header from '../../container/header/Header';
 import Nav from '../../container/nav/Nav';
 import CallAnswerModal from '../../ui/modal/CallAnswerModal';
-
-import styles from './UserLayout.module.scss';
 import { io } from 'socket.io-client';
 import { SocketIoPort } from '../../../config';
 import { SocketIo } from '../../../util/socket';
+
+import styles from './UserLayout.module.scss';
 
 type ViewMenuContext = {
     bigNav: boolean;

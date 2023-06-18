@@ -1,9 +1,16 @@
 import { IconButton, styled } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import Link from 'next/link';
+import { notificationData, userData } from '../../../graphql/store/auth';
+import { ThemeContext } from '../../../pages/_app';
+import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
+import { useReactiveVar } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { SocketIo } from '../../../util/socket';
 
 import styles from './Nav.module.scss';
+import BoxBorderRight from '../../ui/BoxBorderRight';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,14 +18,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import { notificationData, userData } from '../../../graphql/store/auth';
-import { ThemeContext } from '../../../pages/_app';
-import { TypeMenuContext } from '../../layouts/UserLayout/UserLayout';
-import BoxBorderRight from '../../ui/BoxBorderRight';
-import { useReactiveVar } from '@apollo/client';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useRouter } from 'next/router';
-import { SocketIo } from '../../../util/socket';
 
 const CustomLink = styled(Link)(({ theme }) => ({
     color: theme.palette.text.primary,

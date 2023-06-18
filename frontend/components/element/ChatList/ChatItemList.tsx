@@ -1,15 +1,15 @@
 import { useReactiveVar } from '@apollo/client';
-import { Avatar, Badge, Box, styled, Typography } from '@mui/material';
+import { Avatar, Box, styled, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { BackPort } from '../../../config';
-import { Chat, notificationData, userData } from '../../../graphql/store/auth';
+import { Chat, notificationData } from '../../../graphql/store/auth';
 import { ThemeContext } from '../../../pages/_app';
-
-import styles from './ChatList.module.scss';
 import { deepOrange } from '@mui/material/colors';
 import { OfflineBadge, OnlineBadge } from '../../ui/OnlineBadge';
 import { SocketIo } from '../../../util/socket';
+
+import styles from './ChatList.module.scss';
 
 const CustomBox = styled(Box)(({ theme }) => ({
     color: theme.palette.text.primary,

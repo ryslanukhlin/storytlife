@@ -1,7 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { Button, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import {
     AcceptCall,
     useCancelCallMutation,

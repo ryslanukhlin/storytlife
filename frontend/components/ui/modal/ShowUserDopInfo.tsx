@@ -1,8 +1,7 @@
-import React, { FC, useState } from 'react';
+import { FC } from 'react';
 import { DialogContent, DialogTitle, Typography } from '@mui/material';
 import dayjs from 'dayjs';
-import { TypeUser, userData } from '../../../graphql/store/auth';
-import { useReactiveVar } from '@apollo/client';
+import { TypeUser } from '../../../graphql/store/auth';
 import { UserPageInfo } from '../../../pages/[id]';
 
 type ShowUserDopInfoProps = {

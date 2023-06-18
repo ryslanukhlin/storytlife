@@ -1,8 +1,6 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import Comment from './Comment';
 import { Comment as CommentInterface } from '../Post/Posts';
-
-import styles from './Comment.module.scss';
 import { useNewCommentSubscription } from '../../../graphql/generated';
 
 type ComponentsProps = {

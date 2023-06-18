@@ -11,18 +11,14 @@ import {
 import { useRouter } from 'next/router';
 import Card from '../components/ui/Card';
 import { BackPort } from '../config';
-import {
-    useCreateRoomMutation,
-    useGetUsersLazyQuery,
-    useGetUsersQuery,
-} from '../graphql/generated';
+import { useCreateRoomMutation, useGetUsersLazyQuery } from '../graphql/generated';
 import { red } from '@mui/material/colors';
-
-import styles from '../styles/Search.module.scss';
 import { chatData } from '../graphql/store/chat';
 import LinkContent from '../components/ui/LinkWrapper';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+
+import styles from '../styles/Search.module.scss';
 
 const Search = () => {
     const [users, setUsers] = useState<

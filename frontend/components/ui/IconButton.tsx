@@ -1,4 +1,4 @@
-import { Box, Button, styled } from '@mui/material';
+import { Button, styled } from '@mui/material';
 
 const IconButton = styled(Button)(({ theme }) => ({
     borderRadius: 10,

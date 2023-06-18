@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PrismaModule } from './prisma/prisma.module';
@@ -11,11 +11,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { ChatModule } from './chat/chat.module';
 import { PubsubModule } from './pubsub/pubsub.module';
-import { Context } from 'graphql-ws';
-import { JwtModule, JwtService } from '@nestjs/jwt';
 import { CallModule } from './call/call.module';
 import { PostModule } from './post/post.module';
-import jwt_decode from 'jwt-decode';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { FileModule } from './file/file.module';
 

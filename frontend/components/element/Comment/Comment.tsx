@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
-
-import styles from './Comment.module.scss';
+import { FC } from 'react';
 import { Avatar, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { Comment } from '../Post/Posts';
 import { dateFormater } from '../../../util/dateFormat';
 import { BackPort } from '../../../config';
 import LinkContent from '../../ui/LinkWrapper';
+
+import styles from './Comment.module.scss';
 
 const Comment: FC<{ comment: Comment }> = ({ comment }) => {
     return (

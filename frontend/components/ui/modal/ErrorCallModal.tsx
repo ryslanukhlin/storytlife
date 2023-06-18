@@ -1,5 +1,5 @@
 import { Button, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import ModalWrapper from './ModalWrapper/ModalWrapper';
 
 const ErrorCallModal: FC<{ children: React.ReactNode; onClose: () => void }> = ({

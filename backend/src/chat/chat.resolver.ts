@@ -1,10 +1,9 @@
-import { Args, Mutation, Query, ResolveField, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { CurrentUser, ICurrentUser } from 'src/user/currentUser.decorator';
 import { ChatService } from './chat.service';
 import {
     AcceptCall,
     AcceptCallInput,
-    AcceptCallType,
     CreateCallInput,
     CreateCallResult,
     DeleteInputNotification,
@@ -13,7 +12,6 @@ import {
 import { Inject } from '@nestjs/common';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { PUB_SUB } from 'src/pubsub/pubsub.module';
-import { Public } from 'src/decorator/public.decorator';
 import { Message, MessageNotification } from '@prisma/client';
 
 enum SUBSCRIPTIONS_EVENT {

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DeleteInputNotification, MessageInput } from 'src/types/graphql';
-import { ICurrentUser } from 'src/user/currentUser.decorator';
 
 @Injectable()
 export class ChatService {

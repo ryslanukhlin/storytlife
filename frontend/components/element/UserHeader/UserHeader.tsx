@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import {
     Alert,
     Avatar,
@@ -10,12 +9,9 @@ import {
     Typography,
     styled,
 } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { TypeUser, userData } from '../../../graphql/store/auth';
 import { UserPageInfo } from '../../../pages/[id]';
-
-import styles from './UserHeader.module.scss';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { deepOrange } from '@mui/material/colors';
 import {
     useNewAvatarSubscription,
@@ -29,7 +25,9 @@ import { SocketIo } from '../../../util/socket';
 import { useRouter } from 'next/router';
 import EditInfoUserModel from '../../ui/modal/EditInfoUserModel';
 import ShowUserDopInfo from '../../ui/modal/ShowUserDopInfo';
-import { error } from 'console';
+
+import styles from './UserHeader.module.scss';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 const BoxCardContent = styled(Box)(({ theme }) => ({
     background: theme.palette.background.default,

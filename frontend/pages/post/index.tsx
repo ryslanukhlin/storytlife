@@ -14,7 +14,7 @@ import {
 import { red } from '@mui/material/colors';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '../../components/ui/Card';
 import LinkContent from '../../components/ui/LinkWrapper';
 import { BackPort } from '../../config';

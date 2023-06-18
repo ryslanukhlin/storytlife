@@ -1,19 +1,17 @@
 import { Button, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import React, { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import 'dayjs/locale/ru';
-
-import styles from './ModalWrapper/ModalWrapper.module.scss';
 import { useFormik } from 'formik';
 import dayjs, { Dayjs } from 'dayjs';
 import { useEditUserMutation } from '../../../graphql/generated';
-import { userInfo } from 'os';
-import { useReactiveVar } from '@apollo/client';
-import { TypeUser, userData } from '../../../graphql/store/auth';
+import { TypeUser } from '../../../graphql/store/auth';
 import { UserPageInfo } from '../../../pages/[id]';
+
+import styles from './ModalWrapper/ModalWrapper.module.scss';
 
 type EditInfoUserModelProps = {
     close: () => void;

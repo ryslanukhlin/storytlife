@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import IconButton from '../../ui/IconButton';
 
 import styles from './CallFooter.module.scss';
