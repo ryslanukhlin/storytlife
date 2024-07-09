@@ -11,13 +11,6 @@ const NotChatBox = styled(Box)(({ theme }) => ({
 }));
 
 const Chat = () => {
-    useGetCurrentUserChatsQuery({
-        onCompleted(data) {
-            chatData(data.getCurrentUser.chats);
-        },
-        fetchPolicy: 'cache-and-network', // Used for first execution
-    });
-
     return (
         <div className={styles.ChatPage}>
             <Head>

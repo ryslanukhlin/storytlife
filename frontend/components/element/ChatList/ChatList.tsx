@@ -5,18 +5,24 @@ import BoxBorderRight from '../../ui/BoxBorderRight';
 import ChatItemList from './ChatItemList';
 
 import styles from './ChatList.module.scss';
+import { useGetCurrentUserChatsQuery } from '../../../graphql/generated';
 
 const ChatItem = () => {
-    const chats = useReactiveVar(chatData);
+    useGetCurrentUserChatsQuery({
+        onCompleted(data) {
+            chatData(data.getCurrentUser.chats);
+        },
+        fetchPolicy: 'network-only', // Used for first execution
+    });
 
     return (
         <BoxBorderRight className={styles.ChatList}>
-            {chats.length === 0 && (
+            {chatData().length === 0 && (
                 <Typography variant="body1">
                     Перейдите в раздел 'Поиск' <br /> и выберете кому хотите написать
                 </Typography>
             )}
-            {chats.map((contact) => (
+            {chatData().map((contact) => (
                 <ChatItemList key={contact?.id} contact={contact!} />
             ))}
         </BoxBorderRight>
