@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import { Typography } from '@mui/material';
 import { chatData } from '../../../graphql/store/chat';
 import BoxBorderRight from '../../ui/BoxBorderRight';
@@ -6,23 +5,33 @@ import ChatItemList from './ChatItemList';
 
 import styles from './ChatList.module.scss';
 import { useGetCurrentUserChatsQuery } from '../../../graphql/generated';
+import { useEffect, useState } from 'react';
 
 const ChatItem = () => {
-    useGetCurrentUserChatsQuery({
+    const [localStoreChats, setLocalStoreChats] = useState(chatData() ?? []);
+    
+    const data = useGetCurrentUserChatsQuery({
         onCompleted(data) {
             chatData(data.getCurrentUser.chats);
+            setLocalStoreChats(data.getCurrentUser.chats)
         },
-        fetchPolicy: 'network-only', // Used for first execution
+        initialFetchPolicy: "no-cache",
+        fetchPolicy: 'no-cache',
+        nextFetchPolicy: "no-cache",
     });
+
+    useEffect(() => {
+        setLocalStoreChats(data.data?.getCurrentUser.chats!)
+    }, [data.data?.getCurrentUser.chats])
 
     return (
         <BoxBorderRight className={styles.ChatList}>
-            {chatData().length === 0 && (
+            {localStoreChats && localStoreChats.length === 0 && (
                 <Typography variant="body1">
                     Перейдите в раздел 'Поиск' <br /> и выберете кому хотите написать
                 </Typography>
             )}
-            {chatData().map((contact) => (
+            {localStoreChats && localStoreChats.map((contact) => (
                 <ChatItemList key={contact?.id} contact={contact!} />
             ))}
         </BoxBorderRight>
