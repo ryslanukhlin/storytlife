@@ -15,7 +15,7 @@ const Chat = () => {
         onCompleted(data) {
             chatData(data.getCurrentUser.chats);
         },
-        fetchPolicy: 'cache-first', // Used for first execution
+        fetchPolicy: 'cache-and-network', // Used for first execution
     });
 
     return (
